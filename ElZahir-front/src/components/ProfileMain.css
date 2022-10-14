@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;900&display=swap');
+
+.main-profile {
+    width: 100%;
+    font-family: Circular;
+}
+
+.header {
+    width: 100%;
+}
+
+.header-image {
+    height: 140px;
+}
+
+.header-bar {
+    /* outline: 1px solid red; */
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    height: 50px;
+
+    border-bottom: 1px solid rgb(240, 240, 240);
+}
+
+.sticky-bar {
+    position: fixed;
+    width: 100%;
+    top: 0;
+}
+
+
+.header-left {
+    display: flex;
+    padding-left: 5%;
+    gap: 25px;
+}
+
+.header-right {
+    display: flex;
+    padding-right: 5%;
+}
+
+.logo {
+
+    font-size: 27px;
+    font-weight: bold;
+}
+
+.header-search {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    justify-content: flex-start;
+    width: 190px;
+    padding-left: 12px;
+
+    border-radius: 15px;
+    background-color: rgb(245, 245, 245);
+}
+
+.header-icon-img {
+    width: 20px;
+    height: auto;
+}
+
+.header-icon-search {
+    display: flex;
+}
+
+.header-input {
+    width: 100px;
+    height: 15px;
+    font-size: 17px;
+    outline: none;
+    border: none;
+    background-color: rgb(245, 245, 245);
+}
+
+.header-user {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+}
+
+.h-user-logo {
+    background-color: rgb(235, 233, 233);
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
+}
+
+.h-user-name {
+    font-size: 16px;
+}
+
+/*-------------------------------------------------------*/
+
+.main-content {
+    background-color: rgb(242, 242, 242);
+    padding-top: 25px;
+    height: 1600px;
+    display: flex;
+}
+
+.main-left {
+    outline: 1px solid gold;
+    position: relative;
+    width: 400px;
+    min-width: 370px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-panel {
+    background-color: rgb(96, 96, 96);
+    width: 350px;
+    height: 600px;
+
+    border-radius: 10px;
+}
+
+.sticky-panel {
+    position: fixed;
+    top: 76px;
+}
+
+.main-right {
+    outline: 1px solid gold;
+    width: calc(100% - 400px);
+}

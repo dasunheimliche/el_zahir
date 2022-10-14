@@ -1,0 +1,107 @@
+.pointer {
+  cursor: pointer;
+}
+  
+  .main-login {
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    font-family: 'Heebo', sans-serif;
+  }
+  
+  .left-login {
+    outline: 1px solid red;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .card-login {
+    /* outline: 1px solid green; */
+    width: 370px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  .title-login {
+    font-size: 20px;
+    font-weight:500;
+    margin-bottom: 25px;
+  }
+  
+  .sub-login {
+    align-self: flex-start;
+    font-size: 13px;
+    margin-bottom: 30px;
+    
+  }
+  
+  .logwgoogle {
+    width: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: 1px solid rgb(17,23,39);
+    outline-offset: -1px;
+    border-radius: 5px;
+    padding: 10px 0px 10px;
+  }
+  
+  .or-login {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .form-login {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid rgb(92, 91, 91);
+    margin-bottom: 15px;
+    width: 100%;
+    font-size: 15px;
+    padding-bottom: 7px;
+  }
+  
+  .remfor-login {
+    font-size: 12px;
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .qup-login {
+    font-size: 12px;
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .in-login {
+    color: white;
+    background-color: rgb(17,23,39);
+    width: 100%;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+  
+    margin-top: 25px;
+  }
+  
+  /*--------------------------------------*/
+  
+  .right-login {
+    width: 50%;
+    background-color: rgb(142, 142, 239);
+  }
