@@ -1,6 +1,5 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import Samples from './Samples'
 import './Login.css'
 
@@ -33,12 +32,13 @@ const Login = React.forwardRef((props,ref)=> {
 
                     <div className='qup-login'>
                         <p className="q-login">¿No tienes una cuenta?</p>
-                        <a className="up-login  pointer">Regístrate grátis</a>
+                        <Link className="up-login  pointer" to={'/register'}>Regístrate gratis</Link>
+                        {/* <a className="up-login  pointer" href='http://localhost:3000/register'>Regístrate grátis</a> */}
                     </div>
                 </div>
             </div>
             <div className="right-login">
-                <img></img>
+                <img alt='samples'></img>
                 <div className="samples-login">
                     <Samples />
                 </div>

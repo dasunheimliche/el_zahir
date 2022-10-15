@@ -80,6 +80,26 @@
     background-color: rgb(245, 245, 245);
 }
 
+.header-user-menu {
+    outline: 1px solid red;
+    position: relative;
+}
+
+.header-user-opt {
+    outline: 1px solid red;
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.notvisible {
+    visibility: hidden;
+}
+
 .header-user {
     display: flex;
     gap: 7px;

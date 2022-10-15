@@ -11,6 +11,8 @@ userRouter.post('/', (request, response)=> {
             const user = new User({
                 username: body.username,
                 name: body.name,
+                lastname: body.lastname,
+                email:body.email,
                 passwordHash: respuesta,
             })
             user.save()
