@@ -10,6 +10,7 @@ import {
 } from 'react-router-dom'
 
 
+
 function App() {
   let [username, setUsername] = useState(null)
   let [pass, setPass] = useState(null)
@@ -17,26 +18,31 @@ function App() {
   let [email, setEmail] = useState(null)
   let [name, setName] = useState(null)
   let [lastname, setLastname] = useState(null)
-  let [loggued, setLoggued] = useState(false)
+  // let [loggued, setLoggued] = useState(false)
 
 
-  let [user, setUser] = useState(null)
+
+  let [user, setUser] = useState({username: null, loggued:false})
+
+  console.log('1. post hooks - pre use-effect')
 
   const navegar = useNavigate()
   
   useEffect(()=> {
     console.log('AHHHHH AHHH AHHHHH!!!!')
     let loggedUser =  window.localStorage.getItem('loggedUser')
+    
     if (loggedUser) {
       const userl = JSON.parse(loggedUser)
       
       setUser(userl)
       
-    } 
+    } else {
+      setUser({username:null, loggued: false})
+    }
+  }, [])
 
-  }, [loggued])
-
-
+  console.log('2. post useEffect')
 
   let login = (e)=> {
     console.log('LOGIN')
@@ -45,11 +51,11 @@ function App() {
     axios.post('http://localhost:3001/api/login', {username: username, password:pass})
       .then(user => {
           console.log("LOGIN COMPONENT", user.data)
-          setUser(user.data)
-          setLoggued(true)
-          window.localStorage.setItem('loggedUser', JSON.stringify(user.data))
-          window.localStorage.setItem('username', JSON.stringify(user.data.username))         
+          setUser({...user.data, loggued: true})
+          window.localStorage.setItem('loggedUser', JSON.stringify(user.data))       
       })
+
+    // window.location.reload()
     
   }
 
@@ -61,7 +67,9 @@ function App() {
       axios.post('http://localhost:3001/api/users', {
         name, lastname, username, email, password:pass
       })
+
       navegar('/login')
+      window.location.reload()
     } else {
       console.log('no pasa')
     }
@@ -70,24 +78,24 @@ function App() {
   let salir = ()=> {
     console.log('SALIR')
     window.localStorage.removeItem('loggedUser')
-    setLoggued(false)
-    setUser(null)
-
-
+    // setLoggued(false)
+    setUser({...user, loggued:false})
   }
-
+  console.log('3. pre return')
+  
   return (
     <div className="App">
       <Routes>
-        <Route path="/login" element={loggued === false? <Login username={(e)=> setUsername(e.target.value)} password={(e)=> setPass(e.target.value)} login={login}/> :<Navigate replace to={`/${user.username}`}/>}/>
+        <Route path="/login" element={user.loggued === false? <Login username={(e)=> setUsername(e.target.value)} password={(e)=> setPass(e.target.value)} login={login}/> :<Navigate replace to={`/${user.username}`}/>}/>
 
-        <Route path={`/${username}`} element={loggued===false? <Navigate replace to='/login'/>:<ProfileMain user={user.username} salir={salir}/>}/>
+        <Route path={`/${user.username}`} element={user.loggued===false? <Navigate replace to='/login'/>:<ProfileMain user={user.username} salir={salir}/>}/>
 
-        <Route path="/" element={user === null? <Navigate replace to='/login'/>:<Navigate replace to={`/${user.username}`}/>} />
+        <Route path="/" element={user.loggued === false? <Navigate replace to='/login'/>:<Navigate replace to={`/${user.username}`}/>} />
         <Route path='/register' element={<RegisterMain name={(e)=> setName(e.target.value)} lastname={(e)=> setLastname(e.target.value) } username={(e)=> setUsername(e.target.value)} email={(e)=> setEmail(e.target.value)} password={(e)=> setPass(e.target.value)} rpassword={(e)=> setPass2(e.target.value)} signin={signin}/>} />
       </Routes>
     </div>
   ) 
 }
+
 
 export default App;
