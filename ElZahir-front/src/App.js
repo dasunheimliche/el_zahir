@@ -18,10 +18,9 @@ function App() {
   let [email, setEmail] = useState(null)
   let [name, setName] = useState(null)
   let [lastname, setLastname] = useState(null)
+
+  
   // let [loggued, setLoggued] = useState(false)
-
-
-
   let [user, setUser] = useState({username: null, loggued:false})
 
   console.log('1. post hooks - pre use-effect')
