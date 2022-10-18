@@ -26,7 +26,7 @@ postRouter.post('/', async (request, response)=> {
     const user = await User.findById(decodedToken.id)
 
     const post = new Post ({
-        type:body.type,
+        type: body.type,
         title: body.title,
         subtitle: body.subtitle,
         textPost: body.textPost,
@@ -41,6 +41,13 @@ postRouter.post('/', async (request, response)=> {
     await user.save()
 
     response.json(savedPost)
+})
+
+postRouter.get('/', (request, response)=> {
+    Post.find({})
+        .then(posts => {
+            response.json(posts)
+        })
 })
 
 module.exports = postRouter

@@ -1,0 +1,18 @@
+.post-container {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.post-content {
+
+    background-color: rgb(227, 227, 255);
+}
+
+.post-sub {
+    font-family: Circular-light;
+    background-color: rgb(255, 255, 255);
+    height: 80px;
+    padding: 10px;
+
+}
