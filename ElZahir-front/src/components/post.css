@@ -1,17 +1,133 @@
+.dl {
+    /* background-color: #ffffff; */
+    display: flex;
+  }
+  
+  .video-container {
+    flex: 1;
+    position: relative;
+    /* padding-bottom: 56.4999%; */
+    height: 0;
+  }
+  
+  .video-container iframe {
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    /* width: 100%;
+    height: 100%; */
+  }
+
+
+
+
+
 .post-container {
+    border-radius: 5px ;
     display: flex;
     flex-direction: column;
+    background: linear-gradient(to Top, rgb(255, 255, 255),rgba(255, 255, 255, 0.704));
 
 }
-
-.post-content {
-
-    background-color: rgb(227, 227, 255);
+/* IMAGE POST */
+.post-image-content {
+    border-radius: 5px;
+    /* background-color: rgb(255, 255, 255); */
 }
+
+.img {
+    border-radius: 5px;
+}
+
+
+/* TEXT POST*/
+
+.post-text-content {
+    /* background-color: white; */
+    padding-top: 25px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.post-text-title {
+    font-size: 20px;
+}
+
+.post-text-text {
+    font-size: 18px;
+}
+
+/* CITA POST*/
+
+.post-cita-content {
+    /* outline: 1px solid red; */
+    outline-offset: -1px;
+    /* background-color: white; */
+
+    display: flex;
+    justify-content: center;
+
+    padding-left: 50px;
+    padding-right: 50px;
+
+    padding-top: 75px;
+}
+
+.post-text-left {
+    /* outline: 1px solid yellow; */
+}
+
+.post-text-comilla-left {
+    width: 25px;
+    height: auto;
+    filter: contrast(20%);
+}
+
+.post-cita-text-container {
+    display: flex;
+    flex-direction: column;
+    /* outline: 1px solid red; */
+}
+
+.post-cita-text {
+    /* outline: 1px solid green; */
+    font-size: 23px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-style: italic;
+}
+
+.post-text-right {
+    /* outline: 1px solid blue; */
+    display: flex;
+}
+
+.post-text-comilla-right {
+    width: 25px;
+    height: auto;
+    align-self: flex-end;
+    transform: rotate(180deg);
+    filter: contrast(20%);
+}
+
+.post-cita-detail {
+    /* background-color: white; */
+    padding-left: 70px;
+    padding-bottom: 70px;
+}
+
+/* VIDEO POST*/
+
+
+/* ALL TYPES OF POSTS*/
 
 .post-sub {
     font-family: Circular-light;
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(255, 255, 255); */
     height: 80px;
     padding: 10px;
 

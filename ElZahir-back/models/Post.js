@@ -7,6 +7,7 @@ const postSchema = new mongoose.Schema({
     textPost: String,
     imagePost: String,
     videoPost:String,
+    videoAr: String,
     date: Date,
     user: [{
         type: mongoose.Schema.Types.ObjectId,

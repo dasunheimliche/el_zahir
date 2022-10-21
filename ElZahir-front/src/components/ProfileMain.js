@@ -6,6 +6,8 @@ import Post from '../components/Post'
 import PostBox from "../components/PostBox"
 import PostImage from "../components/PostImage"
 import PostText from "../components/PostText"
+import PostCita from "../components/PostCita"
+import PostVideo from "../components/PostVideo"
 import logo from '../icons/search.png'
 
 
@@ -48,17 +50,13 @@ const ProfileMain = ({user, salir, posts})=> {
 
 
     window.addEventListener('scroll', ()=> {
-        console.log(window.scrollY)
+        
         return (window.scrollY >= 125 && sticky === false)? setSticky(true): console.log()
     })
     
     window.addEventListener('scroll', ()=> {
         return (window.scrollY < 126)? setSticky(false): console.log()
     })
-
-
-    
-
 
     const notsee = ()=> {
         console.log('NOTSEE')
@@ -81,7 +79,6 @@ const ProfileMain = ({user, salir, posts})=> {
 
     }
 
-
     const cargarPosts = (posts)=> {
         // console.log("FUNCION POSTS", posts)
         return posts.map((post, i) => <Post key={i} post={post} type={post.type} />)
@@ -94,6 +91,9 @@ const ProfileMain = ({user, salir, posts})=> {
             <form className={seeOpt === 'none'? 'poster-container little': 'poster-container darker'} onSubmit={actualizar}>
                 <PostImage onClick={notseeopt} className={seeOpt === 'image'? 'post-image': 'post-image notvisible'}/>
                 <PostText onClick={notseeopt} className={seeOpt === 'text'? 'post-text': 'post-text notvisible'}/> 
+                <PostCita onClick={notseeopt} className={seeOpt === 'cita'? 'post-text': 'post-text notvisible'}/>
+                <PostVideo onClick={notseeopt} className={seeOpt === 'video'? 'post-image': 'post-image notvisible'}/>
+
             </form>
             
             <div className="header">
@@ -130,8 +130,31 @@ const ProfileMain = ({user, salir, posts})=> {
             <div className="main-content">
                 
                 <div className="main-left">
+
                     <div className={sticky === false? 'profile-panel':'profile-panel sticky-panel'} >
-                        <PostBox onClick={notseeopt}/>
+                        <div className='profile-panel-up'></div>
+                        <div className='profile-panel-profile-image'>
+                            <div className='profile-panel-down-username'>@{user}</div>
+                        </div>
+                        <div className='profile-panel-down'>
+                            {/* <div className='profile-panel-down-username'>@{user}</div> */}
+                            <div className='profile-panel-down-followers'>
+                                <div className='followers stat'>
+                                    <span className='stat-title'>FOLLOWERS</span>
+                                    <span>20.0 K</span>
+                                </div>
+                                <div className='following stat'>
+                                    <span className='stat-title'>FOLLOWING</span>
+                                    <span>568</span>
+                                </div>
+                                <div className='posts stat'>
+                                    <span className='stat-title'>POSTS</span>
+                                    <span>89</span>
+                                </div>
+                            </div>
+                            <PostBox onClick={notseeopt}/>
+                        </div>
+                        
                     </div>
                 </div>
                 <div className="main-right">

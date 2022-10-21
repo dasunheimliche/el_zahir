@@ -32,6 +32,7 @@ postRouter.post('/', async (request, response)=> {
         textPost: body.textPost,
         imagePost: body.imagePost,
         videoPost: body.videoPost,
+        videoAr: body.videoAr,
         date: new Date(),
         user: user._id
     })
