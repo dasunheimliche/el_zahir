@@ -36,7 +36,7 @@ const PostVideo = ({className, onClick})=> {
                 <textarea className="postImage-input" id="postImage-url" placeholder="URL" onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
             </div>
             <div className="postImage-botones">
-                <button className='postImage-button pointer' type="button" onClick={onClick('none')} >CLOSE</button>
+                <button className='postImage-button pointer' type="button" onClick={()=>onClick('none')} >CLOSE</button>
                 <button className="postImage-button pointer" onClick={postear} >POST</button>
             </div>
         </div>

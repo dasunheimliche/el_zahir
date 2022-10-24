@@ -33,7 +33,7 @@ const PostText = ({className, onClick})=> {
                 <textarea className="postText-input" id="postText-url" placeholder="Text" onChange={(e)=> setText(e.target.value)} value={text} autoComplete='off'/>
             </div>
             <div className="postText-botones">
-                <button className='postText-button pointer' type="button" onClick={onClick('none')} >CLOSE</button>
+                <button className='postText-button pointer' type="button" onClick={()=>onClick('none')} >CLOSE</button>
                 <button className="postText-button pointer" onClick={postear} >POST</button>
             </div>
         </div>

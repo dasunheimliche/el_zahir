@@ -21,6 +21,7 @@ mongoose.connect(config.MONGODB_URI)
 // PRE - MIDDLEWARES
 app.use(cors())
 app.use(express.json())
+
 // ROUTERS
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)

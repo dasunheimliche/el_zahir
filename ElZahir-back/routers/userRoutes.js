@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const Post = require('../models/Post')
 const userRouter = require('express').Router() 
 const User = require('../models/User')
 
@@ -19,7 +20,6 @@ userRouter.post('/', (request, response)=> {
                 .then(respuesta => {
                     response.json(respuesta)
                 })
-
         })
 })
 
@@ -27,6 +27,20 @@ userRouter.get('/', (request, response)=> {
     User.find({})
         .then(respuesta => {
             response.json(respuesta)
+        })
+})
+
+// get toma dos argumentos, la dirección de la petición que se va a responder, y una función que toma como argumentos...
+// ... la petición, que contiene los datos enviados por el usuario, que en principio solo es la dirección de la solicitus misma...
+// ... o puede contener un objeto. El segundo argumento es una función predefinida que permite enviar la respuesta.
+
+userRouter.get('/:id', (request, response)=> {
+    console.log('REQUESTTTTTT', request.params.id)
+    let userId = String(request.params.id)
+    User.findById(userId)
+        .then(user => {
+            console.log(user)
+            response.json(user)
         })
 })
 

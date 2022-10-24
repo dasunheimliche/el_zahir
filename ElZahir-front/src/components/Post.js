@@ -1,5 +1,5 @@
-import {  useState } from "react"
-import axios from 'axios'
+// import {  useState } from "react"
+// import axios from 'axios'
 import '../components/post.css'
 import quotes from '../images/quotes.png'
 
@@ -91,7 +91,7 @@ const Post = ({post, type})=> {
                 <div className='dl'>
                     {/* <div className="post-image-content"> */}
                     <div className="video-container" style={{paddingBottom: `${ar}%`}}>
-                        <iframe style={{width: "100%", height:"100%"}} src={urlVideo} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe style={{width: "100%", height:"100%"}} src={urlVideo} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                     </div>
                 </div>
                 <div className="post-sub">

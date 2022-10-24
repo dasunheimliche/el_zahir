@@ -1,13 +1,24 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Samples from './Samples'
 import './Login.css'
 
-const Login = React.forwardRef((props,ref)=> {
+const Login = ({setUser})=> {
+    let [username, setUsername] = useState('')
+    let [password, setPassword] = useState('')
 
-
-
+    let login = (e)=> {
+        console.log('LOGIN WITH', username, password)
+        e.preventDefault()
     
+        axios.post('http://localhost:3001/api/login', {username, password})
+          .then(user => {
+              console.log("LOGIN COMPONENT", user.data)
+              setUser({...user.data, loggued: true})
+              window.localStorage.setItem('loggedUser', JSON.stringify(user.data))       
+          })
+      }
 
 
     return (
@@ -18,22 +29,19 @@ const Login = React.forwardRef((props,ref)=> {
                     <div className="sub-login">Por favor ingrese sus datos</div>
                     <div className="logwgoogle pointer">Log in with google</div>
                     <div className='or-login'>o</div>
-
-                    <form className="login" onSubmit={props.login}>
-                        <input className='form-login'  type='text' onChange={props.username} placeholder={'username'} />
-                        <input className='form-login'  type='password' onChange={props.password} placeholder={'password'} />
-                        
+                    <form className="login" onSubmit={login}>
+                        <input className='form-login'  type='text' onChange={(e)=> setUsername(e.target.value)} placeholder={'username'} />
+                        <input className='form-login'  type='password' onChange={(e)=> setPassword(e.target.value)} placeholder={'password'} />
                         <div className='remfor-login'>
                             <div className="rem-login">Recordarme por 30 días</div>
                             <div className="for-login  pointer">¿Olvidaste tu cotnraseña?</div>
                         </div>
-                        <button type='submit' className="in-login  pointer" onSubmit={props.login}>Log in</button>
+                        <button type='submit' className="in-login  pointer" >Log in</button>
                     </form>
 
                     <div className='qup-login'>
                         <p className="q-login">¿No tienes una cuenta?</p>
                         <Link className="up-login  pointer" to={'/register'}>Regístrate gratis</Link>
-                        {/* <a className="up-login  pointer" href='http://localhost:3000/register'>Regístrate grátis</a> */}
                     </div>
                 </div>
             </div>
@@ -45,6 +53,6 @@ const Login = React.forwardRef((props,ref)=> {
             </div>
         </div>
     )
-})
+}
 
 export default Login
