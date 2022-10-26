@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 
-const PostCita = ({className, onClick})=> {
+const PostCita = ({className, onClick, setUser})=> {
     let [author, setAuthor] = useState('')
     let [work, setWork] = useState('')
     let [cita, setCita] = useState('')
@@ -22,6 +22,10 @@ const PostCita = ({className, onClick})=> {
                 setAuthor('')
                 setWork('')
                 setCita('')
+                let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
+                console.log("UPDATE USERRR WHEN POSTIIIIIN", updateUser.posts)
+                window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser, posts: updateUser.posts + 1}))
+                setUser({...user, posts: updateUser.posts + 1})
             })
 
     }

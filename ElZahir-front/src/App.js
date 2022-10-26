@@ -1,5 +1,5 @@
 // IMPORTS
-import {useEffect, useState } from 'react';
+import {useEffect, useRef, useState } from 'react';
 import axios from 'axios'
 import Login from './components/Login';
 import ProfileMain from './components/ProfileMain'
@@ -11,11 +11,18 @@ function App() {
   console.log('APP STARTS TO RENDER')
   // USESTATES ---------------------------------------------------------------
   let [posts, setPosts] = useState([])
+  
   let [user, setUser] = useState({username: null, loggued:false, userId: null})
+
 
   // USEFFECTS ----------------------------------------------------------------
   useEffect(()=> {
+    console.log("APP USE EFFECT 1")
+    // Cada vez que recargo la página, se actualiza el estado 'user' con el localStorate, por lo que...
+    // ... cada cambio que deba permanecer durante la sesión, debe guardarse en el localStorage
     let loggedUser =  window.localStorage.getItem('loggedUser')
+
+    console.log("APPPPPP LOGGEDUSER", JSON.parse(loggedUser))
     
     if (loggedUser) {
       const userl = JSON.parse(loggedUser)
@@ -24,7 +31,10 @@ function App() {
     } 
   }, [])
 
+
   useEffect(()=> {
+    console.log("APP USE EFFECT 2")
+
     setPosts([])
     axios.get('http://localhost:3001/api/post')
       .then(posts => {

@@ -6,6 +6,18 @@ const userSchema = new mongoose.Schema({
     lastname: String,
     email: String,
     passwordHash: String,
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
+    following: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ],
     posts: [
         {
             type: mongoose.Schema.Types.ObjectId,

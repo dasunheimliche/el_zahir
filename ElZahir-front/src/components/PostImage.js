@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 
-const PostImage = ({className, onClick})=> {
+const PostImage = ({className, onClick, setUser})=> {
     let [url, setUrl] = useState('')
     let [title, setTitle] = useState('')
     let [sub, setSub] = useState('')
@@ -22,6 +22,10 @@ const PostImage = ({className, onClick})=> {
                 setUrl('')
                 setTitle('')
                 setSub('')
+                let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
+                console.log("UPDATE USERRR WHEN POSTIIIIIN", updateUser.posts)
+                window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser, posts: updateUser.posts + 1}))
+                setUser({...user, posts: updateUser.posts + 1})
             })
 
     }

@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useState } from "react"
 
-const PostText = ({className, onClick})=> {
+const PostText = ({className, onClick, setUser})=> {
     let [title, setTitle] = useState('')
     let [text, setText] = useState('')
 
@@ -20,6 +20,10 @@ const PostText = ({className, onClick})=> {
             .then(() => {
                 setText('')
                 setTitle('')
+                let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
+                console.log("UPDATE USERRR WHEN POSTIIIIIN", updateUser.posts)
+                window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser, posts: updateUser.posts + 1}))
+                setUser({...user, posts: updateUser.posts + 1})
             })
 
     }

@@ -9,12 +9,10 @@ const Login = ({setUser})=> {
     let [password, setPassword] = useState('')
 
     let login = (e)=> {
-        console.log('LOGIN WITH', username, password)
         e.preventDefault()
     
         axios.post('http://localhost:3001/api/login', {username, password})
           .then(user => {
-              console.log("LOGIN COMPONENT", user.data)
               setUser({...user.data, loggued: true})
               window.localStorage.setItem('loggedUser', JSON.stringify(user.data))       
           })

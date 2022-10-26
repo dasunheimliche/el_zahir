@@ -1,5 +1,4 @@
-// import {  useState } from "react"
-// import axios from 'axios'
+
 import '../components/post.css'
 import quotes from '../images/quotes.png'
 
@@ -72,19 +71,6 @@ const Post = ({post, type})=> {
         let height = Number(aspectr[1])
         let ar = (width/height) * 100
         console.log(ar)
-        
-
-        // let parser = new DOMParser()
-
-        // axios.get("https://www.youtube.com/oembed?url="+ post.videoPost +"&format=xml")
-        //     .then(respuesta => {
-        //         let xmlDoc = parser.parseFromString(respuesta.data, "text/xml") 
-        //         let width = Number(xmlDoc.getElementsByTagName('width')[0].childNodes[0].textContent)
-        //         let height = Number(xmlDoc.getElementsByTagName('height')[0].childNodes[0].textContent)
-        //         setAr ((height/width)*100)
-
-                
-        //     })
 
         return (
             <div className="post-container figure">
@@ -95,6 +81,7 @@ const Post = ({post, type})=> {
                     </div>
                 </div>
                 <div className="post-sub">
+                    
                     <div className='post-sub-header'>
                         <b style={{fontSize:"17px"}}>{post.title}</b> - <i style={{fontSize:"17px"}}>{post.subtitle}</i>
                     </div>

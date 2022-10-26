@@ -15,9 +15,7 @@ const getToken = (request)=> {
 
 postRouter.post('/', async (request, response)=> {
     const body = request.body
-    console.log('REQUEST', typeof(request.headers.authorization))
     const token = getToken(request)
-    console.log('TOKEN', token)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!token || !decodedToken.id) {
         return response.status(401).json({error: 'token missing or invalid'})

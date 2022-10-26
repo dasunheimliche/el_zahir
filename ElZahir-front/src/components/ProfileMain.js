@@ -13,7 +13,7 @@ import PostVideo from "../components/PostVideo"
 import { Route, Routes } from 'react-router-dom'
 
 const ProfileMain = ({user, setUser, posts})=> {
-
+    console.log("PROFILE MAIN LOADS WITH USER", user)
     // USESTATES
     let [sticky, setSticky] = useState(false)
     let [seeOpt, setSeeOpt] = useState('none')
@@ -24,23 +24,25 @@ const ProfileMain = ({user, setUser, posts})=> {
     console.log('1 - SUSSER ', suser)
     // USE EFECTS
     useEffect(()=> {
-        
+        console.log("PF USE EFFECT 1")
         if (update !== 'no') {
             let localuser = JSON.parse(window.localStorage.getItem('loggedUser'))
+            console.log("PF USE EFFECT 1 - LOCALUSER", localuser)
             setTimeout(()=> {
                 axios.get('http://localhost:3001/api/post')
                 .then(postss => {
                     let postslist = postss.data.filter(post => post.user[0] === localuser.userId)
                     setAcPost(postslist.reverse())
+                    // setUser({...user}) 
                 })
             }, 500)  
         }
       }, [update])
 
     useEffect(()=> {
+        console.log("PF USE EFFECT 2")
         if (suser) {
             let currentSuser = JSON.parse(window.localStorage.getItem('currentSuser'))
-            console.log("USE EFFECT CURRENT USER", currentSuser.id)
             setSuser(currentSuser)
         }
     }, [])
@@ -56,15 +58,16 @@ const ProfileMain = ({user, setUser, posts})=> {
 
     }
 
+
     // RENDER
     return (
         <div className='profile-main'> {console.log('PROFILE MAIN STASTS LOADING')}
 
             <form className={seeOpt === 'none'? 'poster-container little': 'poster-container darker'} onSubmit={actualizar}>
-                <PostImage onClick={setSeeOpt} className={seeOpt === 'image'? 'post-image': 'post-image notvisible'}/>
-                <PostText onClick={setSeeOpt} className={seeOpt === 'text'? 'post-text': 'post-text notvisible'}/> 
-                <PostCita onClick={setSeeOpt} className={seeOpt === 'cita'? 'post-text': 'post-text notvisible'}/>
-                <PostVideo onClick={setSeeOpt} className={seeOpt === 'video'? 'post-image': 'post-image notvisible'}/>
+                <PostImage setUser={setUser} onClick={setSeeOpt} className={seeOpt === 'image'? 'post-image': 'post-image notvisible'}/>
+                <PostText setUser={setUser} user={user} onClick={setSeeOpt} className={seeOpt === 'text'? 'post-text': 'post-text notvisible'}/> 
+                <PostCita setUser={setUser} onClick={setSeeOpt} className={seeOpt === 'cita'? 'post-text': 'post-text notvisible'}/>
+                <PostVideo setUser={setUser} onClick={setSeeOpt} className={seeOpt === 'video'? 'post-image': 'post-image notvisible'}/>
 
             </form>
 
@@ -74,7 +77,7 @@ const ProfileMain = ({user, setUser, posts})=> {
                 <Route path={`/`} element={
                     <div className="main-content"> {console.log("MAIN CONTENT STARTS LOADING")}
                         <div className="main-left">
-                            <ProfilePanel user={user} sticky={sticky} setSeeOpt={setSeeOpt}/>
+                            <ProfilePanel setUser={setUser} user={user} sticky={sticky} setSeeOpt={setSeeOpt} posts={posts}/>
                         </div>
                         <div className="main-right">
                             <div className={sticky === false? 'container': 'container container-stickymode'}>
@@ -86,7 +89,7 @@ const ProfileMain = ({user, setUser, posts})=> {
                 <Route path={`/userId=${suser? suser.id: console.log()}`} element={suser? 
                     <div className="main-content"> {console.log("USER CONTENT START LOADING")}
                         <div className="main-left">
-                            <ProfilePanel user={suser? suser: console.log()} sticky={sticky} setSeeOpt={setSeeOpt} mode={'user'}/>
+                            <ProfilePanel setUser={setUser} user={user} setSuser={setSuser} suser={suser} sticky={sticky} setSeeOpt={setSeeOpt} mode={'user'}/>
                         </div>
                         <div className="main-right">
                             <div className={sticky === false? 'container': 'container container-stickymode'}>
@@ -97,17 +100,6 @@ const ProfileMain = ({user, setUser, posts})=> {
                     
                     : console.log()}/>
             </Routes>
-
-            {/* <div className="main-content">
-                <div className="main-left">
-                    <ProfilePanel user={user} sticky={sticky} setSeeOpt={setSeeOpt}/>
-                </div>
-                <div className="main-right">
-                    <div className={sticky === false? 'container': 'container container-stickymode'}>
-                        {cargarPosts(!acpost? posts: acpost)}
-                    </div>
-                </div>
-            </div> */}
         </div>
     )
 }

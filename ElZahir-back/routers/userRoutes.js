@@ -35,13 +35,62 @@ userRouter.get('/', (request, response)=> {
 // ... o puede contener un objeto. El segundo argumento es una función predefinida que permite enviar la respuesta.
 
 userRouter.get('/:id', (request, response)=> {
-    console.log('REQUESTTTTTT', request.params.id)
     let userId = String(request.params.id)
     User.findById(userId)
         .then(user => {
-            console.log(user)
             response.json(user)
         })
+})
+
+
+userRouter.put('/:id', async (request, response)=> {
+    const body = request.body
+    const id = request.params.id
+
+    if (body.mode === 'follow') {
+        const user = await User.findById(id)
+        const meId = body.id
+        const me = await User.findById(meId)
+
+        user.followers = user.followers.concat(me._id)
+        me.following = me.following.concat(user._id)
+
+        await user.save()
+        await me.save()
+
+        response.json({me:{following: me.following}, user:{followers: user.followers}})
+
+    } else if (body.mode === 'unfollow') {
+        const user = await User.findById(id)
+        const meId = body.id
+        const me = await User.findById(meId)
+
+        // user.followers = user.followers.concat(me._id)
+        // me.following = me.following.concat(user._id)
+
+        me.following = me.following.filter(ide => ide.toString() !== id)
+        user.followers = user.followers.filter(ide => ide.toString() !== me._id.toString())
+        
+        await user.save()
+        await me.save()
+
+        response.json({me:{following: me.following}, user:{followers: user.followers}})
+    }
+
+
+
+
+    // const user = await User.findById(id)
+    // const meId = body.id
+    // const me = await User.findById(meId)
+
+    // user.followers = user.followers.concat(me._id)
+    // me.following = me.following.concat(user._id)
+
+    // await user.save()
+    // await me.save()
+
+    // response.json({me:{following: me.following}, user:{followers: user.followers}})
 })
 
 module.exports = userRouter

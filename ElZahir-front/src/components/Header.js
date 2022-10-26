@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
-import { json, Link } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import logo from '../icons/search.png'
 
 
@@ -21,6 +21,7 @@ const Header = ({user, setUser, sticky, setSticky, setSuser})=> {
                 }
             })    
     }, [search])
+    
 
     useEffect(()=> {
         window.addEventListener('scroll', ()=> {
@@ -32,33 +33,29 @@ const Header = ({user, setUser, sticky, setSticky, setSuser})=> {
         })
     }, [])
 
-
+    let searchRef = useRef()
+    console.log("SEARCH REFFFF:", searchRef)
 
 
     let suserfun = (suser)=> {
         axios.get('http://localhost:3001/api/post')
                 .then(posts => {
                     let postslist = posts.data.filter(post => post.user[0] === suser.id)
-                    window.localStorage.setItem('currentSuser', JSON.stringify({posts: postslist.reverse(), id:suser.id, username: suser.username}))
-                    setSuser({posts: postslist.reverse(), id:suser.id, username: suser.username})
+                    window.localStorage.setItem('currentSuser', JSON.stringify({posts: postslist.reverse(), id:suser.id, username: suser.username, following: suser.following, followers: suser.followers}))
+                    setSuser({posts: postslist.reverse(), id:suser.id, username: suser.username, following: suser.following, followers: suser.followers})
+                    setSearch('')
+                    searchRef.current.value = ''
                 })
 
         
     }
 
-    // const showRes = ()=> {
-    //     console.log(results)
-
-    //     return results.map((res,i)=> <Link className='linknostyle' key={i} to={`/${user.username}/userId=${res.id}`}>
-    //         <div className='pointer' onClick={()=> suserfun(res)}>{res.username}</div>
-    //     </Link>)
-    // }
 
     const showRes = ()=> {
         console.log(results)
         
         return results.map((res,i)=> {
-            console.log({user, res})
+            console.log("RESSSSS", res)
             if (user.userId === res.id) {
                 return (
                     <Link className='linknostyle' key={i} to={`/${user.username}/`}>
@@ -104,7 +101,7 @@ const Header = ({user, setUser, sticky, setSticky, setSuser})=> {
                                 <img className='header-icon-img' alt="searchicon" src={logo} />
                             </div>
                             <form onChange={()=> {console.log('form changed')}}>
-                                <input className={'header-input'} type={'text'} placeholder={'buscar'} onChange={(e)=> setSearch(e.target.value)}/>
+                                <input ref={searchRef} className={'header-input'} type={'text'} placeholder={'buscar'} onChange={(e)=> setSearch(e.target.value)}/>
                                 <div className={results.length > 0? 'search-opt' : 'search-opt notvisible'}>
                                     {showRes()}
                                 </div>
