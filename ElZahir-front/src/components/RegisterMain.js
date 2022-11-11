@@ -3,10 +3,15 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Samples from './Samples'
 import './Login.css'
+import baseURL from '../services/baseURL'
+
 
 const Register = ()=> {
 
     let [inputs, setInputs] = useState({ name: null, lastname: null, username: null, email: null, password: null, password2: null })
+
+    // let baseURL = "http://localhost:3001"
+    // let baseURL = ""
 
     const navegar = useNavigate()
 
@@ -14,7 +19,7 @@ const Register = ()=> {
         e.preventDefault()
         
         if (inputs.password === inputs.password2 && inputs.password.length >= 5) {
-          axios.post('http://localhost:3001/api/users', {
+          axios.post(baseURL.concat('/api/users'), {
             name: inputs.name, lastname: inputs.lastname, username: inputs.username, email: inputs.email, password: inputs.password
           })
           navegar('/login')

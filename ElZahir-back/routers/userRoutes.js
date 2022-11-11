@@ -75,7 +75,23 @@ userRouter.put('/:id', async (request, response)=> {
         await me.save()
 
         response.json({me:{following: me.following}, user:{followers: user.followers}})
+    
+    } else if (body.mode === 'profileImgURL') {
+        const user = await User.findById(id)
+        user.profileImg = body.profileImg
+        
+        await user.save()
+        response.json({profileImg: user.profileImg})
+
+    } else if (body.mode === 'panelImgUrl') {
+        const user = await User.findById(id)
+        user.mainPanelImg = body.mainPanelImg
+        
+        await user.save()
+        response.json({mainPanelImg: user.mainPanelImg})
     }
+
+
 
 
 

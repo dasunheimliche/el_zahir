@@ -1,17 +1,14 @@
 import axios from 'axios'
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import PostBox from "../components/PostBox"
+import baseURL from '../services/baseURL'
 
-
-const ProfilePanel = ({setUser, setSuser, user, suser, posts, sticky, setSeeOpt, mode})=> {
-    // console.log("PROFILE PANEL USER POSTS", posts? "TRUE": "FALSE", posts)
-    // console.log("COMPARINGGG", suser.id, "IN", user.following,"??")
-    // console.log(user.following.includes(suser.id))
-
+const ProfilePanel = ({setUser, setSuser, user, suser, posts, sticky, setSeeOpt, seeOpt, mode})=> {
+    
     let [following, setFollowing] = useState(suser? user.following.includes(suser.id): false)
 
+
     useEffect(()=> {
-        console.log('USE EFFECTSSS!!!')
         if (mode === 'user') {
             if (user.following.includes(suser.id)) {
                 setFollowing(true)
@@ -21,7 +18,7 @@ const ProfilePanel = ({setUser, setSuser, user, suser, posts, sticky, setSeeOpt,
 
     const follow = ()=> {
         if (following === false) {
-            axios.put(`http://localhost:3001/api/users/${suser.id}`, {id:user.userId, mode:'follow'})
+            axios.put(baseURL.concat(`/api/users/${suser.id}`), {id:user.userId, mode:'follow'})
                 .then(respuesta => {
                 window.localStorage.setItem('loggedUser', JSON.stringify({...user, following: respuesta.data.me.following}))
                 window.localStorage.setItem('currentSuser', JSON.stringify({...suser, followers: respuesta.data.user.followers}))
@@ -30,7 +27,7 @@ const ProfilePanel = ({setUser, setSuser, user, suser, posts, sticky, setSeeOpt,
                 setFollowing(!following)
             })
         } else if (following === true) {
-            axios.put(`http://localhost:3001/api/users/${suser.id}`, {id:user.userId, mode:'unfollow'})
+            axios.put(baseURL.concat(`/api/users/${suser.id}`), {id:user.userId, mode:'unfollow'})
             .then(respuesta => {
                 window.localStorage.setItem('loggedUser', JSON.stringify({...user, following: respuesta.data.me.following}))
                 window.localStorage.setItem('currentSuser', JSON.stringify({...suser, followers: respuesta.data.user.followers}))
@@ -39,20 +36,19 @@ const ProfilePanel = ({setUser, setSuser, user, suser, posts, sticky, setSeeOpt,
                 setFollowing(!following)
         })
         }
-        // axios.put(`http://localhost:3001/api/users/${suser.id}`, {id:user.userId, mode:'follow'})
-        // .then(respuesta => {
-        //     window.localStorage.setItem('loggedUser', JSON.stringify({...user, following: respuesta.data.me.following}))
-        //     window.localStorage.setItem('currentSuser', JSON.stringify({...suser, followers: respuesta.data.user.followers}))
-        //     setUser({...user, following: respuesta.data.me.following})
-        //     setSuser({...suser, followers: respuesta.data.user.followers})
-        //     setFollowing(!following)
-        // })
     }
 
     return (
         <div className={sticky === false? 'profile-panel':'profile-panel sticky-panel'} >
-                        <div className='profile-panel-up'></div>
-                        <div className='profile-panel-profile-image'>
+                        <div style={{"backgroundImage":`url(${mode === 'user'? suser.mainPanelImg: user.mainPanelImg})`}}  className='profile-panel-up'>
+                            <div className='panel-options'>
+                                <div className='panel-options-left'>{''}</div>
+                                <div onClick={mode === 'user'? ()=>console.log():()=>setSeeOpt({type: 'changePanImg', post: null})} className={mode === 'user'? 'panel-options-middle' : 'panel-options-middle pointer'}>{''}</div>
+                                <div className='panel-options-right'>{''}</div>
+                            </div>
+
+                        </div>
+                        <div style={{"backgroundImage":`url(${mode === 'user'? suser.profileImg: user.profileImg})`}} className={mode === 'user'? 'profile-panel-profile' : 'profile-panel-profile pointer'} onClick={mode === 'user'? ()=>console.log():()=>setSeeOpt({type: 'changePI', post: null})}>
                             <div className={'profile-panel-down-username'}>@{mode === 'user'? suser.username: user.username}</div>
                             {mode === 'user'? <div className={following === true? "profile-panel-down-follow pointer unfollow" : "profile-panel-down-follow pointer"} onClick={follow}>{following? 'Followed': 'Follow'}</div>: console.log()}
                         </div>
@@ -72,7 +68,7 @@ const ProfilePanel = ({setUser, setSuser, user, suser, posts, sticky, setSeeOpt,
                                     <span>{mode === 'user'? (suser? String(suser.posts.length):"0"):(posts? String(user.posts):"0")}</span>
                                 </div>
                             </div>
-                            {mode === 'user'? <div></div>:<PostBox onClick={setSeeOpt} />}
+                            {mode === 'user'? <div></div>:<PostBox onClick={setSeeOpt} seeOpt={seeOpt}/>}
                         </div>
                         
                     </div>

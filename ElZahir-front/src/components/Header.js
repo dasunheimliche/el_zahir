@@ -2,19 +2,22 @@ import axios from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../icons/search.png'
+import baseURL from '../services/baseURL'
 
-
-const Header = ({user, setUser, sticky, setSticky, setSuser})=> {
+const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
     let [see, setSee] = useState(false)
     let [search, setSearch] = useState('')
     let [results, setResults] = useState([])
 
+    // let baseURL = "http://localhost:3001"
+    // let baseURL = ""
+
     useEffect(()=> {
-        axios.get('http://localhost:3001/api/users')
+        axios.get(baseURL.concat('/api/users'))
             .then(users => {
                 if (search.length > 0) {
                     let usuarios = users.data
-                    let result =  usuarios.filter(user => user.username.startsWith(search))
+                    let result =  usuarios.filter(user => user.username.toLowerCase().startsWith(search.toLowerCase()))
                     setResults(result)
                 } else {
                     setResults([])
@@ -25,24 +28,24 @@ const Header = ({user, setUser, sticky, setSticky, setSuser})=> {
 
     useEffect(()=> {
         window.addEventListener('scroll', ()=> {
-            return (window.scrollY >= 125 && sticky === false)? setSticky(true): console.log()
+            return (window.scrollY >= 62 && sticky === false)? setSticky(true): console.log()
         })
         
         window.addEventListener('scroll', ()=> {
-            return (window.scrollY < 125)? setSticky(false): console.log()
+            return (window.scrollY < 62)?  setSticky(false): console.log()
         })
     }, [])
 
     let searchRef = useRef()
-    console.log("SEARCH REFFFF:", searchRef)
 
+    // SUSER ABAJO ES UN USUARIO DE
 
     let suserfun = (suser)=> {
-        axios.get('http://localhost:3001/api/post')
+        axios.get(baseURL.concat('/api/post'))
                 .then(posts => {
                     let postslist = posts.data.filter(post => post.user[0] === suser.id)
-                    window.localStorage.setItem('currentSuser', JSON.stringify({posts: postslist.reverse(), id:suser.id, username: suser.username, following: suser.following, followers: suser.followers}))
-                    setSuser({posts: postslist.reverse(), id:suser.id, username: suser.username, following: suser.following, followers: suser.followers})
+                    window.localStorage.setItem('currentSuser', JSON.stringify({posts: postslist.reverse(), id:suser.id, username: suser.username, following: suser.following, followers: suser.followers, profileImg: suser.profileImg, mainPanelImg:suser.mainPanelImg}))
+                    setSuser({posts: postslist.reverse(), id:suser.id, username: suser.username, following: suser.following, followers: suser.followers, profileImg: suser.profileImg, mainPanelImg:suser.mainPanelImg})
                     setSearch('')
                     searchRef.current.value = ''
                 })
@@ -52,10 +55,8 @@ const Header = ({user, setUser, sticky, setSticky, setSuser})=> {
 
 
     const showRes = ()=> {
-        console.log(results)
         
         return results.map((res,i)=> {
-            console.log("RESSSSS", res)
             if (user.userId === res.id) {
                 return (
                     <Link className='linknostyle' key={i} to={`/${user.username}/`}>
@@ -81,26 +82,26 @@ const Header = ({user, setUser, sticky, setSticky, setSuser})=> {
     }
 
     let salir = ()=> {
-        window.localStorage.removeItem('loggedUser')
+        window.localStorage.clear()
         setUser({...user, loggued:false})
       }
 
     return (
-        <div className="header">
+        <div className={!seeOpt.post? "header" : "header notvisible"}>
                 <div className="header-image"></div>
                 <div className={sticky === false? 'header-bar':'header-bar sticky-bar'}>
 
                     <div className="header-left">
 
                         <Link className='linknostyle' to={`/${user.username}`}>
-                            <div className="logo">El Zahir.</div>
+                            <div className="logo">Zahir</div>
                         </Link>
                         
                         <div className="header-search">
                             <div className="header-icon-search">
                                 <img className='header-icon-img' alt="searchicon" src={logo} />
                             </div>
-                            <form onChange={()=> {console.log('form changed')}}>
+                            <form>
                                 <input ref={searchRef} className={'header-input'} type={'text'} placeholder={'buscar'} onChange={(e)=> setSearch(e.target.value)}/>
                                 <div className={results.length > 0? 'search-opt' : 'search-opt notvisible'}>
                                     {showRes()}
@@ -108,10 +109,11 @@ const Header = ({user, setUser, sticky, setSticky, setSuser})=> {
                             </form>
                         </div>
                     </div>
+                    
                     <div className="header-right pointer">
                         <div className={!see? 'header-user-menu': 'header-user-menu expanded header-user-menu-s'} onClick={notsee}>
                             <div className="header-user">
-                                <div className="h-user-logo"></div>
+                                <div style={{"backgroundImage":`url(${user.profileImg})`}} className="h-user-logo"></div>
                                 <div className="h-user-name">{user.username}</div>
                             </div>
                             <div className={see? 'header-user-opt': 'header-user-opt notvisible'}>

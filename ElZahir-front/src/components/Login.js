@@ -3,15 +3,19 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Samples from './Samples'
 import './Login.css'
+import baseURL from '../services/baseURL'
 
 const Login = ({setUser})=> {
     let [username, setUsername] = useState('')
     let [password, setPassword] = useState('')
 
+    // let baseURL = "http://localhost:3001"
+    // let baseURL = ""
+
     let login = (e)=> {
         e.preventDefault()
     
-        axios.post('http://localhost:3001/api/login', {username, password})
+        axios.post(baseURL.concat('/api/login'), {username, password})
           .then(user => {
               setUser({...user.data, loggued: true})
               window.localStorage.setItem('loggedUser', JSON.stringify(user.data))       

@@ -6,23 +6,20 @@ import ProfileMain from './components/ProfileMain'
 import RegisterMain from './components/RegisterMain'
 import './components/PostBox.css'
 import { Routes, Route,  Navigate } from 'react-router-dom'
+import baseURL from './services/baseURL'
 
 function App() {
-  console.log('APP STARTS TO RENDER')
   // USESTATES ---------------------------------------------------------------
   let [posts, setPosts] = useState([])
   
-  let [user, setUser] = useState({username: null, loggued:false, userId: null})
-
+  let [user, setUser] = useState({username: window.localStorage.getItem('loggedUser')? JSON.parse(window.localStorage.getItem('loggedUser')).username : null , loggued:false, userId: null})
+  // let [user, setUser] = useState('')
 
   // USEFFECTS ----------------------------------------------------------------
   useEffect(()=> {
-    console.log("APP USE EFFECT 1")
     // Cada vez que recargo la página, se actualiza el estado 'user' con el localStorate, por lo que...
     // ... cada cambio que deba permanecer durante la sesión, debe guardarse en el localStorage
     let loggedUser =  window.localStorage.getItem('loggedUser')
-
-    console.log("APPPPPP LOGGEDUSER", JSON.parse(loggedUser))
     
     if (loggedUser) {
       const userl = JSON.parse(loggedUser)
@@ -33,10 +30,9 @@ function App() {
 
 
   useEffect(()=> {
-    console.log("APP USE EFFECT 2")
 
     setPosts([])
-    axios.get('http://localhost:3001/api/post')
+    axios.get(baseURL.concat('/api/post'))
       .then(posts => {
         let postslist = posts.data.filter(post => post.user[0] === user.userId)
         if (postslist.length !== posts.length) {
@@ -55,7 +51,7 @@ function App() {
         <Route path="/login" element={user.loggued === false? <Login setUser={setUser} setPosts={setPosts} /> : <Navigate replace to={`/${user.username}`}/>}/>
         <Route path='/register' element={<RegisterMain />} />
 
-        <Route path={`/${user.username}/*`} element={user.loggued===false? <Navigate replace to='/login'/>:<ProfileMain user={user} setUser={setUser} posts={posts}/>}/>
+        <Route path={`/${user.username}/*`} element={user.loggued===false? <Navigate replace to='/login'/>:<ProfileMain user={user} setUser={setUser} posts={posts} setPosts={setPosts}/>}/>
       </Routes>
     </div>
   ) 

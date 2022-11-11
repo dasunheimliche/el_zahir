@@ -5,6 +5,8 @@ const userSchema = new mongoose.Schema({
     name: String,
     lastname: String,
     email: String,
+    profileImg: String,
+    mainPanelImg: String,
     passwordHash: String,
     followers: [
         {
@@ -24,6 +26,12 @@ const userSchema = new mongoose.Schema({
             ref: 'Post'
         }
     ],
+    likedPosts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:'Post'
+        }
+    ]
 })
 
 userSchema.set('toJSON', {

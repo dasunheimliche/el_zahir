@@ -13,6 +13,12 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
     }],
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    username: String,
+    profileImg: String,
 })
 
 postSchema.set('toJSON', {
@@ -23,6 +29,8 @@ postSchema.set('toJSON', {
     }
 })
 
+
 const Post = mongoose.model('Post', postSchema)
+
 
 module.exports = Post

@@ -33,12 +33,20 @@ html {
   width: 100%;
 }
 
+html {
+  overflow-y: scroll;
+  overflow-y: overlay;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
 .linknostyle {
+  color: inherit;
   text-decoration: none;
 }
+
+
 

@@ -5,6 +5,8 @@ import './ProfileMain.css'
 import Header from '../components/Header'
 import ProfilePanel from '../components/ProfilePanel'
 import Post from '../components/Post'
+import baseURL from '../services/baseURL'
+
 
 const UserMain = ({user, setUser, posts})=> {
 
@@ -14,13 +16,16 @@ const UserMain = ({user, setUser, posts})=> {
     let [update, setUpdate] = useState('no')
     let [acpost, setAcPost] = useState(null)
 
+    // let baseURL = "http://localhost:3001"
+    // let baseURL = ""
+
     // USE EFECTS
     useEffect(()=> {
         
         if (update !== 'no') {
             let localuser = JSON.parse(window.localStorage.getItem('loggedUser'))
             setTimeout(()=> {
-                axios.get('http://localhost:3001/api/post')
+                axios.get(baseURL.concat('/api/post'))
                 .then(postss => {
                     let postslist = postss.data.filter(post => post.user[0] === localuser.userId)
                     setAcPost(postslist.reverse())

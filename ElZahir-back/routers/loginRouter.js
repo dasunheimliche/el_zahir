@@ -27,7 +27,7 @@ loginRouter.post('/', async (request, response)=> {
 
     response
         .status(200)
-        .send({token, username: user.username, name: user.name, userId:String(user._id), followers: user.followers, following: user.following, posts:user.posts.length})
+        .send({token, username: user.username, name: user.name, userId:String(user._id), followers: user.followers, following: user.following, posts:user.posts.length, profileImg: user.profileImg, mainPanelImg:user.mainPanelImg})
 
 })
 

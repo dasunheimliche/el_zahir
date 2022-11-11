@@ -7,6 +7,7 @@ const app = express()
 const userRouter = require('./routers/userRoutes')
 const loginRouter = require('./routers/loginRouter')
 const postRouter = require('./routers/postRouter')
+const commentRouter = require('./routers/commentRouter')
 
 // CONECTO A MONGOOSE
 const mongoose = require('mongoose')
@@ -23,13 +24,12 @@ app.use(cors())
 app.use(express.json())
 
 // ROUTERS
+app.use(express.static('build'))
+
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/post', postRouter)
-
-app.get('/api/', (request, response)=> {
-    response.send('<div>Hola!</div>')
-})
+app.use('/api/comment', commentRouter)
 
 // POST - MIDDLEWARES
 
