@@ -12,6 +12,8 @@ const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
     // let baseURL = "http://localhost:3001"
     // let baseURL = ""
 
+    console.log(window.innerWidth)
+
     useEffect(()=> {
         axios.get(baseURL.concat('/api/users'))
             .then(users => {
@@ -27,13 +29,36 @@ const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
     
 
     useEffect(()=> {
-        window.addEventListener('scroll', ()=> {
-            return (window.scrollY >= 62 && sticky === false)? setSticky(true): console.log()
-        })
+
+        if (window.innerWidth > 1600) {
+            window.addEventListener('scroll', ()=> {
+                return (window.scrollY >= 62 && sticky === false)? setSticky(true): console.log()
+            })
+            
+            window.addEventListener('scroll', ()=> {
+                return (window.scrollY < 62)?  setSticky(false): console.log()
+            })
+
+        } else if (window.innerWidth <= 1366 ) {
+            window.addEventListener('scroll', ()=> {
+                return (window.scrollY >= 42 && sticky === false)? setSticky(true): console.log()
+            })
+            
+            window.addEventListener('scroll', ()=> {
+                return (window.scrollY < 42)?  setSticky(false): console.log()
+            })
+
+        } else if (window.innerWidth <= 1600 && window.innerWidth > 1366) {
+            window.addEventListener('scroll', ()=> {
+                return (window.scrollY >= 50 && sticky === false)? setSticky(true): console.log()
+            })
+            
+            window.addEventListener('scroll', ()=> {
+                return (window.scrollY < 50)?  setSticky(false): console.log()
+            })
+        }
+
         
-        window.addEventListener('scroll', ()=> {
-            return (window.scrollY < 62)?  setSticky(false): console.log()
-        })
     }, [])
 
     let searchRef = useRef()
@@ -43,7 +68,7 @@ const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
     let suserfun = (suser)=> {
         axios.get(baseURL.concat('/api/post'))
                 .then(posts => {
-                    let postslist = posts.data.filter(post => post.user[0] === suser.id)
+                    let postslist = posts.data.filter(post => post.user === suser.id)
                     window.localStorage.setItem('currentSuser', JSON.stringify({posts: postslist.reverse(), id:suser.id, username: suser.username, following: suser.following, followers: suser.followers, profileImg: suser.profileImg, mainPanelImg:suser.mainPanelImg}))
                     setSuser({posts: postslist.reverse(), id:suser.id, username: suser.username, following: suser.following, followers: suser.followers, profileImg: suser.profileImg, mainPanelImg:suser.mainPanelImg})
                     setSearch('')
@@ -59,14 +84,15 @@ const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
         return results.map((res,i)=> {
             if (user.userId === res.id) {
                 return (
-                    <Link className='linknostyle' key={i} to={`/${user.username}/`}>
+                    <Link className='linknostyle' key={i} to={`/home/`}>
                         <div className='pointer' onClick={()=> suserfun(res)}>{res.username}</div>
                     </Link>
                 )
                 
             } else {
                 return (
-                    <Link className='linknostyle' key={i} to={`/${user.username}/userId=${res.id}`}>
+                    <Link className='linknostyle' key={i} to={`/user/${res.id}`}>
+                    {/* <Link className='linknostyle' key={i} to={`/home/userId=${res.id}`}> */}
                         <div className='pointer' onClick={()=> suserfun(res)}>{res.username}</div>
                     </Link>
                 )
@@ -93,7 +119,7 @@ const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
 
                     <div className="header-left">
 
-                        <Link className='linknostyle' to={`/${user.username}`}>
+                        <Link className='linknostyle' to={`/home`}>
                             <div className="logo">Zahir</div>
                         </Link>
                         

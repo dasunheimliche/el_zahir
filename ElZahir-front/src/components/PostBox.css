@@ -69,6 +69,21 @@
     height: 25px;
 }
 
+
+.post-video {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: white;
+    width: 300px;
+    height: 250px;
+    justify-content: space-between;
+}
+
+
+
 /*COMIENZO VENTANA EMERGENTE PARA POSTEAR UNA IMAGEN*/
 
 .post-image {
@@ -111,6 +126,11 @@
     resize: none;
     border-radius: 10px;
     padding: 5px;
+}
+
+#postImage-ar {
+    padding: 5px;
+    font-size: 17px;
 }
 
 #postImage-title:focus {

@@ -9,10 +9,10 @@ const postSchema = new mongoose.Schema({
     videoPost:String,
     videoAr: String,
     date: Date,
-    user: [{
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
-    }],
+    },
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

@@ -118,6 +118,10 @@
     outline: none;
     border: none;
     background-color: rgb(245, 245, 245);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .header-user-menu {
@@ -201,7 +205,14 @@
 }
 
 .profile-main {
-    height: 100%;
+    /* outline: 1px solid white;
+    outline-offset: -1px; */
+
+    display: flex;
+    flex-direction: column;
+
+
+    /* padding-bottom: 100px; */
 }
 
 .noOver {
@@ -211,14 +222,17 @@
 /* MAIN CONTENT */
 
 .main-content {
-    /* outline: 3px solid red; */
+    /* outline: 3px solid rgb(255, 0, 255); */
     padding-top: 40px;
     display: flex;
-    height: calc(100% - 275px);
+    /* height: calc(100% - 275px); */
 
     /* CON LO DE ABAJO CONTROLO EL ANCHO DEL CONTENIDO*/
     margin-left: 5%;
     margin-right: 5%; 
+
+    /* padding-bottom: 150px; */
+
 }
 
 .main-left {
@@ -226,7 +240,6 @@
     margin-right: 2.8%;
     display: flex;
     justify-content: flex-start;
-
 }
 
 
@@ -269,7 +282,7 @@
 .panel-options {
     background: linear-gradient(to top, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0));
     /* outline: 3px solid red; */
-    outline-offset: -3px;
+    /* outline-offset: -3px; */
     width: 100%;
     display: flex;
     height: 100%;
@@ -432,12 +445,13 @@
 /*PROFILE PANEL END*/
 
 .main-right {
-    /* outline: 1px solid green; */
+    /* outline: 5px solid green; */
     width: 100%;
     z-index: 0;
     position: relative;
     /* top: -40px; */
     /* padding-right: 3%; */
+
 }
 
 
@@ -459,17 +473,19 @@
     break-inside: avoid;
 
     border-radius: 5px;
+
 }
   
   
 .container {
+    /* outline: 1px solid red; */
     background-color: rgba(255, 245, 245, 0.291);
     position: relative;
     column-count: 2;
     column-gap: 15px;
 
-    height: min-content;
-    min-height: 90%;
+    min-height: calc(100vh - 300px);
+
     min-width: 1030px;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -478,10 +494,14 @@
 
     padding: 30px;
     padding-top: 15px;
-
+    padding-bottom: 30px;
 }
 
-
+.container-user {
+    padding-top: 30px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
 
 .container-stickymode {
     z-index: -1;
@@ -491,6 +511,11 @@
     border-radius: 10px ;
     padding-top: 30px;
 }
+
+.container-user-stickymode {
+    top: 55px;
+}
+
 
 
 /* PESTAÑAS */
@@ -550,6 +575,7 @@
     }
 
     .header-search {
+
         width: 135px;
         padding-left: 8px;
     }
@@ -567,6 +593,9 @@
     }
 
     .header-input {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         height: 9px;
         font-size: 15px;
     }
@@ -632,7 +661,7 @@
         z-index: -1;
         position: relative;
         /* top: 75px; */
-        top: 78px;
+        top: 65px;
     }
     /* PROFILE PANEL widht 1366*/
     .profile-panel {
@@ -648,7 +677,7 @@
     .sticky-panel {
         position: fixed;
         /* top: 85px; */
-        top: 57px;
+        top: 95px;
         width: 281px;
         height: 402px;
     }
@@ -746,6 +775,221 @@
     .pestaña {
         padding-top: 7px;
         padding-bottom: 7px;
+        font-size: 13px;
+    }
+
+  }
+
+
+  @media only screen and (max-width: 1610px)  and (min-width: 1367px) {
+
+    .logo {
+        font-size: 22px;
+    }
+
+    .header-image {
+        height: 50px;
+    }
+
+    .header-bar {
+        height: 45px;
+    }
+
+    .header-search {
+
+        width: 158px;
+        padding-left: 10px;
+    }
+
+    .search-opt {
+        width: 137px;
+        padding-left: 31px;
+        margin-top: 8px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+
+    .header-icon-img {
+        width: 16px;
+    }
+
+    .header-input {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 12px;
+        font-size: 14px;
+    }
+
+    .header-user-menu {
+  
+        padding-top: 4px;
+        padding-bottom: 4px;
+        padding-left: 4px;
+        padding-right: 12px;
+        border-radius: 17px;
+    }
+
+    .expanded {
+        border-top-left-radius: 17px ;
+        border-top-right-radius: 17px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    .header-user-opt {
+        width: calc(100% - 14px);
+        padding-left: 14px;
+        gap: 5px;
+        padding-top: 10px;
+        padding-bottom: 6px;
+        border-bottom-left-radius: 17px;
+        border-bottom-right-radius: 17px;
+    }
+
+
+
+    .h-user-logo {
+        width: 29px;
+        height: 29px;
+        margin-left: 8px;
+    }
+
+    .h-user-name {
+        font-size: 13px;
+    }
+
+    .signoff {
+        font-size: 13px;
+    }
+    
+
+    .main-content {
+        padding-top: 32px;
+    }
+
+
+    .container {
+        padding: 25px;
+        min-height: calc(100vh - 250px);
+        min-width: 858px;
+    }
+
+    .container-stickymode {
+        z-index: -1;
+        position: relative;
+        top: 80px;
+    }
+
+    .profile-panel {
+        width: 329px;
+        height: 481px;
+        top: 77px;
+    }
+
+    .profile-panel::before .sticky-panel{
+        width: 329px;
+        height: 481px;
+    }
+
+    .sticky-panel {
+        position: fixed;
+        top: 77px;
+    }
+
+
+    .profile-panel-up {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        width: 100%;
+        height: 277px;
+    }
+
+    .profile-panel-profile {
+        width: 70px;
+        height: 70px;
+        border: 3px solid rgb(240, 240, 240);
+        border-radius: 50px;
+        top: 239px;
+        left: 30px;
+    }
+
+    .profile-panel-down {
+        height: 204px;
+    }
+
+    .profile-panel-down-username {
+        font-size: 16px;
+        top: 75px;
+    }
+
+    .profile-panel-down-follow {
+        outline: 1px solid red;
+        font-size: 12px;
+        top: 40px;
+        left: 187px;
+    
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    
+        border-radius: 17px;
+    }
+
+    .unfollow:hover::after {
+        font-size: 12px;
+        content: 'Unfollow';
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    
+        padding-left: 21px;
+        padding-right: 21px;
+        padding-top: 7px;
+        padding-bottom: 7px;
+    
+        border-radius: 17px;
+    }
+
+
+    .profile-panel-down {
+        outline-offset: -1px;
+        height: 204px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .profile-panel-down-followers {
+        font-size: 16px;
+        gap: 10px;
+        padding-top: 55px;
+        gap: 10px;
+        padding-top: 55px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .stat {
+        width: 83px;
+        padding-top: 20px;
+        gap: 12px;
+        margin-bottom: 5px;
+    }
+    
+    .stat-title {
+        font-size: 14px;
+    }
+
+    .main-left {
+        min-width: 329px;
+        margin-right: 2.8%;
+    }
+
+
+    .pestaña {
+        padding-top: 14px;
+        padding-bottom: 8px;
         font-size: 13px;
     }
 

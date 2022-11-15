@@ -3,7 +3,9 @@ import {useEffect, useRef, useState } from 'react';
 import axios from 'axios'
 import Login from './components/Login';
 import ProfileMain from './components/ProfileMain'
+import ProfileMainOut from './components/ProfileMainOut';
 import RegisterMain from './components/RegisterMain'
+import PostToShow from './components/PostToShow';
 import './components/PostBox.css'
 import { Routes, Route,  Navigate } from 'react-router-dom'
 import baseURL from './services/baseURL'
@@ -12,8 +14,14 @@ function App() {
   // USESTATES ---------------------------------------------------------------
   let [posts, setPosts] = useState([])
   
-  let [user, setUser] = useState({username: window.localStorage.getItem('loggedUser')? JSON.parse(window.localStorage.getItem('loggedUser')).username : null , loggued:false, userId: null})
+  let [user, setUser] = useState(window.localStorage.getItem('loggedUser')? JSON.parse(window.localStorage.getItem('loggedUser')) : {username:null, loggued:false, userId: null})
   // let [user, setUser] = useState('')
+
+  console.log("APP STARTS WITH USER:", user.loggued)
+
+  let loggued = JSON.parse(window.localStorage.getItem('loggedUser'))
+  console.log("LOGGUEDDDDDD", loggued)
+
 
   // USEFFECTS ----------------------------------------------------------------
   useEffect(()=> {
@@ -34,7 +42,7 @@ function App() {
     setPosts([])
     axios.get(baseURL.concat('/api/post'))
       .then(posts => {
-        let postslist = posts.data.filter(post => post.user[0] === user.userId)
+        let postslist = posts.data.filter(post => post.user === user.userId)
         if (postslist.length !== posts.length) {
           setPosts(postslist.reverse())
         }
@@ -46,12 +54,16 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={user.loggued === false? <Navigate replace to='/login'/>:<Navigate replace to={`/${user.username}`}/>} />
+        <Route path="/" element={user.loggued === false? <Navigate replace to='/login'/>:<Navigate replace to={`/home`}/>} />
 
-        <Route path="/login" element={user.loggued === false? <Login setUser={setUser} setPosts={setPosts} /> : <Navigate replace to={`/${user.username}`}/>}/>
+        <Route path="/login" element={user.loggued === false? <Login setUser={setUser} setPosts={setPosts} /> : <Navigate replace to={`/home`}/>}/>
         <Route path='/register' element={<RegisterMain />} />
+ 
+        <Route path={`/home/*`} element={user.loggued===false? <Navigate replace to='/login'/>:<ProfileMain user={user} setUser={setUser} posts={posts} setPosts={setPosts}/>} /> 
 
-        <Route path={`/${user.username}/*`} element={user.loggued===false? <Navigate replace to='/login'/>:<ProfileMain user={user} setUser={setUser} posts={posts} setPosts={setPosts}/>}/>
+        <Route path={'/user/*'}  element={user.loggued === false? <Navigate replace to='/login'/> : <ProfileMainOut user={user} setUser={setUser} />}/>
+
+        <Route path={`/post/*`} element={<PostToShow />} />
       </Routes>
     </div>
   ) 

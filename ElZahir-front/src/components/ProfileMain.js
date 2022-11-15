@@ -24,14 +24,14 @@ import baseURL from '../services/baseURL'
 
 const ProfileMain = ({user, setUser, posts, setPosts})=> {
 
+    
+
     // USESTATES
     let [sticky, setSticky] = useState(false)
     let [seeOpt, setSeeOpt] = useState({type: 'none', post: null})
 
     let [postF, setPostF] = useState(false)
-    let [suser, setSuser] = useState({id:null, posts:[]})
-
-    // let [showPost, setShowPost] = useState({type: null, post: null})
+    let [suser, setSuser] = useState({id:null, posts:[], followers: [], following: []})
 
 
     // USE EFECTS
@@ -43,7 +43,7 @@ const ProfileMain = ({user, setUser, posts, setPosts})=> {
             axios.get(baseURL.concat('/api/post'))
             .then(postss => {
 
-                let postslist = postss.data.filter(post => post.user[0] === localuser.userId)
+                let postslist = postss.data.filter(post => post.user === localuser.userId)
                 setPosts(postslist.reverse())
             })
         }, 500)  
@@ -71,9 +71,9 @@ const ProfileMain = ({user, setUser, posts, setPosts})=> {
         axios.get(baseURL.concat('/api/post'))
             .then(allposts => {
                 let follows = user.following
-                let posts = allposts.data.filter(post => follows.includes(post.user[0]))
+                let posts = allposts.data.filter(post => follows.includes(post.user))
                 // window.localStorage.setItem('postsF', JSON.stringify(posts))
-                setPostF(posts)
+                setPostF(posts.reverse())
             })
     }
 
@@ -81,10 +81,10 @@ const ProfileMain = ({user, setUser, posts, setPosts})=> {
         axios.get(baseURL.concat('/api/post'))
             .then(allposts => {
                 let follows = user.following
-                let posts = allposts.data.filter(post => !follows.includes(post.user[0]))
-                let posts2 = posts.filter(post => post.user[0] !== user.userId)
+                let posts = allposts.data.filter(post => !follows.includes(post.user))
+                let posts2 = posts.filter(post => post.user !== user.userId)
                 // window.localStorage.setItem('postsF', JSON.stringify(posts2))
-                setPostF(posts2)
+                setPostF(posts2.reverse())
             })
     }
 
@@ -101,7 +101,7 @@ const ProfileMain = ({user, setUser, posts, setPosts})=> {
                 <PostImageUi setUser={setUser} onClick={setSeeOpt} className={seeOpt.type === 'image'? 'post-image': 'post-image notvisible'}/>
                 <PostTextUi setUser={setUser} user={user} onClick={setSeeOpt} className={seeOpt.type === 'text'? 'post-text': 'post-text notvisible'}/> 
                 <PostCitaUi setUser={setUser} onClick={setSeeOpt} className={seeOpt.type === 'cita'? 'post-text': 'post-text notvisible'}/>
-                <PostVideoUi setUser={setUser} onClick={setSeeOpt} className={seeOpt.type === 'video'? 'post-image': 'post-image notvisible'}/>
+                <PostVideoUi setUser={setUser} onClick={setSeeOpt} className={seeOpt.type === 'video'? 'post-video': 'post-video notvisible'}/>
 
                 <ChangePI user={user} setUser={setUser} onClick={setSeeOpt} className={seeOpt.type === 'changePI'? 'post-image': 'post-image notvisible'}/>
                 <ChangePanImg user={user} setUser={setUser} onClick={setSeeOpt} className={seeOpt.type === 'changePanImg'? 'post-image': 'post-image notvisible'}/>
@@ -112,7 +112,7 @@ const ProfileMain = ({user, setUser, posts, setPosts})=> {
                 {seeOpt.type === 'imagePost'? <ShowImagePost onClick={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
                 {seeOpt.type === 'textPost'? <ShowTextPost onClick={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
                 {seeOpt.type === 'citaPost'? <ShowCitaPost onClick={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
-                {seeOpt.type === 'videoPost'? <ShowVideoPost onClick={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
+                {seeOpt.type === 'videoPost'? <ShowVideoPost onClick={setSeeOpt} post={seeOpt.post} mainUser={user} setUser={setUser} postF={postF}/>: console.log()}
 
             </div>
 
@@ -140,13 +140,13 @@ const ProfileMain = ({user, setUser, posts, setPosts})=> {
                         </div>
                     </div>
                 }/>
-                <Route path={`/userId=${suser? suser.id: console.log()}`} element={suser? 
+                <Route exact path={`/userId=${suser? suser.id: console.log()}`} element={suser? 
                     <div className="main-content">
                         <div className="main-left">
                             <ProfilePanel setUser={setUser} user={user} setSuser={setSuser} suser={suser} sticky={sticky} setSeeOpt={setSeeOpt} seeOpt={seeOpt} mode={'user'}/>
                         </div>
                         <div className="main-right">
-                            <div className={sticky === false? 'container': 'container container-stickymode'}>
+                            <div className={sticky === false? 'container container-user': 'container container-user container-stickymode container-user-stickymode'}>
                                 {cargarPosts(suser.posts? suser.posts : [])}
                             </div>
                         </div>

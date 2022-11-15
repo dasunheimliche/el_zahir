@@ -3,38 +3,29 @@ import {useEffect, useState } from 'react'
 import '../components/post.css'
 import baseURL from '../services/baseURL'
 
-const ShowTextPost = ({post, mode, mainUser, postF, onClick})=> {
+const ShowTextPost = ({post, mainUser, onClick})=> {
+    let mode = 'user'
+    // let [liked, setLiked] = useState(false)
 
-    let [liked, setLiked] = useState(false)
+    
+    // const like = ()=> {
+    //     console.log("LIKE POST ID:", post.id)
+    //     setLiked(true)
+    //     axios.put(baseURL.concat(`/api/post/${post.id}`), {meId: mainUser.userId, mode: 'like'})
+    // }
 
-    useEffect(()=> {
-        console.log("USE EFFECT STARTS")
-        if (post.likes.includes(mainUser.userId)) {
-            setLiked(true)
-        } else {
-            setLiked(false)
-        }
-    }, [postF])
-
-
-    const like = ()=> {
-        console.log("LIKE POST ID:", post.id)
-        setLiked(true)
-        axios.put(baseURL.concat(`/api/post/${post.id}`), {meId: mainUser.userId, mode: 'like'})
-    }
-
-    const unlike = ()=> {
-        console.log("UNLIKE POST ID", post.id)
-        setLiked(false)
-        axios.put(baseURL.concat(`/api/post/${post.id}`), {meId: mainUser.userId, mode: 'unlike'})
-    }
+    // const unlike = ()=> {
+    //     console.log("UNLIKE POST ID", post.id)
+    //     setLiked(false)
+    //     axios.put(baseURL.concat(`/api/post/${post.id}`), {meId: mainUser.userId, mode: 'unlike'})
+    // }
 
     return (
-        <div className="post-container-textPost figure-showPost">
+        <div className='ShowPostOut'>
+            <div className="post-container-textPost figure-showPost">
                 {console.log("3 - TEXT RENDER STARTS")}
                 {console.log("-----------------------")}
-
-                {mode === 'user'? 
+                {mode === 'user'?
                     <div className='post-user-info'>
                         <div className='post-user-profile'>
                             <img className={'post-user-profile-image'} src={post.profileImg}></img>
@@ -48,15 +39,16 @@ const ShowTextPost = ({post, mode, mainUser, postF, onClick})=> {
                 <div className="post-sub">
                     <div className='post-sub-text'></div>
                     <div className='post-sub-area'>
-                        <div className='post-sub-size' onClick={()=>onClick({type: 'none', post: null})}></div>
+                        <div className='post-sub-size' style={{backgroundImage: "url()"}}></div>
                         <div className={'social-icons'}>
-                            {/* <span onClick={liked? unlike : like} className={liked? 'social-icon social-liked pointer' : 'social-icon social-notliked pointer'}></span>
+                            <span className={'social-icon social-notliked pointer'}></span>
                             <span className={'social-icon social-comment pointer'}></span>
-                            <span className={'social-icon social-share pointer'}></span> */}
+                            <span className={'social-icon social-share pointer'}></span>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     )
 }
 

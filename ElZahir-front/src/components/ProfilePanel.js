@@ -4,7 +4,6 @@ import PostBox from "../components/PostBox"
 import baseURL from '../services/baseURL'
 
 const ProfilePanel = ({setUser, setSuser, user, suser, posts, sticky, setSeeOpt, seeOpt, mode})=> {
-    
     let [following, setFollowing] = useState(suser? user.following.includes(suser.id): false)
 
 
@@ -68,7 +67,7 @@ const ProfilePanel = ({setUser, setSuser, user, suser, posts, sticky, setSeeOpt,
                                     <span>{mode === 'user'? (suser? String(suser.posts.length):"0"):(posts? String(user.posts):"0")}</span>
                                 </div>
                             </div>
-                            {mode === 'user'? <div></div>:<PostBox onClick={setSeeOpt} seeOpt={seeOpt}/>}
+                            {mode === 'user' || seeOpt.post? <div></div>:<PostBox onClick={setSeeOpt} seeOpt={seeOpt}/>}
                         </div>
                         
                     </div>

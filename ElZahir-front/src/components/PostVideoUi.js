@@ -11,7 +11,8 @@ const PostVideo = ({className, onClick, setUser})=> {
     // let baseURL = "http://localhost:3001"
     // let baseURL = ""
 
-    const postear = ()=> {
+    const postear = (e)=> {
+        e.preventDefault()
         let user = JSON.parse(window.localStorage.getItem('loggedUser'))
         let token = `Bearer ${user.token}`
 
@@ -25,6 +26,7 @@ const PostVideo = ({className, onClick, setUser})=> {
                 setUrl('')
                 setTitle('')
                 setSub('')
+                setAr('')
                 let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
                 window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser, posts: updateUser.posts + 1}))
                 setUser({...user, posts: updateUser.posts + 1})
@@ -33,18 +35,18 @@ const PostVideo = ({className, onClick, setUser})=> {
     }
 
     return (
-        <div className={className}>
+        <form className={className} onSubmit={(e)=>postear(e)}>
             <div className="postImage-inputs">
-                <input className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
-                <input className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
-                <input className="postImage-input" id="postImage-ar" placeholder="Aspect ratio" onChange={(e)=> setAr(e.target.value)} value={ar} autoComplete='off'/>
-                <textarea className="postImage-input" id="postImage-url" placeholder="URL" onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
+                <input required className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
+                <input required className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
+                <input className="postImage-input" id="postImage-ar" placeholder="Aspect ratio (Ej.: 16:9 or 1280:720)" onChange={(e)=> setAr(e.target.value)} value={ar} autoComplete='off'/>
+                <textarea required className="postImage-input" id="postImage-url" placeholder="URL" onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
             </div>
             <div className="postImage-botones">
                 <button className='postImage-button pointer' type="button" onClick={()=>onClick({type: 'none', post: null})} >CLOSE</button>
-                <button className="postImage-button pointer" onClick={postear} >POST</button>
+                <button typeof="submit" className="postImage-button pointer" >POST</button>
             </div>
-        </div>
+        </form>
     )
 }
 

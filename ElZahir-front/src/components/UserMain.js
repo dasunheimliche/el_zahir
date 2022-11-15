@@ -27,7 +27,7 @@ const UserMain = ({user, setUser, posts})=> {
             setTimeout(()=> {
                 axios.get(baseURL.concat('/api/post'))
                 .then(postss => {
-                    let postslist = postss.data.filter(post => post.user[0] === localuser.userId)
+                    let postslist = postss.data.filter(post => post.user === localuser.userId)
                     setAcPost(postslist.reverse())
                 })
             }, 500)  

@@ -8,7 +8,8 @@ import baseURL from '../services/baseURL'
 const Login = ({setUser})=> {
     let [username, setUsername] = useState('')
     let [password, setPassword] = useState('')
-
+    let [ok, setOk] = useState('')
+    console.log("OKKK????", ok)
     // let baseURL = "http://localhost:3001"
     // let baseURL = ""
 
@@ -18,7 +19,12 @@ const Login = ({setUser})=> {
         axios.post(baseURL.concat('/api/login'), {username, password})
           .then(user => {
               setUser({...user.data, loggued: true})
-              window.localStorage.setItem('loggedUser', JSON.stringify(user.data))       
+              setOk(true)
+              window.localStorage.setItem('loggedUser', JSON.stringify(user.data))
+
+          })
+          .catch(res=> {
+            setOk(false)
           })
       }
 
@@ -27,17 +33,18 @@ const Login = ({setUser})=> {
         <div className="main-login">
             <div className="left-login">
                 <div className="card-login">
-                    <div className="title-login">Bienvenido a El Zahir</div>
+                    <div className="title-login">Bienvenido/a</div>
                     <div className="sub-login">Por favor ingrese sus datos</div>
-                    <div className="logwgoogle pointer">Log in with google</div>
-                    <div className='or-login'>o</div>
+                    {/* <div className="logwgoogle pointer">Log in with google</div> */}
+                    {/* <div className='or-login'>o</div> */}
                     <form className="login" onSubmit={login}>
-                        <input className='form-login'  type='text' onChange={(e)=> setUsername(e.target.value)} placeholder={'username'} />
-                        <input className='form-login'  type='password' onChange={(e)=> setPassword(e.target.value)} placeholder={'password'} />
-                        <div className='remfor-login'>
+                        <input required className='form-login'  type='text' onChange={(e)=> setUsername(e.target.value)} placeholder={'username'} />
+                        <input required className='form-login'  type='password' onChange={(e)=> setPassword(e.target.value)} placeholder={'password'} />
+                        {/* <div className='remfor-login'>
                             <div className="rem-login">Recordarme por 30 días</div>
                             <div className="for-login  pointer">¿Olvidaste tu cotnraseña?</div>
-                        </div>
+                        </div> */}
+                        <div className={ok === false? 'failedLogin': ''}></div>
                         <button type='submit' className="in-login  pointer" >Log in</button>
                     </form>
 
@@ -48,9 +55,14 @@ const Login = ({setUser})=> {
                 </div>
             </div>
             <div className="right-login">
-                <img alt='samples'></img>
-                <div className="samples-login">
+                {/* <img alt='samples'></img> */}
+                {/* <div className="samples-login">
                     <Samples />
+                </div> */}
+                <div className='right-login-text'>
+                    <h1 className='right-login-title'>ZAHIR</h1>
+                    <p className='right-login-quote'>"Noches hubo en que me creí tan seguro de poder olvidar El Zahir, que voluntariamente lo recordaba. Lo cierto es que abusé de esos ratos: darles principio resultaba más fácil que darles fin"</p>
+                    <b>El Zahir - </b><i>Jorge Luis Borges</i>
                 </div>
             </div>
         </div>

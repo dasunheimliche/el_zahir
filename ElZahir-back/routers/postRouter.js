@@ -7,7 +7,7 @@ const postRouter = require('express').Router()
 
 const getToken = (request)=> {
     const auth = request.headers.authorization
-    console.log('AUTH', auth)
+    // console.log('AUTH', auth)
     if (auth && auth.toLowerCase().startsWith('bearer')) {
         return auth.substring(7)
     }
@@ -21,7 +21,7 @@ postRouter.put('/:id', async(request, response)=> {
 
     if (body.mode === 'like') {
         const meId = body.meId
-        console.log("BODYYY", body)
+        // console.log("BODYYY", body)
         
         const post = await Post.findById(id)
         const user = await User.findById(meId)
@@ -34,7 +34,7 @@ postRouter.put('/:id', async(request, response)=> {
 
     } else if (body.mode === 'unlike') {
         const meId = body.meId
-        console.log("BODYYY", body)
+        // console.log("BODYYY", body)
 
         await User.update({}, {$pull: {likedPosts: ObjectId(id)}})
 
@@ -83,20 +83,7 @@ postRouter.post('/', async (request, response)=> {
 postRouter.get('/', async (request, response)=> {
 
     let posts = await Post.find({})
-    let respuesta = posts.map(post => 
-        User.findById(post.user[0].toString())
-        .then(user => {
-            post.profileImg = user.profileImg
-            return post
-        })
-    )
-
-    await Promise.all(respuesta)
-    .then(res=> {
-        response.json(res)
-    })
-
-    
+    response.json(posts)
 
 })
 

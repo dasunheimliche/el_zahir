@@ -10,7 +10,8 @@ const PostImage = ({className, onClick, setUser})=> {
     // let baseURL = "http://localhost:3001"
     // let baseURL = ""
 
-    const postear = ()=> {
+    const postear = (e)=> {
+        e.preventDefault()
         let user = JSON.parse(window.localStorage.getItem('loggedUser'))
         let token = `Bearer ${user.token}`
 
@@ -32,17 +33,17 @@ const PostImage = ({className, onClick, setUser})=> {
     }
 
     return (
-        <div className={className}>
+        <form className={className} onSubmit={(e=>postear(e))}>
             <div className="postImage-inputs">
-                <input className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
-                <input className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
-                <textarea className="postImage-input" id="postImage-url" placeholder="URL" onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
+                <input required className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
+                <input required className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
+                <textarea required className="postImage-input" id="postImage-url" placeholder="URL" onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
             </div>
             <div className="postImage-botones">
                 <button className='postImage-button pointer' type="button" onClick={()=>onClick({type: 'none', post: null})} >CLOSE</button>
-                <button className="postImage-button pointer" onClick={postear} >POST</button>
+                <button className="postImage-button pointer" >POST</button>
             </div>
-        </div>
+        </form>
     )
 }
 

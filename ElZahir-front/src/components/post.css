@@ -27,6 +27,8 @@
   
   .video-container iframe {
     border-radius: 5px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
     position: absolute;
     top: 0;
     right: 0;
@@ -41,6 +43,7 @@
     display: flex;
     flex-direction: column;
     background-color: white;
+
 }
 
 .post-user-info {
@@ -89,6 +92,7 @@
     border-radius: 5px;
     border: 14px solid white;
     /* background-color: rgb(255, 255, 255); */
+
 }
 
 .img {
@@ -263,9 +267,41 @@
     background-image: url('../icons/comentario.jpg');
 }
 
+
 .social-share {
     background-image: url('../icons/compartir.jpg');
     width: 21px;
+}
+
+.social-share::after {
+    /* outline: 1px solid red; */
+    content: "Link copied!";
+    position: relative;
+    font-size: 13px;
+    top: -35px;
+    left: -25px;
+    visibility: hidden;
+    width: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition-property: content;
+    transition-duration: 0.2s;
+    transition-delay: 1s;
+
+    background-color: rgb(71, 71, 71);
+    color: white;
+    padding: 5px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+.social-share:active::after {
+    visibility: visible;
 }
 
 .social-delete {
@@ -275,10 +311,10 @@
 /* SHOW POST*/
 
 .figure-showPost {
-    margin: 0;
+    /* margin: 0;
     grid-template-rows: 1fr auto;
     break-inside: avoid;
-    border-radius: 5px;
+    border-radius: 5px; */
 }
 
 /* SHOW IMAGE POST */
@@ -290,16 +326,17 @@
     display: flex;
     flex-direction: column;
     background-color: white;
-    max-height: 90vh;
+    /* max-height: 90vh;
     max-width: 90vw;
-    width: 55vh;
+    width: 55vh; */
 }
 
 .post-image-content-show {
-
     border-radius: 5px;
     border: 14px solid white;
 }
+
+
 
 /* SHOW TEXT POST*/
 
@@ -340,9 +377,9 @@
     display: flex;
     flex-direction: column;
     background-color: white;
-    width: 30%;
-    max-height: 90vh;
-    max-width: 90vw;
+    width: 40%;
+    /* max-height: 90vh;
+    max-width: 90vw; */
 }
 
 /* COMMENTS */

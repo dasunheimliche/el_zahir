@@ -16,6 +16,14 @@ const Post = ({post, type, mode, user, setUser, mainUser, postF, onClick})=> {
 
     // console.log(`2 - WITH POST LIKES: ${post.likes} ${typeof post.likes[0]} AND MAIN USER ID: ${mainUser.userId} ${typeof(mainUser.userId)} POST LIKED? = ${liked}`)
 
+    // const image = new image()
+    // image.src = post.imagePost
+
+    // image.onload = function() {
+    //     alert(this.width + 'x' + this.height);
+    //   }
+
+
     useEffect(()=> {
         // console.log("USE EFFECT STARTS")
         if (post.likes.includes(mainUser.userId)) {
@@ -55,6 +63,12 @@ const Post = ({post, type, mode, user, setUser, mainUser, postF, onClick})=> {
         // })
     }
 
+    let postURL = `http://localhost:3000/#/post/${post.id}`
+
+    const clipboard = ()=> {
+        navigator.clipboard.writeText(postURL)
+    }
+
 
     if (type === "image") {
         return (
@@ -76,7 +90,7 @@ const Post = ({post, type, mode, user, setUser, mainUser, postF, onClick})=> {
                 </div>
                 <div className="post-sub">
                     <div className='post-sub-header' >
-                        <i>{post.title}</i> - <b>{post.subtitle}</b>
+                        <i>{post.title}</i> {(post.title && post.subtitle)? "-" : console.log()} <b>{post.subtitle}</b>
                     </div>
                     <div className='post-sub-text' ></div>
                     <div className='post-sub-area'>
@@ -84,8 +98,8 @@ const Post = ({post, type, mode, user, setUser, mainUser, postF, onClick})=> {
                         <div className={'social-icons'}>
                             <span onClick={liked? unlike : like} className={liked? 'social-icon social-liked pointer' : 'social-icon social-notliked pointer'}></span>
                             <span className={'social-icon social-comment pointer'} onClick={()=>onClick({type: 'comments', post: post})}></span>
-                            <span className={'social-icon social-share pointer'}></span>
-                            {(mode !== 'user' && user? user.userId === post.user[0]: "" === post.user[0])? <span className={'social-icon social-delete pointer'} onClick={deletePost}></span> : console.log()}
+                            <span className={'social-icon social-share pointer'} onClick={clipboard}></span>
+                            {(mode !== 'user' && user? user.userId === post.user: "" === post.user)? <span className={'social-icon social-delete pointer'} onClick={deletePost}></span> : console.log()}
                         </div>
                     </div>
   
@@ -117,8 +131,8 @@ const Post = ({post, type, mode, user, setUser, mainUser, postF, onClick})=> {
                         <div className={'social-icons'}>
                             <span onClick={liked? unlike : like} className={liked? 'social-icon social-liked pointer' : 'social-icon social-notliked pointer'}></span>
                             <span className={'social-icon social-comment pointer'} onClick={()=>onClick({type: 'comments', post: post})}></span>
-                            <span className={'social-icon social-share pointer'}></span>
-                            {(mode !== 'user' && user? user.userId === post.user[0]: "" === post.user[0])? <span className={'social-icon social-delete pointer'} onClick={deletePost}></span> : console.log()}
+                            <span className={'social-icon social-share pointer'} onClick={clipboard}></span>
+                            {(mode !== 'user' && user? user.userId === post.user: "" === post.user)? <span className={'social-icon social-delete pointer'} onClick={deletePost}></span> : console.log()}
                         </div>
                     </div>
                 </div>
@@ -163,8 +177,8 @@ const Post = ({post, type, mode, user, setUser, mainUser, postF, onClick})=> {
                         <div className={'social-icons'}>
                             <span onClick={liked? unlike : like} className={liked? 'social-icon social-liked pointer' : 'social-icon social-notliked pointer'}></span>
                             <span className={'social-icon social-comment pointer'} onClick={()=>onClick({type: 'comments', post: post})}></span>
-                            <span className={'social-icon social-share pointer'}></span>
-                            {(mode !== 'user' && user? user.userId === post.user[0]: "" === post.user[0])? <span className={'social-icon social-delete pointer'} onClick={deletePost}></span> : console.log()}
+                            <span className={'social-icon social-share pointer'} onClick={clipboard}></span>
+                            {(mode !== 'user' && user? user.userId === post.user: "" === post.user)? <span className={'social-icon social-delete pointer'} onClick={deletePost}></span> : console.log()}
                         </div>
                     </div>
                 </div>
@@ -177,14 +191,14 @@ const Post = ({post, type, mode, user, setUser, mainUser, postF, onClick})=> {
         const urlVideo = `https://www.youtube.com/embed/${idVideo}?playlist=${idVideo}&loop=1`
         
         let aspectr = post.videoAr.split(':')
-        let width = Number(aspectr[0])
-        let height = Number(aspectr[1])
+        let width = Number(aspectr[1])
+        let height = Number(aspectr[0])
         let ar = (width/height) * 100
 
         return (
             <div className="post-container figure">
-                {console.log("3 - VIDEO RENDER STARTS")}
-                {console.log("-----------------------")}
+                {/* {console.log("3 - VIDEO RENDER STARTS")}
+                {console.log("-----------------------")} */}
 
                 {mode === 'user'? 
                     <div className='post-user-info-video'>
@@ -210,8 +224,8 @@ const Post = ({post, type, mode, user, setUser, mainUser, postF, onClick})=> {
                         <div className={'social-icons'}>
                             <span onClick={liked? unlike : like} className={liked? 'social-icon social-liked pointer' : 'social-icon social-notliked pointer'}></span>
                             <span className={'social-icon social-comment pointer'} onClick={()=>onClick({type: 'comments', post: post})}></span>
-                            <span className={'social-icon social-share pointer'}></span>
-                            {(mode !== 'user' && user? user.userId === post.user[0]: "" === post.user[0])? <span className={'social-icon social-delete pointer'} onClick={deletePost}></span> : console.log()}
+                            <span className={'social-icon social-share pointer'} onClick={clipboard}></span>
+                            {(mode !== 'user' && user? user.userId === post.user: "" === post.user)? <span className={'social-icon social-delete pointer'} onClick={deletePost}></span> : console.log()}
                         </div>
                     </div>
                 </div>

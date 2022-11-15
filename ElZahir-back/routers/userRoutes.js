@@ -78,9 +78,12 @@ userRouter.put('/:id', async (request, response)=> {
     
     } else if (body.mode === 'profileImgURL') {
         const user = await User.findById(id)
+
         user.profileImg = body.profileImg
-        
         await user.save()
+
+        await Post.updateMany({user : user._id}, {profileImg: body.profileImg})
+
         response.json({profileImg: user.profileImg})
 
     } else if (body.mode === 'panelImgUrl') {
