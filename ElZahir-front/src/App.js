@@ -17,10 +17,10 @@ function App() {
   let [user, setUser] = useState(window.localStorage.getItem('loggedUser')? JSON.parse(window.localStorage.getItem('loggedUser')) : {username:null, loggued:false, userId: null})
   // let [user, setUser] = useState('')
 
-  console.log("APP STARTS WITH USER:", user.loggued)
+  // console.log("APP STARTS WITH USER:", user.loggued)
 
   let loggued = JSON.parse(window.localStorage.getItem('loggedUser'))
-  console.log("LOGGUEDDDDDD", loggued)
+  // console.log("LOGGUEDDDDDD", loggued)
 
 
   // USEFFECTS ----------------------------------------------------------------
@@ -53,6 +53,7 @@ function App() {
   // RENDER ------------------------------------------------------------------
   return (
     <div className="App">
+      <div className='svg'></div>
       <Routes>
         <Route path="/" element={user.loggued === false? <Navigate replace to='/login'/>:<Navigate replace to={`/home`}/>} />
 

@@ -23,8 +23,8 @@ const ShowTextPost = ({post, mainUser, onClick})=> {
     return (
         <div className='ShowPostOut'>
             <div className="post-container-textPost figure-showPost">
-                {console.log("3 - TEXT RENDER STARTS")}
-                {console.log("-----------------------")}
+                {/* {console.log("3 - TEXT RENDER STARTS")}
+                {console.log("-----------------------")} */}
                 {mode === 'user'?
                     <div className='post-user-info'>
                         <div className='post-user-profile'>

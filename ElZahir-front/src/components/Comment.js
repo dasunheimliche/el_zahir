@@ -7,12 +7,12 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
 
     let [subComments, setSubComments] = useState('')
 
-    console.log("COMMMENT", comment)
+    // console.log("COMMMENT", comment)
 
     const sets = (commentID, user)=> {
-        console.log(commentID)
+        // console.log(commentID)
         setCommentID(commentID)
-        console.log(user)
+        // console.log(user)
         setPlaceholder(`responder a @${user}`)
         setValue('')
     }

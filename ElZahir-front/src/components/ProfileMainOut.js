@@ -36,14 +36,14 @@ const ProfileMainOut = ({user, setUser})=> {
 
     const navegar = useNavigate()
 
-    console.log("STRIIIIIIIIIIIIIIIIIIIIIIING", window.location.href.split('/')[5])
+    // console.log("STRIIIIIIIIIIIIIIIIIIIIIIING", window.location.href.split('/')[5])
 
     let userID = window.location.href.split('/')[5]
 
-    console.log("USER IDD", userID, userID.length)
+    // console.log("USER IDD", userID, userID.length)
 
     window.addEventListener('popstate', ()=> {
-        console.log("POPSTATEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+        // console.log("POPSTATEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
         if (userID.length === 24) {
             setURL(userID)
         } 
@@ -135,7 +135,7 @@ const ProfileMainOut = ({user, setUser})=> {
 
            
               
-            <div className="main-content">
+            <div className={!seeOpt.post? "main-content": "main-content notvisible"}>
                 <div className="main-left">
                     <ProfilePanel setUser={setUser} user={user} setSuser={setSuser} suser={suser} sticky={sticky} setSeeOpt={setSeeOpt} seeOpt={seeOpt} mode={'user'}/>
                 </div>

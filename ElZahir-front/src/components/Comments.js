@@ -11,14 +11,14 @@ const Comments = ({post, postF, mode, mainUser, onClick})=> {
     let [placeholder, setPlaceholder] = useState('')
     let [commentID, setCommentID] = useState('')
 
-    console.log("CUTTTTTTTTTTTTTTTED",placeholder.split('@')[1])
+    // console.log("CUTTTTTTTTTTTTTTTED",placeholder.split('@')[1])
 
-    console.log("COMMENT ID AND PLACEHOLDER", commentID, placeholder)
+    // console.log("COMMENT ID AND PLACEHOLDER", commentID, placeholder)
 
     useEffect(()=> {
         axios.get(baseURL.concat('/api/comment'))
         .then(comments => {
-            console.log(comments.data)
+            // console.log(comments.data)
             let resultados = comments.data.filter(comment => (comment.postID === post.id && !comment.commentID))
             setComments(resultados)
         })
@@ -36,7 +36,7 @@ const Comments = ({post, postF, mode, mainUser, onClick})=> {
             commentID: commentID
         }
 
-        console.log("TO SENDDDD", toSend)
+        // console.log("TO SENDDDD", toSend)
 
         axios.post(baseURL.concat('/api/comment'), toSend)
         .then(res => {
@@ -48,9 +48,9 @@ const Comments = ({post, postF, mode, mainUser, onClick})=> {
     }
 
     const sets = (commentID, user)=> {
-        console.log(commentID)
+        // console.log(commentID)
         setCommentID('')
-        console.log(user)
+        // console.log(user)
         setPlaceholder(``)
         setValue('')
     }

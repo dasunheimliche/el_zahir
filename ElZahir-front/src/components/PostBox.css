@@ -21,6 +21,8 @@
 }
 
 .postbox-container {
+    /* outline: 1px solid green;
+    outline-offset: -1px; */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -43,6 +45,7 @@
 }
 
 .postbox-buttons {
+    /* outline: 1px solid red; */
     width: 100%;
     height: 0px;
     visibility: hidden;
@@ -58,8 +61,6 @@
 
     transition-property: height;
     transition-duration: 0.2s;
-
-
 }
 
 
@@ -250,7 +251,7 @@
 
     border: none;
     width: 25px;
-    height: 25px;
+    height: 0px;
     background-image: url('../icons/imageButton.png');
     background-size: cover;
     transition-property: height;
@@ -261,7 +262,7 @@
 
     border: none;
     width: 37px;
-    height: 25px;
+    height: 0px;
     background-image: url('../icons/citaButton.png');
     background-size: cover;
     transition-property: height;
@@ -285,7 +286,7 @@
 
     border: none;
     width: 25px;
-    height: 25px;
+    height: 0px;
     background-image: url('../icons/videoButton.png');
     background-size: cover;
     transition-property: height;

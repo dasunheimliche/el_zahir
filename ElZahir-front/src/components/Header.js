@@ -12,7 +12,7 @@ const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
     // let baseURL = "http://localhost:3001"
     // let baseURL = ""
 
-    console.log(window.innerWidth)
+    // console.log(window.innerWidth)
 
     useEffect(()=> {
         axios.get(baseURL.concat('/api/users'))

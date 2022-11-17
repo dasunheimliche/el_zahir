@@ -15,8 +15,8 @@ const Register = ()=> {
 
     const navegar = useNavigate()
 
-    console.log("VALID USERSS", validUsers)
-    console.log("INCUDES", validUsers.includes(inputs.username))
+    // console.log("VALID USERSS", validUsers)
+    // console.log("INCUDES", validUsers.includes(inputs.username))
     // console.log("OKKK?", ok)
 
     useEffect(()=> {
@@ -49,7 +49,7 @@ const Register = ()=> {
 
     return (
         <div className="main-login">
-            {console.log("STARTS RENDER")}
+            {/* {console.log("STARTS RENDER")} */}
             <div className="left-login">
 
                 <div className="card-login">

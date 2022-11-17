@@ -42,8 +42,8 @@ const ShowVideoPost = ({post})=> {
     return (
         <div className='ShowPostOut'>
             <div style={ar >= 100?  (ar >= 170? {width:"21%"}: {width: "32%"}) : {width: "50%"}} className="post-container-videoPost figure-showPost">
-                {console.log("3 - VIDEO RENDER STARTS")}
-                {console.log("-----------------------")}
+                {/* {console.log("3 - VIDEO RENDER STARTS")}
+                {console.log("-----------------------")} */}
                 {mode === 'user'?
                     <div className='post-user-info-video'>
                         <div className='post-user-profile'>

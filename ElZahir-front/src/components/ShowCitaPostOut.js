@@ -12,8 +12,8 @@ const ShowCitaPost = ({post})=> {
     return (
         <div className='ShowPostOut'>
             <div className="post-container-citaPost figure-showPost">
-                {console.log("3 - CITA RENDER STARTS")}
-                {console.log("-----------------------")}
+                {/* {console.log("3 - CITA RENDER STARTS")}
+                {console.log("-----------------------")} */}
                 {mode === 'user'?
                     <div className='post-user-info'>
                         <div className='post-user-profile'>

@@ -12,7 +12,7 @@ const PostToShow = ()=> {
     let [post, setPost] = useState('')
 
     let postID = window.location.href.split('/')[5]
-    console.log(postID)
+    // console.log(postID)
 
     useEffect(()=> {
         axios.get(baseURL.concat(`/api/post/${postID}`))

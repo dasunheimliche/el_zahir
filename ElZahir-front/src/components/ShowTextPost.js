@@ -8,7 +8,7 @@ const ShowTextPost = ({post, mode, mainUser, postF, onClick})=> {
     let [liked, setLiked] = useState(false)
 
     useEffect(()=> {
-        console.log("USE EFFECT STARTS")
+        // console.log("USE EFFECT STARTS")
         if (post.likes.includes(mainUser.userId)) {
             setLiked(true)
         } else {
@@ -18,21 +18,21 @@ const ShowTextPost = ({post, mode, mainUser, postF, onClick})=> {
 
 
     const like = ()=> {
-        console.log("LIKE POST ID:", post.id)
+        // console.log("LIKE POST ID:", post.id)
         setLiked(true)
         axios.put(baseURL.concat(`/api/post/${post.id}`), {meId: mainUser.userId, mode: 'like'})
     }
 
     const unlike = ()=> {
-        console.log("UNLIKE POST ID", post.id)
+        // console.log("UNLIKE POST ID", post.id)
         setLiked(false)
         axios.put(baseURL.concat(`/api/post/${post.id}`), {meId: mainUser.userId, mode: 'unlike'})
     }
 
     return (
         <div className="post-container-textPost figure-showPost">
-                {console.log("3 - TEXT RENDER STARTS")}
-                {console.log("-----------------------")}
+                {/* {console.log("3 - TEXT RENDER STARTS")}
+                {console.log("-----------------------")} */}
 
                 {mode === 'user'? 
                     <div className='post-user-info'>

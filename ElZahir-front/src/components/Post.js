@@ -63,7 +63,8 @@ const Post = ({post, type, mode, user, setUser, mainUser, postF, onClick})=> {
         // })
     }
 
-    let postURL = `http://localhost:3000/#/post/${post.id}`
+    // let postURL = `http://localhost:3000/#/post/${post.id}`
+    let postURL = `http://zahir.herokuapp.com/#/post/${post.id}`
 
     const clipboard = ()=> {
         navigator.clipboard.writeText(postURL)

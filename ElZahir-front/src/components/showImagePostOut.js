@@ -11,18 +11,18 @@ const ShowImagePost = ({post})=> {
     let [ancho, setAncho] = useState((size.width/size.height)*window.innerHeight)
 
     window.addEventListener('resize', function() {
-        console.log("INNER WIDHT, INNER HEIGHT", window.innerWidth, window.innerHeight)
+        // console.log("INNER WIDHT, INNER HEIGHT", window.innerWidth, window.innerHeight)
         setAncho((size.width/size.height)*(window.innerHeight - 200))
     });
 
     window.addEventListener('load', function() {
-        console.log("INNER WIDHT, INNER HEIGHT", window.innerWidth, window.innerHeight)
+        // console.log("INNER WIDHT, INNER HEIGHT", window.innerWidth, window.innerHeight)
         setAncho((size.width/size.height)*(window.innerHeight - 200))
     });
 
     ancho = ((size.width/size.height)*(window.innerHeight - 200))
 
-    console.log("ANCHOOOO", ancho)
+    // console.log("ANCHOOOO", ancho)
 
     const img = new Image();
 
@@ -40,8 +40,8 @@ const ShowImagePost = ({post})=> {
             <div className='ShowPostOut'>
                 <div style={size.height > (window.innerHeight - 150)? {width: `${ancho}px`, maxWidth: '90%'} : console.log()} className= {size.width !==0? "post-container-imagePost figure-showPost" : ''}>
                     {/* <div className='post-screen'></div> */}
-                    {console.log("3 - IMAGE RENDER STARTS")}
-                    {console.log("-----------------------")}
+                    {/* {console.log("3 - IMAGE RENDER STARTS")}
+                    {console.log("-----------------------")} */}
                     {mode === 'user'?
                         <div className='post-user-info-image'>
                             <div className='post-user-profile'>

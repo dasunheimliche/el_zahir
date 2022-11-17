@@ -10,25 +10,25 @@ const ShowImagePost = ({post, mode, mainUser, postF, onClick})=> {
     let [ancho, setAncho] = useState((size.width/size.height)*window.innerHeight)
 
     window.addEventListener('resize', function() {
-        console.log("INNER WIDHT, INNER HEIGHT", window.innerWidth, window.innerHeight)
+        // console.log("INNER WIDHT, INNER HEIGHT", window.innerWidth, window.innerHeight)
         setAncho((size.width/size.height)*(window.innerHeight - 200))
     });
 
     window.addEventListener('load', function() {
-        console.log("INNER WIDHT, INNER HEIGHT", window.innerWidth, window.innerHeight)
+        // console.log("INNER WIDHT, INNER HEIGHT", window.innerWidth, window.innerHeight)
         setAncho((size.width/size.height)*(window.innerHeight - 200))
     });
 
     ancho = ((size.width/size.height)*(window.innerHeight - 200))
 
-    console.log("ANCHOOOO", ancho)
+    // console.log("ANCHOOOO", ancho)
 
     const img = new Image();
 
 
     useEffect(()=> {
         img.addEventListener("load", function() {
-            console.log("USE EFFECT", this.naturalWidth +' '+ this.naturalHeight )
+            // console.log("USE EFFECT", this.naturalWidth +' '+ this.naturalHeight )
             setSize({width: this.naturalWidth, height: this.naturalHeight})
         })
         img.src = post.imagePost
@@ -37,7 +37,7 @@ const ShowImagePost = ({post, mode, mainUser, postF, onClick})=> {
 
 
     useEffect(()=> {
-        console.log("USE EFFECT STARTS")
+        // console.log("USE EFFECT STARTS")
         if (post.likes.includes(mainUser.userId)) {
             setLiked(true)
         } else {
@@ -47,13 +47,13 @@ const ShowImagePost = ({post, mode, mainUser, postF, onClick})=> {
 
 
     const like = ()=> {
-        console.log("LIKE POST ID:", post.id)
+        // console.log("LIKE POST ID:", post.id)
         setLiked(true)
         axios.put(baseURL.concat(`/api/post/${post.id}`), {meId: mainUser.userId, mode: 'like'})
     }
 
     const unlike = ()=> {
-        console.log("UNLIKE POST ID", post.id)
+        // console.log("UNLIKE POST ID", post.id)
         setLiked(false)
         axios.put(baseURL.concat(`/api/post/${post.id}`), {meId: mainUser.userId, mode: 'unlike'})
     }
