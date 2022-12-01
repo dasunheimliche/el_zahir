@@ -123,17 +123,22 @@ const ProfileMain = ({user, setUser, posts, setPosts})=> {
                     <div className={!seeOpt.post? "main-content" : "main-content notvisible"}>
 
                         <div className={'main-left'}>
+                            {!seeOpt.post?
                             <ProfilePanel setUser={setUser} user={user} sticky={sticky} setSeeOpt={setSeeOpt} seeOpt={seeOpt} posts={posts} />
+                            :
+                            console.log()
+                            }
+                            {/* <ProfilePanel setUser={setUser} user={user} sticky={sticky} setSeeOpt={setSeeOpt} seeOpt={seeOpt} posts={posts} /> */}
                         </div>
 
                         <div className="main-right">
-                            <div className={sticky? 'profile-main-pestañas profile-main-pestañas-sticky' : "profile-main-pestañas"}>
+                            { seeOpt.type === 'none'? <div className={sticky? 'profile-main-pestañas profile-main-pestañas-sticky' : "profile-main-pestañas"}>
 
                                 <span onClick={backtome} className='pestaña pestaña-me pointer'>ME</span>
                                 <span onClick={potsSeguidores}  className='pestaña pestaña-social pointer'>FRIENDS</span>
                                 <span onClick={potsDescubrir} className='pestaña pestaña-discover pointer' >EXPLORE</span>
                                 
-                            </div>
+                            </div> : console.log()}
                             <div className={sticky === false? 'container': 'container container-stickymode'}>
                                 {cargarPosts(postF? postF: posts)}
                             </div>
@@ -142,6 +147,7 @@ const ProfileMain = ({user, setUser, posts, setPosts})=> {
                 }/>
                 <Route exact path={`/userId=${suser? suser.id: console.log()}`} element={suser? 
                     <div className="main-content">
+                        
                         <div className="main-left">
                             <ProfilePanel setUser={setUser} user={user} setSuser={setSuser} suser={suser} sticky={sticky} setSeeOpt={setSeeOpt} seeOpt={seeOpt} mode={'user'}/>
                         </div>

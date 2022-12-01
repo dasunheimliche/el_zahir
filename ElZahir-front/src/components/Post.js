@@ -79,10 +79,10 @@ const Post = ({post, type, mode, user, setUser, mainUser, postF, onClick})=> {
                 {console.log("-----------------------")} */}
                 {mode === 'user'? 
                     <div className='post-user-info-image'>
-                        <div className='post-user-profile'>
-                            {/* <img className={'post-user-profile-image'} src={profileImg}></img> */}
-                            <img className={'post-user-profile-image'} src={post.profileImg} />
-                        </div>
+                        
+                        {/* <img className={'post-user-profile-image'} src={profileImg}></img> */}
+                        <img className={'post-user-profile-image'} src={post.profileImg} />
+                   
                         <div className='post-user-username'>@{post.username}</div>
                         <div></div>
                     </div> : console.log()}
@@ -188,8 +188,15 @@ const Post = ({post, type, mode, user, setUser, mainUser, postF, onClick})=> {
     }
     if (type === "video") {
 
-        const idVideo = post.videoPost.replace('https://www.youtube.com/watch?v=',"")
+        let idVideo
+        if (post.videoPost.startsWith("https://www.youtube.com/watch?")) {
+            idVideo = post.videoPost.replace('https://www.youtube.com/watch?v=',"")
+        } else if (post.videoPost.startsWith("https://youtu.be/")) {
+            idVideo = post.videoPost.replace('https://youtu.be/',"")
+        }
+
         const urlVideo = `https://www.youtube.com/embed/${idVideo}?playlist=${idVideo}&loop=1`
+        
         
         let aspectr = post.videoAr.split(':')
         let width = Number(aspectr[1])

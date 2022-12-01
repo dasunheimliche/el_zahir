@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import baseURL from '../services/baseURL'
 
 const PostVideo = ({className, onClick, setUser})=> {
@@ -7,9 +7,22 @@ const PostVideo = ({className, onClick, setUser})=> {
     let [title, setTitle] = useState('')
     let [sub, setSub] = useState('')
     let [ar, setAr] = useState('')
+    let [error, setError] = useState('idle')
 
-    // let baseURL = "http://localhost:3001"
-    // let baseURL = ""
+
+    const copyfromcb = (e)=> {
+        e.preventDefault()
+        navigator.clipboard.readText()
+        .then(text => setUrl(text))
+    }
+
+    useEffect(()=> {
+        if (!url.includes("youtu")) {
+            setError(true)
+        } else {
+            setError(false)
+        }
+    }, [url])
 
     const postear = (e)=> {
         e.preventDefault()
@@ -35,14 +48,17 @@ const PostVideo = ({className, onClick, setUser})=> {
     }
 
     return (
-        <form className={className} onSubmit={(e)=>postear(e)}>
+        <form className={className} onSubmit={error? console.log(): (e)=>postear(e)}>
             <div className="postImage-inputs">
                 <input required className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
                 <input required className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
-                <input className="postImage-input" id="postImage-ar" placeholder="Aspect ratio (Ej.: 16:9 or 1280:720)" onChange={(e)=> setAr(e.target.value)} value={ar} autoComplete='off'/>
+                <input className="postImage-input" id="postImage-ar" placeholder="Aspect ratio (Ej.: 16:9) optional" onChange={(e)=> setAr(e.target.value)} value={ar} autoComplete='off'/>
                 <textarea required className="postImage-input" id="postImage-url" placeholder="URL" onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
+                {(error && url.length > 0) && <div className="post-invalid">invalid url</div>}
+
             </div>
             <div className="postImage-botones">
+                <button className="postImage-button pointer" onClick={(e)=>copyfromcb(e)} >CLIPBOARD</button>
                 <button className='postImage-button pointer' type="button" onClick={()=>onClick({type: 'none', post: null})} >CLOSE</button>
                 <button typeof="submit" className="postImage-button pointer" >POST</button>
             </div>

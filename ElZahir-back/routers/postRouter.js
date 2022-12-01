@@ -5,6 +5,19 @@ const User = require('../models/User')
 const Post = require('../models/Post')
 const postRouter = require('express').Router()
 
+const Imagekit = require('imagekit')
+const fs = require('fs/promises')
+
+const imagekit = new Imagekit({
+    publicKey: "public_6DnujADgzOoT69JIc0gb33SS7C4=",
+    privateKey: "private_ss2dmZXrdv1OBjRHEEtg6wH09GQ=",
+    urlEndpoint: "https://ik.imagekit.io/vo7gdb6tl"
+})
+// const fileupload = require('express-fileupload')
+
+// app.use(fileupload())
+// app.use(express.urlencoded({extended: false}))
+
 const getToken = (request)=> {
     const auth = request.headers.authorization
     // console.log('AUTH', auth)
@@ -51,6 +64,8 @@ postRouter.put('/:id', async(request, response)=> {
 
 postRouter.post('/', async (request, response)=> {
     const body = request.body
+  
+    // console.log("BODYY", request.data)
     const token = getToken(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!token || !decodedToken.id) {
@@ -58,26 +73,76 @@ postRouter.post('/', async (request, response)=> {
     }
 
     const user = await User.findById(decodedToken.id)
+    // console.log("BODYYYYY", body)
+    // console.log(request.files? "HAY REQUEST FILES" : "NO HAY REQUEST FILES")
+    if (request.files) {
+        // console.log("FILE POST PATH")
+        // console.log("FILESSSSSSS",request.files)
+        // console.log("FILESSS.IMAGE", request.files.image)
+        let sampleFile = request.files.image
+        let uploadPath = __dirname + '\\uploads\\' + sampleFile.name
 
-    const post = new Post ({
-        type: body.type,
-        title: body.title,
-        subtitle: body.subtitle,
-        textPost: body.textPost,
-        imagePost: body.imagePost,
-        videoPost: body.videoPost,
-        videoAr: body.videoAr,
-        date: new Date(),
-        user: user._id,
-        username: user.username,
-        profileImg: user.profileImg,
-    })
+        sampleFile.mv(uploadPath, async function (err) {
+            if (err) {
+                return response.status(500).send(err)
+            }
+            // console.log("START READ FILE IN", uploadPath)
 
-    const savedPost = await post.save()
-    user.posts = user.posts.concat(savedPost._id)
-    await user.save()
+            let fileup = await fs.readFile(uploadPath)
+    
+            let promesa = await imagekit.upload({
+                file: fileup,
+                fileName: sampleFile.name
+            })
 
-    response.json(savedPost)
+            fs.unlink(uploadPath)
+            
+            // console.log("ENDS UPLOAD", promesa.url)
+
+            const post = new Post ({
+                type: body.type,
+                title: body.title,
+                subtitle: body.subtitle,
+                textPost: body.textPost,
+                imagePost: promesa.url,
+                videoPost: body.videoPost,
+                videoAr: body.videoAr,
+                date: new Date(),
+                user: user._id,
+                username: user.username,
+                profileImg: user.profileImg,
+            })
+    
+            const savedPost = await post.save()
+            user.posts = user.posts.concat(savedPost._id)
+            await user.save()
+    
+            response.json(savedPost)
+        })
+    } else {
+
+        // console.log("URL POST PATH")
+        const post = new Post ({
+            type: body.type,
+            title: body.title,
+            subtitle: body.subtitle,
+            textPost: body.textPost,
+            imagePost: body.imagePost,
+            videoPost: body.videoPost,
+            videoAr: body.videoAr,
+            date: new Date(),
+            user: user._id,
+            username: user.username,
+            profileImg: user.profileImg,
+        })
+
+        const savedPost = await post.save()
+        user.posts = user.posts.concat(savedPost._id)
+        await user.save()
+
+        response.json(savedPost)
+
+    }
 })
 
 postRouter.get('/', async (request, response)=> {

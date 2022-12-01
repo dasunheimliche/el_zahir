@@ -72,6 +72,7 @@
     background: url('../images/letter-bg4.gif') 0 0 / cover no-repeat;
     color: #de466c;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 
     filter: saturate(200%);
@@ -261,8 +262,7 @@
     font-family: 'Barlow';
     position: relative;
     width: 395px;
-    height: 590px;
-    /* border-radius: 10px; */
+    height:max-content;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -284,25 +284,25 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 395px;
-    height: 590px;
+    height:max-content;
     background-size:cover;
 }
 
 .panel-options {
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0));
     /* outline: 3px solid red; */
-    /* outline-offset: -3px; */
+    outline-offset: -3px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0));
     width: 100%;
     display: flex;
     height: 100%;
 
-    position: relative;
     top: 0px;
+    position: absolute;
 }
 
 .panel-options-left {
-    /* outline: 1px solid blue; */
+    z-index: 1;
+    /* outline: 5px solid blue; */
     width: 10%;
     display: flex;
     justify-content: center;
@@ -310,6 +310,7 @@
 }
 
 .panel-options-middle {
+    /* outline: 5px solid rgb(0, 255, 21); */
     width: 80%;
     display: flex;
     justify-content: center;
@@ -317,25 +318,24 @@
 }
 
 .panel-options-right {
-    /* outline: 1px solid blue; */
+    /* outline: 5px solid blue; */
     width: 10%;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .profile-panel-up {
-    position: relative;
-
     /* background-image: linear-gradient(to top, rgba(0, 0, 0, 0.736), rgba(0, 0, 0, 0)), url('https://64.media.tumblr.com/e9559361078bfb7a60a3490648e284ba/tumblr_nsqo147moz1rshw4wo1_540.jpg'); */
     background-size: cover;
     align-self: center;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     width: 100%;
-    height: 340px;
-
+    min-height: 340px;
     overflow: hidden;
+    position: relative;
 }
 
 
@@ -346,7 +346,7 @@
 
 
 .profile-panel-profile {
-
+    /* outline: 1px solid red; */
     background-size: cover;
     background-color: #ffd1d1;
     width: 100px;
@@ -354,17 +354,14 @@
     border: 3px solid rgb(240, 240, 240);
     border-radius: 50px;
     position: absolute;
-    top: 287px;
-
+    /* top: 287px; */
+    top: -50px;
     left: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.profile-panel-down {
-    height: 250px;
-}
 
 .profile-panel-down-username {
     font-weight: bold;
@@ -375,11 +372,14 @@
 }
 
 .profile-panel-down-follow {
+
     font-weight: bold;
     color: white;
     position: relative;
-    top: 50px;
-    left: 225px;
+    top: -145px;
+    left: 265px;
+
+    width: 50px;
 
     background-color: #3e3e3e;
     padding-left: 25px;
@@ -388,6 +388,12 @@
     padding-bottom: 10px;
 
     border-radius: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
 
 }
 
@@ -400,8 +406,8 @@
     top: 0px;
     left: 0px;
 
-    padding-left: 25px;
-    padding-right: 26px;
+    padding-left: 20px;
+    padding-right: 21px;
     padding-top: 10px;
     padding-bottom: 10px;
 
@@ -409,17 +415,21 @@
     
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .profile-panel-down {
-    height: 250px;
+    position: relative;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     display: flex;
     flex-direction: column;
 }
 
-
+.profile-panel-down-first {
+    width: 100%;
+    height: 86px;
+}
 
 .profile-panel-down-followers {
     justify-content: center;
@@ -427,7 +437,7 @@
     width: 100%;
     display: flex;
     gap: 15px;
-    padding-top: 86px;
+
 }
 
 .stat {
@@ -458,7 +468,7 @@
     /* outline: 5px solid green; */
     width: 100%;
     z-index: 0;
-    position: relative;
+    /* position: relative; */
     /* top: -40px; */
     /* padding-right: 3%; */
 
@@ -517,6 +527,7 @@
 }
 
 .container-user-stickymode {
+    position: relative;
     top: 55px;
 }
 
@@ -670,20 +681,20 @@
     /* PROFILE PANEL widht 1366*/
     .profile-panel {
         width: 281px;
-        height: 402px;
+        height: min-content;
     }
 
-    .profile-panel::before .sticky-panel{
-        width: 281px;
-        height: 409px;
-    }
+    /* .profile-panel::before .sticky-panel{
+
+    } */
 
     .sticky-panel {
         position: fixed;
+        /* position: sticky; */
         /* top: 85px; */
         top: 95px;
-        width: 281px;
-        height: 402px;
+        /* width: 281px;
+        height: 402px; */
     }
 
 
@@ -691,7 +702,7 @@
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         width: 100%;
-        height: 231px;
+        min-height: 231px;
     }
 
     .profile-panel-profile {
@@ -699,12 +710,8 @@
         height: 70px;
         border: 3px solid rgb(240, 240, 240);
         border-radius: 50px;
-        top: 195px;
+        top: -35px;
         left: 30px;
-    }
-
-    .profile-panel-down {
-        height: 270px;
     }
 
     .profile-panel-down-username {
@@ -714,8 +721,9 @@
 
     .profile-panel-down-follow {
         font-size: 12px;
-        top: 35px;
-        left: 150px;
+        top: -110px;
+        left: 175px;
+        font-size: 13px;
     
         padding-left: 20px;
         padding-right: 20px;
@@ -731,6 +739,7 @@
         position: absolute;
         top: 0px;
         left: 0px;
+        font-size: 13px;
     
         padding-left: 21px;
         padding-right: 21px;
@@ -742,18 +751,24 @@
 
 
     .profile-panel-down {
-        outline-offset: -1px;
-        height: 170px;
+
+
+        /* height: 170px; */
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
     }
 
+    .profile-panel-down-first {
+
+        width: 100%;
+        height: 55px;
+    }
+
     .profile-panel-down-followers {
+
         font-size: 13px;
         gap: 10px;
-        padding-top: 55px;
-        gap: 10px;
-        padding-top: 55px;
+
         display: flex;
         justify-content: center;
     }
@@ -887,13 +902,13 @@
 
     .profile-panel {
         width: 329px;
-        height: 481px;
+        height: min-content;
         top: 77px;
     }
 
     .profile-panel::before .sticky-panel{
         width: 329px;
-        height: 481px;
+        height: min-content;
     }
 
     .sticky-panel {
@@ -906,7 +921,7 @@
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         width: 100%;
-        height: 277px;
+        min-height: 277px;
     }
 
     .profile-panel-profile {
@@ -914,24 +929,25 @@
         height: 70px;
         border: 3px solid rgb(240, 240, 240);
         border-radius: 50px;
-        top: 239px;
+        top: -35px;
         left: 30px;
     }
 
-    .profile-panel-down {
-        height: 204px;
-    }
 
     .profile-panel-down-username {
         font-size: 16px;
         top: 75px;
     }
+    .profile-panel-down-first {
+        height: 70px;
+    }
 
     .profile-panel-down-follow {
         /* outline: 1px solid red; */
         font-size: 12px;
-        top: 40px;
-        left: 187px;
+        left: 215px;
+        top: -120px;
+        font-size: 14px;
     
         padding-left: 20px;
         padding-right: 20px;
@@ -942,24 +958,24 @@
     }
 
     .unfollow:hover::after {
-        font-size: 12px;
         content: 'Unfollow';
         position: absolute;
         top: 0px;
-        left: 0px;
+        left: -2px;
     
-        padding-left: 21px;
-        padding-right: 21px;
+        padding-left: 20px;
+        padding-right: 20px;
         padding-top: 7px;
         padding-bottom: 7px;
     
         border-radius: 17px;
+        font-size: 14px;
     }
 
 
     .profile-panel-down {
-        outline-offset: -1px;
-        height: 204px;
+
+        /* height: 204px; */
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
     }
@@ -967,9 +983,8 @@
     .profile-panel-down-followers {
         font-size: 16px;
         gap: 10px;
-        padding-top: 55px;
-        gap: 10px;
-        padding-top: 55px;
+        /* padding-top: 55px; */
+        /* padding-top: 55px; */
         display: flex;
         justify-content: center;
     }
@@ -1001,17 +1016,36 @@
 
 
   @media (orientation: portrait) {
+        .logo {
+            text-shadow: 0.4vw -0.4vw 0px rgb(255, 255, 255);
+
+        }
+    /* LOGIN AND REGISTER*/
         .right-login {
-            width: 0px;
+            /* outline: 10px solid red;
+            outline-offset: -10px; */
+            width: 0vw;
+            visibility: hidden;
         }
 
+        .left-login {
+            width: 100%;
+        } 
+
+        .card-login {
+            padding-left: 10vw;
+            padding-right: 10vw;
+        }
+    /* SVG */
         .svg {
             width: 100%;
         }
+    /*HEADER*/
         .logo {
             font-size: 5vw;
         }
         .header-image {
+            width: 0px;
             height: 0px;
         }
         .header-bar{
@@ -1030,10 +1064,11 @@
             padding-bottom: 1vw;
         }
         .header-search {
+            /* outline: 1px solid red; */
             width: 30vw;
             border-radius: 3vw;
             gap: 1vw;
-            padding-left: 3vw;
+            padding-left: 2vw;
         }
         .search-opt {
             width: calc(26vw);
@@ -1092,6 +1127,8 @@
             margin-right: 2%;
         }
 
+    /* MAINS */
+
         .main-content {
             display: flex;
             flex-direction: column;
@@ -1099,72 +1136,173 @@
             margin-right: 0%;
             padding-top: 0px;
         }
-
+    
         .main-left {
             min-width: 100%;
             margin-right: 0%;
         }
-
+    /* PROFILE PANEL*/
         .profile-panel {
-            position: static;
             width: 100%;
             border-radius: 0px;
+            /* height: 75vh; */
+            position: static;
+        }
+        .profile-panel::before .sticky-panel {
+            position: static;
         }
         .profile-panel-up{
+            /* outline: 3px solid red;
+            outline-offset: -3px; */
             border-radius: 0px;
+            min-height: 40vh;
+        }
+        .profile-panel-down {
+            /* outline: 3px solid rgb(68, 0, 255);
+            outline-offset: -3px; */
+            /* height: 35vh; */
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+        .profile-panel-profile {
+            width: 20vw;
+            height: 20vw;
+            border-width: 0.7vw;
+            border-radius: 200vw;
+            top: -10vw;
+            left: 37.5vw;
+        }
+        .profile-panel-down-username {
+            font-size: 4vw;
+            top: 21vw;
+        }
+        .profile-panel-down-first {
+            height: 21vw;
+        }
+        .profile-panel-down-followers {
+
+            font-size: 5vw;
+            gap: 5vw;
+        }
+        .stat {
+            width: 18vw;
+            padding-top: 0vw;
+            gap: 3vw;
+            margin-bottom: 0vh;
+        }
+        .stat-title {
+            font-size: 3.5vw;
+        }
+        .profile-panel-down-follow {
+            position: relative;
+            top: 0vh;
+            left: 0vw;
+            width: 8vw;
+        
+
+            margin-top: 5vh;
+            margin-bottom: 5vh;
+            align-self: center;
+
+            font-size: 4vw;
+            border-radius: 3.7vw;
+            padding-left: 7vw;
+            padding-right: 7vw;
+            padding-top: 2vw;
+            padding-bottom: 2vw;
+
+            background-color: rgb(0, 145, 0);
+
+        }
+        .unfollow:hover::after {
+            /* position: static; */
+            content: 'Unfollow';
+            background-color: rgb(251, 42, 42);
+            position: absolute;
+            left: -2vw;
+            
+            font-size: 4vw;
+            padding-left: 5.1vw;
+            padding-right: 5.1vw;
+            padding-top: 2vw;
+            padding-bottom: 2vw;
+            border-radius: 3.7vw;
+            
+            display: flex;
+            justify-content: center;
+            align-self: center;
         }
 
+        /* MAIN RIGHT*/
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        /* .main-right {
+            width: 95%;
+        } */
+
+        /* CONTAINER */
         .container {
             position: static;
             column-count:unset;
             width: 100%;
-            min-width: calc(100% - 10px);
+            min-width: calc(100%);
+            min-height: 25vw;
             padding-left: 0px;
             padding-right: 0px;
             margin-left: 0px;
             margin-right: 0px;
+            padding-top: 3vw;
         }
-
         .container-stickymode {
+            /* outline: 1px solid red; */
+            position: static;
+            border-radius: 0px;
+            padding-top: 3vw;
+        }
+        .container-user {
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+            padding-top: 3vw;
+        }
+        .container-user-stickymode {
             position: static;
         }
 
+        /* PESTAÑAS */
+        .profile-main-pestañas {
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+        }
         .profile-main-pestañas-sticky {
-            height: 25px;
+            height:min-content;
             visibility: visible;
         }
-
-        .sticky-panel {
-            position: static;
-            
+        .pestaña {
+            /* outline: 1px solid red; */
+            font-size: 3vw;
+            padding-top: 4vw;
+            padding-bottom: 2vw;
         }
-
-        .profile-panel::before .sticky-panel {
-            position: static;
+        .pestaña-me {
+            border-top: 0px;
         }
-
-        .post-container {
-            width: 100%;
+        .pestaña-discover {
+            border-top: 0px;
         }
-
 
         .figure {
-            grid-template-rows: 100%;
-            width: 100%;
+            margin-bottom: 3vw;
+        }
+       
+        .signoff {
+            font-size: 3.5vw;
+
         }
 
 
-        .poster-container {
-            position: static;
-        }
-        .postbox-buttons {
-            height: 25px;
-            z-index: 2;
-        }
-
-        .post-video {
-            position: static;
-        }
      
 
    }

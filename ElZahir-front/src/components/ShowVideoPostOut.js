@@ -31,7 +31,13 @@ const ShowVideoPost = ({post})=> {
     //     axios.put(baseURL.concat(`/api/post/${post.id}`), {meId: mainUser.userId, mode: 'unlike'})
     // }
 
-    const idVideo = post.videoPost.replace('https://www.youtube.com/watch?v=',"")
+    let idVideo
+        if (post.videoPost.startsWith("https://www.youtube.com/watch?")) {
+            idVideo = post.videoPost.replace('https://www.youtube.com/watch?v=',"")
+        } else if (post.videoPost.startsWith("https://youtu.be/")) {
+            idVideo = post.videoPost.replace('https://youtu.be/',"")
+        }
+        
     const urlVideo = `https://www.youtube.com/embed/${idVideo}?playlist=${idVideo}&loop=1`
         
     let aspectr = post.videoAr.split(':')

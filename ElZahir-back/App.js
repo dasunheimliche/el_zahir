@@ -9,6 +9,8 @@ const loginRouter = require('./routers/loginRouter')
 const postRouter = require('./routers/postRouter')
 const commentRouter = require('./routers/commentRouter')
 
+const fileupload = require('express-fileupload')
+
 // CONECTO A MONGOOSE
 const mongoose = require('mongoose')
 mongoose.connect(config.MONGODB_URI)
@@ -20,8 +22,14 @@ mongoose.connect(config.MONGODB_URI)
     })
 
 // PRE - MIDDLEWARES
+
 app.use(cors())
 app.use(express.json())
+
+
+app.use(fileupload())
+app.use(express.urlencoded({extended: false}))
+
 
 // ROUTERS
 app.use(express.static('build'))
@@ -30,6 +38,7 @@ app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/post', postRouter)
 app.use('/api/comment', commentRouter)
+
 
 // POST - MIDDLEWARES
 
