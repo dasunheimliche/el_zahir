@@ -266,7 +266,7 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(to Top, rgb(237, 237, 237),rgba(255, 255, 255, 0.704), rgba(0, 0, 0, 0.38));
+    background: linear-gradient(to Top, rgb(255, 255, 255),rgb(255, 255, 255), rgba(0, 0, 0, 0.38));
     position: sticky;
     top: 95px;
 }
@@ -356,7 +356,8 @@
     position: absolute;
     /* top: 287px; */
     top: -50px;
-    left: 30px;
+    left: 35px;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -419,6 +420,7 @@
 }
 
 .profile-panel-down {
+    background-color: white;
     position: relative;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -1018,14 +1020,17 @@
   @media (orientation: portrait) {
         .logo {
             text-shadow: 0.4vw -0.4vw 0px rgb(255, 255, 255);
-
         }
     /* LOGIN AND REGISTER*/
         .right-login {
             /* outline: 10px solid red;
             outline-offset: -10px; */
+            display: none;
             width: 0vw;
             visibility: hidden;
+        }
+        .right-login-text {
+            display: none;
         }
 
         .left-login {
@@ -1165,12 +1170,15 @@
             border-bottom-right-radius: 0px;
         }
         .profile-panel-profile {
+            outline: 1px solid red;
             width: 20vw;
             height: 20vw;
             border-width: 0.7vw;
             border-radius: 200vw;
             top: -10vw;
-            left: 37.5vw;
+            /* left: 37.5vw; */
+            left: calc(50% - 10vw);
+            
         }
         .profile-panel-down-username {
             font-size: 4vw;

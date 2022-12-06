@@ -1,25 +1,24 @@
+// 1 - Importo mongoose
+// 2 - Creo un esquema
+// 3 - Edito el comportamiento de toJSON
+// 4 - Convierto el esquema en un modelo
+
 const mongoose = require('mongoose')
 
-const postSchema = new mongoose.Schema({
-    type: String,
-    title:String,
-    subtitle: String,
-    textPost: String,
-    imagePost: String,
-    videoPost:String,
-    videoAr: String,
-    date: Date,
+const moodSchema = new mongoose.Schema({
+    moodImg: String,
+    moodVideo: String,
     imgkitID: String,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
     },
-    likes: [{
+    date: Date,
+    posts: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Post'
     }],
-    username: String,
-    profileImg: String,
+    pinned: Boolean
 })
 
 postSchema.set('toJSON', {
@@ -30,8 +29,6 @@ postSchema.set('toJSON', {
     }
 })
 
+const Mood = mongoose.model('Mood', moodSchema)
 
-const Post = mongoose.model('Post', postSchema)
-
-
-module.exports = Post
+module.exports = Mood

@@ -3,17 +3,16 @@ import { useEffect, useRef, useState } from "react"
 import baseURL from '../services/baseURL'
 
 
-const ChangePI = ({className, onClick, user, setUser})=> {
-    // ----------------------------------
-    // let [url, setUrl] = useState('')
-    // ----------------------------------
+const ChangePI = ({className, onClick, setUser})=> {
 
     let [mode, setMode] = useState('idle')
     let [url, setUrl] = useState('')
     let [error, setError] = useState(false)
     let [file, setFile] = useState(false)
+    let [loading, setLoading] = useState(false)
 
     let fileForm = useRef()
+
 
     useEffect(()=> {
         if ((url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.bmp') || url.endsWith('.gif') || url.endsWith('.webp') || url.endsWith('.tiff')) && url.length > 0) {
@@ -24,16 +23,19 @@ const ChangePI = ({className, onClick, user, setUser})=> {
     }, [url])
 
     useEffect(()=> {
-        if (file.type !== "image/png" && file !== false) {
-            setError("invalid file")
-        } else {
-            setError(false)
+        if (file.type) {
+            if (!file.type.startsWith('image/') && file !== false) {
+                setError("invalid file")
+            } else {
+                setError(false)
+            }
         }
-        
     }, [file])
 
     const copyfromcb = (e)=> {
         e.preventDefault()
+        setError(false)
+        setUrl('')
         setMode('url')
         setFile('')
         navigator.clipboard.readText()
@@ -42,6 +44,7 @@ const ChangePI = ({className, onClick, user, setUser})=> {
         })
     }
     const upload = (e)=> {
+        setError(false)
         setMode('file')
         setUrl(e.target.files[0].name)
         setFile(e.target.files[0])
@@ -57,7 +60,13 @@ const ChangePI = ({className, onClick, user, setUser})=> {
         onClick({type: 'none', post: null})
     }
 
-    const postear = ()=> {
+    const not = (e)=> {
+        e.preventDefault()
+    }
+
+    const postear = (e)=> {
+        setLoading(true)
+        e.preventDefault()
         const formData = new FormData()
         formData.append("image", file)
         formData.append("mode", "profileImgURL")
@@ -73,6 +82,8 @@ const ChangePI = ({className, onClick, user, setUser})=> {
             }
             axios.put(baseURL.concat(`/api/users/${user.userId}`), {profileImg: url, mode:'profileImgURL'}, config)
             .then(respuesta => {
+                setLoading(false)
+                setError(false)
                 setUrl('')
                 if (fileForm.current.value) {
                     fileForm.current.value = null
@@ -89,6 +100,8 @@ const ChangePI = ({className, onClick, user, setUser})=> {
             }
             axios.put(baseURL.concat(`/api/users/${user.userId}`), formData, config)
             .then(respuesta => {
+                setLoading(false)
+                setError(false)
                 setUrl('')
                 setFile('')
                 if (fileForm.current.value) {
@@ -102,25 +115,11 @@ const ChangePI = ({className, onClick, user, setUser})=> {
 
     }
 
-
-
-    // const postear = ()=> {
-    //     axios.put(baseURL.concat(`/api/users/${user.userId}`), {profileImg: url, mode:'profileImgURL'})
-    //         .then(respuesta => {
-    //             window.localStorage.setItem('loggedUser', JSON.stringify({...user, profileImg: respuesta.data.profileImg}))
-    //             setUser({...user, profileImg: respuesta.data.profileImg})
-
-    //         })
-    // }
-
-
     return (
-        <form className={className} onSubmit={error? console.log(): e=>postear(e)}>
+        <form className={className} onSubmit={error? e=>not(e): loading? e=>not(e) : e=>postear(e)}>
             <div className="postImage-inputs">
-                {/* <input required className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
-                <input required className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/> */}
                 <div className="post-options">
-                    <textarea disabled  className="postImage-input" id="postImage-url" style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
+                    <textarea disabled required  className="postImage-input" id="postImage-url" style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
                     <div className="clip-up">
                         <div className="clipboard pointer" onClick={(e)=>copyfromcb(e)}></div>
                         <label className="upload pointer">
@@ -128,23 +127,16 @@ const ChangePI = ({className, onClick, user, setUser})=> {
                         </label>
                     </div>
                 </div>
-                {(error && url.length > 0) && <div className="post-invalid">{error === "invalid link" && error !== false? "invalid link": "invalid file"}</div>}
+                <div>
+                    {(error && url.length > 0) && <div className="post-invalid">{error === "invalid link" && error !== false? "invalid link": "invalid file"}</div>}
+                </div>
             </div>
             <div className="postImage-botones">
+                <div className="loadingGif" style={loading? {display: "block"} : {display: "none"}}></div>
                 <button className='postImage-button pointer' type="button" onClick={close} >CLOSE</button>
                 <button className="postImage-button pointer" >POST</button>
             </div>
         </form>
-
-        // <div className={className}>
-        //     <div className="postImage-inputs">
-        //         <textarea className="postImage-input" id="postImage-url" placeholder="URL" onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
-        //     </div>
-        //     <div className="postImage-botones">
-        //         <button className='postImage-button pointer' type="button" onClick={()=>onClick({type: 'none', post: null})} >CLOSE</button>
-        //         <button className="postImage-button pointer" onClick={postear} >POST</button>
-        //     </div>
-        // </div>
     )
 }
 

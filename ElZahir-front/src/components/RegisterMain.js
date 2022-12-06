@@ -78,10 +78,10 @@ const Register = ()=> {
 
             <div className="right-login">
 
-                <img alt='profile'></img>
+                {/* <img alt='profile'></img>
                 <div className="samples-login">
                     <Samples />
-                </div>
+                </div> */}
                 
             </div>
         </div>

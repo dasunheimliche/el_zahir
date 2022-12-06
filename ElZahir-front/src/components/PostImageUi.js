@@ -9,16 +9,17 @@ const PostImage = ({className, onClick, setUser})=> {
     let [sub, setSub] = useState('')
     let [error, setError] = useState(false)
     let [file, setFile] = useState(false)
+    let [loading, setLoading] = useState(false)
 
-    console.log("FILEEEEEEEEEEEEEEEE", file)
-    console.log("MODEEEE", mode)
-    console.log("ERRORRR?", error)
+    // console.log("FILEEEEEEEEEEEEEEEE", file.type)
+    // console.log("MODEEEE", mode)
+    // console.log("ERRORRR?", error)
 
     // let baseURL = "http://localhost:3001"
     // let baseURL = ""
     let fileForm = useRef()
 
-    console.log("FILE FOOOORM",fileForm)
+    // console.log("FILE FOOOORM",fileForm)
 
     useEffect(()=> {
         if ((url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.bmp') || url.endsWith('.gif') || url.endsWith('.webp') || url.endsWith('.tiff')) && url.length > 0) {
@@ -29,17 +30,20 @@ const PostImage = ({className, onClick, setUser})=> {
     }, [url])
 
     useEffect(()=> {
-        if (file.type !== "image/png" && file !== false) {
-            setError("invalid file")
-        } else {
-            setError(false)
+        if (file.type) {
+            if (!file.type.startsWith('image/') && file !== false) {
+                setError("invalid file")
+            } else {
+                setError(false)
+            }
         }
-        
     }, [file])
 
 
     const copyfromcb = (e)=> {
         e.preventDefault()
+        setError(false)
+        setUrl('')
         setMode('url')
         setFile('')
         navigator.clipboard.readText()
@@ -48,14 +52,20 @@ const PostImage = ({className, onClick, setUser})=> {
         })
     }
     const upload = (e)=> {
+        setError(false)
         setMode('file')
         setUrl(e.target.files[0].name)
         setFile(e.target.files[0])
     }
 
+    const not = (e)=> {
+        e.preventDefault()
+    }
+
 
     const postear = (e)=> {
-       
+        setLoading(true)
+        e.preventDefault()
         const formData = new FormData()
         formData.append("image", file)
         formData.append("title", title)
@@ -66,7 +76,7 @@ const PostImage = ({className, onClick, setUser})=> {
         let token = `Bearer ${user.token}`
 
         if (mode === 'url') {
-            console.log("URL MODE")
+            // console.log("URL MODE")
             let config = {
                 headers: {
                     Authorization: token
@@ -74,6 +84,7 @@ const PostImage = ({className, onClick, setUser})=> {
             }
             axios.post(baseURL.concat("/api/post") , {title: title, subtitle:sub, imagePost:url, type: 'image'}, config)
                 .then(() => {
+                    setLoading(false)
                     setUrl('')
                     setTitle('')
                     setSub('')
@@ -83,9 +94,10 @@ const PostImage = ({className, onClick, setUser})=> {
                     let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
                     window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser, posts: updateUser.posts + 1}))
                     setUser({...user, posts: updateUser.posts + 1})
+                    setError(false)
                 })
         } else if (mode === 'file') {
-            console.log("FILE MODE")
+            // console.log("FILE MODE")
             let config = {
                 headers: {
                     Authorization: token,
@@ -94,11 +106,11 @@ const PostImage = ({className, onClick, setUser})=> {
             }
             axios.post(baseURL.concat("/api/post") , formData, config)
                 .then(() => {
-                    console.log("ALGOOOOOOOOOOO", e.target[3])
+                    setLoading(false)
+                    // console.log("ALGOOOOOOOOOOO", e.target[3])
                     if (fileForm.current.value) {
                         fileForm.current.value = null
                     }
-                    // e.target[3].value = null
                     setUrl('')
                     setTitle('')
                     setSub('')
@@ -106,7 +118,7 @@ const PostImage = ({className, onClick, setUser})=> {
                     let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
                     window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser, posts: updateUser.posts + 1}))
                     setUser({...user, posts: updateUser.posts + 1})
-
+                    setError(false)
                 })
         }
 
@@ -127,7 +139,7 @@ const PostImage = ({className, onClick, setUser})=> {
     }
 
     return (
-        <form className={className} onSubmit={error? console.log(): e=>postear(e)}>
+        <form className={className} onSubmit={error? e=>not(e): loading? e=>not(e) : e=>postear(e)}>
             <div className="postImage-inputs">
                 <input required className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
                 <input required className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
@@ -141,12 +153,14 @@ const PostImage = ({className, onClick, setUser})=> {
                         </label>
                     </div>
                 </div>
-                {(error && url.length > 0) && <div className="post-invalid">{error === "invalid link" && error !== false? "invalid link": "invalid file"}</div>}
+                <div>
+                    {(error && url.length > 0) && <div className="post-invalid">{error === "invalid link" && error !== false? "invalid link": "invalid file"}</div>}
+                </div>
             </div>
             <div className="postImage-botones">
                 {/* <input ref={fileForm} type="file" onClick={()=>setUrl('')} onChange={(e)=>upload(e)} />
                 <button className="postImage-button pointer" onClick={(e)=>copyfromcb(e)} >CLIPBOARD</button> */}
-
+                <div className="loadingGif" style={loading? {display: "block"} : {display: "none"}}></div>
                 <button className='postImage-button pointer' type="button" onClick={close} >CLOSE</button>
                 <button className="postImage-button pointer" >POST</button>
             </div>

@@ -1,8 +1,11 @@
 // IMPORTO MODULOS
-const cors = require('cors')
 const config = require('./utils/config')
+
+const cors = require('cors')
+
 const express = require('express')
-const app = express()
+const mongoose = require('mongoose')
+// const app = express()
 
 const userRouter = require('./routers/userRoutes')
 const loginRouter = require('./routers/loginRouter')
@@ -12,7 +15,7 @@ const commentRouter = require('./routers/commentRouter')
 const fileupload = require('express-fileupload')
 
 // CONECTO A MONGOOSE
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 mongoose.connect(config.MONGODB_URI)
     .then(() => {
         console.log('Connected to MongoDB')
@@ -22,6 +25,7 @@ mongoose.connect(config.MONGODB_URI)
     })
 
 // PRE - MIDDLEWARES
+const app = express()
 
 app.use(cors())
 app.use(express.json())

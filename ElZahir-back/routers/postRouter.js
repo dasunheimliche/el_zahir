@@ -75,6 +75,7 @@ postRouter.post('/', async (request, response)=> {
     const user = await User.findById(decodedToken.id)
     // console.log("BODYYYYY", body)
     // console.log(request.files? "HAY REQUEST FILES" : "NO HAY REQUEST FILES")
+
     if (request.files) {
         // console.log("FILE POST PATH")
         // console.log("FILESSSSSSS",request.files)
@@ -94,7 +95,7 @@ postRouter.post('/', async (request, response)=> {
                 file: fileup,
                 fileName: sampleFile.name
             })
-
+            console.log("PRMOESAAAAAA",promesa)
             fs.unlink(uploadPath)
             
             // console.log("ENDS UPLOAD", promesa.url)
@@ -105,6 +106,7 @@ postRouter.post('/', async (request, response)=> {
                 subtitle: body.subtitle,
                 textPost: body.textPost,
                 imagePost: promesa.url,
+                imgkitID: promesa.fileId,
                 videoPost: body.videoPost,
                 videoAr: body.videoAr,
                 date: new Date(),
@@ -116,12 +118,42 @@ postRouter.post('/', async (request, response)=> {
             const savedPost = await post.save()
             user.posts = user.posts.concat(savedPost._id)
             await user.save()
-    
+
             response.json(savedPost)
+            
+            // response.json(savedPost)
         })
-    } else {
+    } else if (!request.files && body.type === "image") {
+
+        let promesa = await imagekit.upload({
+            file: body.imagePost,
+            fileName: "randomname"
+        })
+
 
         // console.log("URL POST PATH")
+        const post = new Post ({
+            type: body.type,
+            title: body.title,
+            subtitle: body.subtitle,
+            textPost: body.textPost,
+            imagePost: promesa.url,
+            imgkitID: promesa.fileId,
+            videoPost: body.videoPost,
+            videoAr: body.videoAr,
+            date: new Date(),
+            user: user._id,
+            username: user.username,
+            profileImg: user.profileImg,
+        })
+
+        const savedPost = await post.save()
+        user.posts = user.posts.concat(savedPost._id)
+        await user.save()
+
+        response.json(savedPost)
+
+    } else if (body.type === "text" || body.type === "cita" || body.type === "video") {
         const post = new Post ({
             type: body.type,
             title: body.title,
@@ -141,7 +173,6 @@ postRouter.post('/', async (request, response)=> {
         await user.save()
 
         response.json(savedPost)
-
     }
 })
 
@@ -161,11 +192,25 @@ postRouter.get('/:id', async (request, response)=> {
 })
 
 postRouter.delete('/:id', async(request, response) => {
+
+    const body = request.body
+
+    // console.log("DELETE BODY", request)
+
+    const token = getToken(request)
+
+    // console.log("DELETE TOKEN", token)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        return response.status(401).json({error: 'token missing or invalid'})
+    }
+
     const id = request.params.id
 
     await User.update({}, {$pull: {posts: ObjectId(id)}}, {new: true})
-
-
+    if (body.imgkitID) {
+        imagekit.deleteFile(body.imgkitID)
+    }
     await Post.findByIdAndDelete(id)
     .then(deletedPost => {
         response.json(deletedPost)

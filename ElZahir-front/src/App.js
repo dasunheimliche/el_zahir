@@ -13,13 +13,14 @@ import baseURL from './services/baseURL'
 function App() {
   // USESTATES ---------------------------------------------------------------
   let [posts, setPosts] = useState([])
+  let [moods, setMoods] = useState([])
   
   let [user, setUser] = useState(window.localStorage.getItem('loggedUser')? JSON.parse(window.localStorage.getItem('loggedUser')) : {username:null, loggued:false, userId: null})
   // let [user, setUser] = useState('')
 
   // console.log("APP STARTS WITH USER:", user.loggued)
 
-  let loggued = JSON.parse(window.localStorage.getItem('loggedUser'))
+  // let loggued = JSON.parse(window.localStorage.getItem('loggedUser'))
   // console.log("LOGGUEDDDDDD", loggued)
 
 
@@ -60,7 +61,7 @@ function App() {
         <Route path="/login" element={user.loggued === false? <Login setUser={setUser} setPosts={setPosts} /> : <Navigate replace to={`/home`}/>}/>
         <Route path='/register' element={<RegisterMain />} />
  
-        <Route path={`/home/*`} element={user.loggued===false? <Navigate replace to='/login'/>:<ProfileMain user={user} setUser={setUser} posts={posts} setPosts={setPosts}/>} /> 
+        <Route path={`/home/*`} element={user.loggued===false? <Navigate replace to='/login'/>:<ProfileMain moods={moods} setMoods={setMoods} user={user} setUser={setUser} posts={posts} setPosts={setPosts}/>} /> 
 
         <Route path={'/user/*'}  element={user.loggued === false? <Navigate replace to='/login'/> : <ProfileMainOut user={user} setUser={setUser} />}/>
 

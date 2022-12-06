@@ -22,9 +22,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import baseURL from '../services/baseURL'
 
-const ProfileMain = ({user, setUser, posts, setPosts})=> {
-
-    
+const ProfileMain = ({user, setUser, posts, setPosts, moods, setMoods})=> {
 
     // USESTATES
     let [sticky, setSticky] = useState(false)
@@ -32,6 +30,8 @@ const ProfileMain = ({user, setUser, posts, setPosts})=> {
 
     let [postF, setPostF] = useState(false)
     let [suser, setSuser] = useState({id:null, posts:[], followers: [], following: []})
+
+    let [mood, setMood] = useState(0)
 
 
     // USE EFECTS
@@ -124,7 +124,7 @@ const ProfileMain = ({user, setUser, posts, setPosts})=> {
 
                         <div className={'main-left'}>
                             {!seeOpt.post?
-                            <ProfilePanel setUser={setUser} user={user} sticky={sticky} setSeeOpt={setSeeOpt} seeOpt={seeOpt} posts={posts} />
+                            <ProfilePanel mood={mood} setMood={setMood} setUser={setUser} user={user} sticky={sticky} setSeeOpt={setSeeOpt} seeOpt={seeOpt} posts={posts} />
                             :
                             console.log()
                             }
