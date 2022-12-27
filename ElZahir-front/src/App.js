@@ -12,33 +12,31 @@ import baseURL from './services/baseURL'
 
 function App() {
   // USESTATES ---------------------------------------------------------------
+
   let [posts, setPosts] = useState([])
   let [moods, setMoods] = useState([])
   
   let [user, setUser] = useState(window.localStorage.getItem('loggedUser')? JSON.parse(window.localStorage.getItem('loggedUser')) : {username:null, loggued:false, userId: null})
-  // let [user, setUser] = useState('')
 
-  // console.log("APP STARTS WITH USER:", user.loggued)
-
-  // let loggued = JSON.parse(window.localStorage.getItem('loggedUser'))
-  // console.log("LOGGUEDDDDDD", loggued)
-
-
+  
   // USEFFECTS ----------------------------------------------------------------
+
   useEffect(()=> {
     // Cada vez que recargo la página, se actualiza el estado 'user' con el localStorate, por lo que...
     // ... cada cambio que deba permanecer durante la sesión, debe guardarse en el localStorage
     let loggedUser =  window.localStorage.getItem('loggedUser')
     
+    // Lo siguiente corre solo si existe loggedUser
     if (loggedUser) {
-      const userl = JSON.parse(loggedUser)
-      setUser(userl)
-      
+      const userFromLocalStorate = JSON.parse(loggedUser)
+      setUser(userFromLocalStorate)
     } 
   }, [])
 
 
   useEffect(()=> {
+
+    // Cada vez que cambia el estado 'user' actualizo el estado 'posts' con la base de datos.
 
     setPosts([])
     axios.get(baseURL.concat('/api/post'))

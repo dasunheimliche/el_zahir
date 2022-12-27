@@ -2,7 +2,7 @@ import axios from "axios"
 import { useState } from "react"
 import baseURL from '../services/baseURL'
 
-const PostCita = ({className, onClick, setUser})=> {
+const PostCita = ({className, setSeeOpt, setUser})=> {
     let [author, setAuthor] = useState('')
     let [work, setWork] = useState('')
     let [cita, setCita] = useState('')
@@ -46,7 +46,7 @@ const PostCita = ({className, onClick, setUser})=> {
 
 
             <div className="postText-botones">
-                <button className='postText-button pointer' type="button" onClick={()=>onClick({type: 'none', post:null})} >CLOSE</button>
+                <button className='postText-button pointer' type="button" onClick={()=>setSeeOpt({type: 'none', post:null})} >CLOSE</button>
                 <button type="submit" className="postText-button pointer" >POST</button>
             </div>
         </form>

@@ -42,8 +42,8 @@ loginRouter.post('/', async (request, response)=> {
     // ENVIO LA RESPUESTA A LA SOLICITUD
     response
         .status(200)
-        .send({token, username: user.username, name: user.name, userId:String(user._id), followers: user.followers, following: user.following, posts:user.posts.length, profileImg: user.profileImg, mainPanelImg:user.mainPanelImg})
-
+        // .send({token, username: user.username, name: user.name, userId:String(user._id), followers: user.followers, following: user.following, posts:user.posts.length, profileImg: user.profileImg, mainPanelImg:user.mainPanelImg})
+        .send({...user.toObject(), token, userId:user._id, posts:user.posts.length})
 })
 
 module.exports = loginRouter

@@ -3,7 +3,7 @@ import {useEffect, useState } from 'react'
 import '../components/post.css'
 import baseURL from '../services/baseURL'
 
-const ShowImagePost = ({post, mode, mainUser, postF, onClick})=> {
+const ShowImagePost = ({post, mode, mainUser, postF, setSeeOpt})=> {
 
     let [liked, setLiked] = useState(false)
     let [size, setSize] = useState({width: 0, height: 0})
@@ -80,13 +80,15 @@ const ShowImagePost = ({post, mode, mainUser, postF, onClick})=> {
                     <div className='post-sub-header' >
                         <i>{post.title}</i> {(post.title && post.subtitle)? "-" : console.log()} <b>{post.subtitle}</b>
                     </div>
-                    <div className='post-sub-text'></div>
-                    <div className='post-sub-area'>
-                        <div className='post-sub-size' onClick={()=>onClick({type: 'none', post: null})}></div>
-                        <div className={'social-icons'}>
-                            {/* <span onClick={liked? unlike : like} className={liked? 'social-icon social-liked pointer' : 'social-icon social-notliked pointer'}></span>
-                            <span className={'social-icon social-comment pointer'}></span>
-                            <span className={'social-icon social-share pointer'}></span> */}
+                    <div onClick={()=>setSeeOpt({type: 'none', post: null})} className={"pointer"}>
+                        <div className='post-sub-text'></div>
+                        <div className='post-sub-area'>
+                            <div></div>
+                            <div className={'social-icons'}>
+                                {/* <span onClick={liked? unlike : like} className={liked? 'social-icon social-liked pointer' : 'social-icon social-notliked pointer'}></span>
+                                <span className={'social-icon social-comment pointer'}></span>
+                                <span className={'social-icon social-share pointer'}></span> */}
+                            </div>
                         </div>
                     </div>
                 </div>

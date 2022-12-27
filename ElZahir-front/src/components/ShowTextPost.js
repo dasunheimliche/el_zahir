@@ -3,7 +3,7 @@ import {useEffect, useState } from 'react'
 import '../components/post.css'
 import baseURL from '../services/baseURL'
 
-const ShowTextPost = ({post, mode, mainUser, postF, onClick})=> {
+const ShowTextPost = ({post, mode, mainUser, postF, setSeeOpt})=> {
 
     let [liked, setLiked] = useState(false)
 
@@ -48,7 +48,7 @@ const ShowTextPost = ({post, mode, mainUser, postF, onClick})=> {
                 <div className="post-sub">
                     <div className='post-sub-text'></div>
                     <div className='post-sub-area'>
-                        <div className='post-sub-size' onClick={()=>onClick({type: 'none', post: null})}></div>
+                        <div className='post-sub-size' onClick={()=>setSeeOpt({type: 'none', post: null})}></div>
                         <div className={'social-icons'}>
                             {/* <span onClick={liked? unlike : like} className={liked? 'social-icon social-liked pointer' : 'social-icon social-notliked pointer'}></span>
                             <span className={'social-icon social-comment pointer'}></span>

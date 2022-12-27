@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import baseURL from '../services/baseURL'
 
-const PostVideo = ({className, onClick, setUser})=> {
+const PostVideo = ({className, setSeeOpt, setUser})=> {
     let [url, setUrl] = useState('')
     let [title, setTitle] = useState('')
     let [sub, setSub] = useState('')
@@ -59,7 +59,7 @@ const PostVideo = ({className, onClick, setUser})=> {
             </div>
             <div className="postImage-botones">
                 <button className="postImage-button pointer" onClick={(e)=>copyfromcb(e)} >CLIPBOARD</button>
-                <button className='postImage-button pointer' type="button" onClick={()=>onClick({type: 'none', post: null})} >CLOSE</button>
+                <button className='postImage-button pointer' type="button" onClick={()=>setSeeOpt({type: 'none', post: null})} >CLOSE</button>
                 <button typeof="submit" className="postImage-button pointer" >POST</button>
             </div>
         </form>

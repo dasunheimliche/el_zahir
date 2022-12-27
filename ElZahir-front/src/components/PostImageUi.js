@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import baseURL from '../services/baseURL'
 
-const PostImage = ({className, onClick, setUser})=> {
+const PostImage = ({className, setSeeOpt, setUser})=> {
     let [mode, setMode] = useState('idle')
     let [url, setUrl] = useState('')
     let [title, setTitle] = useState('')
@@ -135,7 +135,7 @@ const PostImage = ({className, onClick, setUser})=> {
         setSub('')
         setFile('')
         setError(false)
-        onClick({type: 'none', post: null})
+        setSeeOpt({type: 'none', post: null})
     }
 
     return (

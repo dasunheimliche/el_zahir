@@ -314,12 +314,12 @@
 
 /* SHOW POST*/
 
-.figure-showPost {
-    /* margin: 0;
+/* .figure-showPost {
+    margin: 0;
     grid-template-rows: 1fr auto;
     break-inside: avoid;
-    border-radius: 5px; */
-}
+    border-radius: 5px;
+} */
 
 /* SHOW IMAGE POST */
 
@@ -555,7 +555,7 @@
     overflow-wrap: break-word;
 }
 
-@media (orientation: portrait) {
+@media only screen and (max-width: 920px) {
     .post-container {
         margin-left: 2vw;
         margin-right: 2vw;
@@ -706,6 +706,8 @@
     .comments-input-container {
         border-radius: 4.2vw;
         min-width: fit-content;
+        min-width: -webkit-fill-available;
+        min-width: -moz-fit-content;
         margin-bottom: 2vw;
     }
     .comment-cancel {

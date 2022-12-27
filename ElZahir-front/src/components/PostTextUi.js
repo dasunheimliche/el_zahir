@@ -2,7 +2,7 @@ import axios from "axios"
 import { useState } from "react"
 import baseURL from '../services/baseURL'
 
-const PostText = ({className, onClick, setUser})=> {
+const PostText = ({className, setSeeOpt, setUser})=> {
     let [title, setTitle] = useState('')
     let [text, setText] = useState('')
 
@@ -39,7 +39,7 @@ const PostText = ({className, onClick, setUser})=> {
                 <textarea required className="postText-input" id="postText-url" placeholder="Text" onChange={(e)=> setText(e.target.value)} value={text} autoComplete='off'/>
             </div>
             <div className="postText-botones">
-                <button className='postText-button pointer' type="button" onClick={()=>onClick({type: 'none', post: null})} >CLOSE</button>
+                <button className='postText-button pointer' type="button" onClick={()=>setSeeOpt({type: 'none', post: null})} >CLOSE</button>
                 <button type="submit" className="postText-button pointer" >POST</button>
             </div>
         </form>

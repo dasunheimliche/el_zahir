@@ -9,10 +9,6 @@ const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
     let [search, setSearch] = useState('')
     let [results, setResults] = useState([])
 
-    // let baseURL = "http://localhost:3001"
-    // let baseURL = ""
-
-    // console.log(window.innerWidth)
 
     useEffect(()=> {
         axios.get(baseURL.concat('/api/users'))
@@ -66,6 +62,7 @@ const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
     // SUSER ABAJO ES UN USUARIO DE
 
     let suserfun = (suser)=> {
+
         axios.get(baseURL.concat('/api/post'))
                 .then(posts => {
                     let postslist = posts.data.filter(post => post.user === suser.id)
@@ -92,7 +89,6 @@ const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
             } else {
                 return (
                     <Link className='linknostyle' key={i} to={`/user/${res.id}`}>
-                    {/* <Link className='linknostyle' key={i} to={`/home/userId=${res.id}`}> */}
                         <div className='pointer' onClick={()=> suserfun(res)}>{res.username}</div>
                     </Link>
                 )
