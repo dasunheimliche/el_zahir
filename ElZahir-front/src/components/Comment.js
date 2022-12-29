@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import baseURL from '../services/baseURL'
 
 
-const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload, setValue, mainUser})=> {
+const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload, setValue, user})=> {
 
     let [subComments, setSubComments] = useState('')
 
@@ -40,7 +40,7 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
                     <div className="comment-socials">
                         <div className="comment-socials-answ pointer" onClick={()=> sets(comment.id, comment0.username)}>Responder</div>
                         {/* <div className="comment-socials-like pointer">Like</div> */}
-                        {comment0.username === mainUser.username || post.username === mainUser.username? <div className="comment-socials-del pointer" onClick={()=>borrar(comment0.id)}>Delete</div> : console.log}
+                        {comment0.username === user.username || post.username === user.username? <div className="comment-socials-del pointer" onClick={()=>borrar(comment0.id)}>Delete</div> : console.log}
                     </div>
                 </div>
             )
@@ -54,7 +54,7 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
             <div className="comment-socials">
                 <div className="comment-socials-answ pointer" onClick={()=> sets(comment.id, comment.username)}>Responder</div>
                 {/* <div className="comment-socials-like pointer">Like</div> */}
-                {comment.username === mainUser.username || post.username === mainUser.username? <div className="comment-socials-del pointer" onClick={()=>borrar(comment.id)}>Delete</div> : console.log}
+                {comment.username === user.username || post.username === user.username? <div className="comment-socials-del pointer" onClick={()=>borrar(comment.id)}>Delete</div> : console.log}
             </div>
             {subComments !== ''? cargarComments() : console.log()}
         </div>

@@ -118,7 +118,7 @@ postRouter.post('/', async (request, response)=> {
             const savedPost = await post.save()
             user.posts = user.posts.concat(savedPost._id)
             await user.save()
-
+            
             response.json(savedPost)
             
             // response.json(savedPost)

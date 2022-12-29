@@ -1,7 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Samples from './Samples'
 import './Login.css'
 import baseURL from '../services/baseURL'
 
@@ -14,10 +13,6 @@ const Register = ()=> {
 
 
     const navegar = useNavigate()
-
-    // console.log("VALID USERSS", validUsers)
-    // console.log("INCUDES", validUsers.includes(inputs.username))
-    // console.log("OKKK?", ok)
 
     useEffect(()=> {
         axios.get(baseURL.concat('/api/users'))
@@ -49,16 +44,12 @@ const Register = ()=> {
 
     return (
         <div className="main-login">
-            {/* {console.log("STARTS RENDER")} */}
             <div className="left-login">
 
                 <div className="card-login">
 
-                    <div className="title-login">Bienvenido a El Zahir</div>
+                    <div className="title-login">Bienvenido a Zahir</div>
                     <div className="sub-login">Por favor ingrese sus datos</div>
-                    {/* <div className="logwgoogle pointer">Log in with google</div> */}
-                    {/* <div className='or-login'>o</div> */}
-
                     <form className="login"  onSubmit={ok? (e)=>signin(e) : console.log()}>
 
                         <input required className='form-login'  type='text' onChange={(e)=> setInputs({...inputs, name: e.target.value})} placeholder={'name'} />
@@ -70,6 +61,7 @@ const Register = ()=> {
                         <input required className='form-login'  type='password' onChange={(e)=> setInputs({...inputs, password2: e.target.value})} placeholder={'repeat password'} />
                         <div className={inputs.password? (inputs.password !== inputs.password2? 'notpass': (inputs.password.length < 5? 'tooShort' : '')) : ''}></div>
                         <button type='submit' className="in-login  pointer">Sign in</button>
+
                     </form>
 
                 </div>
@@ -77,12 +69,6 @@ const Register = ()=> {
             </div>
 
             <div className="right-login">
-
-                {/* <img alt='profile'></img>
-                <div className="samples-login">
-                    <Samples />
-                </div> */}
-                
             </div>
         </div>
     )

@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import baseURL from '../services/baseURL'
 
-const PostImage = ({className, setSeeOpt, setUser})=> {
+const PostImage = ({setSeeOpt, setUser})=> {
     let [mode, setMode] = useState('idle')
     let [url, setUrl] = useState('')
     let [title, setTitle] = useState('')
@@ -11,15 +11,7 @@ const PostImage = ({className, setSeeOpt, setUser})=> {
     let [file, setFile] = useState(false)
     let [loading, setLoading] = useState(false)
 
-    // console.log("FILEEEEEEEEEEEEEEEE", file.type)
-    // console.log("MODEEEE", mode)
-    // console.log("ERRORRR?", error)
-
-    // let baseURL = "http://localhost:3001"
-    // let baseURL = ""
     let fileForm = useRef()
-
-    // console.log("FILE FOOOORM",fileForm)
 
     useEffect(()=> {
         if ((url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.bmp') || url.endsWith('.gif') || url.endsWith('.webp') || url.endsWith('.tiff')) && url.length > 0) {
@@ -76,14 +68,14 @@ const PostImage = ({className, setSeeOpt, setUser})=> {
         let token = `Bearer ${user.token}`
 
         if (mode === 'url') {
-            // console.log("URL MODE")
             let config = {
                 headers: {
                     Authorization: token
                 }
             }
             axios.post(baseURL.concat("/api/post") , {title: title, subtitle:sub, imagePost:url, type: 'image'}, config)
-                .then(() => {
+                .then(savedPost => {
+                    console.log("SAVEDPOST URL", savedPost)
                     setLoading(false)
                     setUrl('')
                     setTitle('')
@@ -92,12 +84,12 @@ const PostImage = ({className, setSeeOpt, setUser})=> {
                         fileForm.current.value = null
                     }
                     let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
-                    window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser, posts: updateUser.posts + 1}))
-                    setUser({...user, posts: updateUser.posts + 1})
+                    updateUser = {...updateUser, posts: updateUser.posts.concat(savedPost.data.id)}
+                    window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser}))
+                    setUser({...updateUser})
                     setError(false)
                 })
         } else if (mode === 'file') {
-            // console.log("FILE MODE")
             let config = {
                 headers: {
                     Authorization: token,
@@ -105,9 +97,9 @@ const PostImage = ({className, setSeeOpt, setUser})=> {
                 }
             }
             axios.post(baseURL.concat("/api/post") , formData, config)
-                .then(() => {
+                .then(savedPost => {
+                    console.log("SAVEPOST FILEE", savedPost)
                     setLoading(false)
-                    // console.log("ALGOOOOOOOOOOO", e.target[3])
                     if (fileForm.current.value) {
                         fileForm.current.value = null
                     }
@@ -116,8 +108,9 @@ const PostImage = ({className, setSeeOpt, setUser})=> {
                     setSub('')
                     setFile('')
                     let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
-                    window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser, posts: updateUser.posts + 1}))
-                    setUser({...user, posts: updateUser.posts + 1})
+                    updateUser = {...updateUser, posts: updateUser.posts.concat(savedPost.data.id)}
+                    window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser}))
+                    setUser({...updateUser})
                     setError(false)
                 })
         }
@@ -139,15 +132,14 @@ const PostImage = ({className, setSeeOpt, setUser})=> {
     }
 
     return (
-        <form className={className} onSubmit={error? e=>not(e): loading? e=>not(e) : e=>postear(e)}>
+        <form className={'post-image'} onSubmit={error? e=>not(e): loading? e=>not(e) : e=>postear(e)}>
             <div className="postImage-inputs">
                 <input required className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
-                <input required className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
+                <input className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
                 <div className="post-options">
                     <textarea disabled  className="postImage-input" id="postImage-url" style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
                     <div className="clip-up">
                         <div className="clipboard pointer" onClick={(e)=>copyfromcb(e)}></div>
-                        {/* <div className="upload pointer"></div> */}
                         <label className="upload pointer">
                             <input style={{display: "none"}} ref={fileForm} type="file" onClick={()=>setUrl('')} onChange={(e)=>upload(e)} />
                         </label>
@@ -158,8 +150,6 @@ const PostImage = ({className, setSeeOpt, setUser})=> {
                 </div>
             </div>
             <div className="postImage-botones">
-                {/* <input ref={fileForm} type="file" onClick={()=>setUrl('')} onChange={(e)=>upload(e)} />
-                <button className="postImage-button pointer" onClick={(e)=>copyfromcb(e)} >CLIPBOARD</button> */}
                 <div className="loadingGif" style={loading? {display: "block"} : {display: "none"}}></div>
                 <button className='postImage-button pointer' type="button" onClick={close} >CLOSE</button>
                 <button className="postImage-button pointer" >POST</button>

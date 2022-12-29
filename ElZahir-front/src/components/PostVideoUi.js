@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import baseURL from '../services/baseURL'
 
-const PostVideo = ({className, setSeeOpt, setUser})=> {
+const PostVideo = ({setSeeOpt, setUser})=> {
     let [url, setUrl] = useState('')
     let [title, setTitle] = useState('')
     let [sub, setSub] = useState('')
@@ -35,23 +35,24 @@ const PostVideo = ({className, setSeeOpt, setUser})=> {
             }
         }
         axios.post(baseURL.concat("/api/post") , {title: title, subtitle:sub, videoPost:url,videoAr: ar, type: 'video'}, config)
-            .then(() => {
+            .then(savedPost => {
                 setUrl('')
                 setTitle('')
                 setSub('')
                 setAr('')
                 let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
-                window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser, posts: updateUser.posts + 1}))
-                setUser({...user, posts: updateUser.posts + 1})
+                updateUser = {...updateUser, posts: updateUser.posts.concat(savedPost.data.id)}
+                window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser}))
+                setUser({...updateUser})
             })
 
     }
 
     return (
-        <form className={className} onSubmit={error? console.log(): (e)=>postear(e)}>
+        <form className={'post-video'} onSubmit={error? console.log(): (e)=>postear(e)}>
             <div className="postImage-inputs">
                 <input required className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
-                <input required className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
+                <input className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
                 <input className="postImage-input" id="postImage-ar" placeholder="Aspect ratio (Ej.: 16:9) optional" onChange={(e)=> setAr(e.target.value)} value={ar} autoComplete='off'/>
                 <textarea required className="postImage-input" id="postImage-url" placeholder="URL" onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
                 {(error && url.length > 0) && <div className="post-invalid">invalid url</div>}

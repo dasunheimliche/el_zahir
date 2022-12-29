@@ -127,17 +127,6 @@ userRouter.put('/:id', async (request, response)=> {
             response.json({profileImg: user.profileImg})
 
         }
-
-
-        // const user = await User.findById(id)
-
-        // user.profileImg = body.profileImg
-        // await user.save()
-
-        // await Post.updateMany({user : user._id}, {profileImg: body.profileImg})
-
-        // response.json({profileImg: user.profileImg})
-
     } else if (body.mode === 'panelImgUrl') {
 
         if (request.files) {
@@ -182,22 +171,6 @@ userRouter.put('/:id', async (request, response)=> {
         // response.json({mainPanelImg: user.mainPanelImg})
     }
 
-
-
-
-
-    // ESTO DE ABAJO CREO QUE NO VA
-    // const user = await User.findById(id)
-    // const meId = body.id
-    // const me = await User.findById(meId)
-
-    // user.followers = user.followers.concat(me._id)
-    // me.following = me.following.concat(user._id)
-
-    // await user.save()
-    // await me.save()
-
-    // response.json({me:{following: me.following}, user:{followers: user.followers}})
 })
 
 module.exports = userRouter

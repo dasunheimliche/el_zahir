@@ -40,10 +40,11 @@ loginRouter.post('/', async (request, response)=> {
     const token = jwt.sign(userForToken, process.env.SECRET)
 
     // ENVIO LA RESPUESTA A LA SOLICITUD
+    console.log("USER FROM NODE", user.toObject)
     response
         .status(200)
         // .send({token, username: user.username, name: user.name, userId:String(user._id), followers: user.followers, following: user.following, posts:user.posts.length, profileImg: user.profileImg, mainPanelImg:user.mainPanelImg})
-        .send({...user.toObject(), token, userId:user._id, posts:user.posts.length})
+        .send({...user.toObject(), token, userId:user._id})
 })
 
 module.exports = loginRouter

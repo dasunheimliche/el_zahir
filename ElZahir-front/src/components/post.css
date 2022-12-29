@@ -12,7 +12,10 @@
     display: flex;
 }
 
-
+.logo-out {
+    position:absolute;
+    top: -40px;
+  }
 
 .dl {
     /* background-color: #ffffff; */
@@ -93,8 +96,6 @@
 .post-image-content {
     border-radius: 5px;
     border: 14px solid white;
-    /* background-color: rgb(255, 255, 255); */
-
 }
 
 .img {
@@ -252,7 +253,7 @@
 .social-icon {
     background-size: cover;
     height: 20px;
-    width: 19px;
+    width: 20px;
     
 }
 
@@ -310,6 +311,8 @@
 
 .social-delete {
     background-image: url('../icons//delete-icon.png');
+    height: 20px;
+    width: 21px;
 }
 
 /* SHOW POST*/
@@ -330,6 +333,9 @@
     display: flex;
     flex-direction: column;
     background-color: white;
+    position: relative;
+    margin-left: 2vw;
+    margin-right: 2vw;
     /* max-height: 90vh;
     max-width: 90vw;
     width: 55vh; */
@@ -354,13 +360,14 @@
     width: 30%;
     max-height: 90vh;
     max-width: 90vw;
+    position: relative;
 }
 
 /* SHOW CITA POST*/
 
 .post-container-citaPost {
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
-
+    position: relative;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -376,7 +383,7 @@
     box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
     /* box-shadow: 0px 11px 10px 0px rgba(0,0,0,0.5); */
 
-
+    position: relative;
     border-radius: 5px;
     display: flex;
     flex-direction: column;

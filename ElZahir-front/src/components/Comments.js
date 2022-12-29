@@ -4,16 +4,13 @@ import baseURL from '../services/baseURL'
 import Comment from '../components/Comment'
 
 
-const Comments = ({post, postF, mode, mainUser, onClick})=> {
+const Comments = ({post, user, setSeeOpt})=> {
     let [reload, setReload] = useState(false)
     let [comments, setComments] = useState('')
     let [value, setValue] = useState('')
     let [placeholder, setPlaceholder] = useState('')
     let [commentID, setCommentID] = useState('')
 
-    // console.log("CUTTTTTTTTTTTTTTTED",placeholder.split('@')[1])
-
-    // console.log("COMMENT ID AND PLACEHOLDER", commentID, placeholder)
 
     useEffect(()=> {
         axios.get(baseURL.concat('/api/comment'))
@@ -30,13 +27,11 @@ const Comments = ({post, postF, mode, mainUser, onClick})=> {
         let toSend
 
         toSend = {
-            username: mainUser.username,
+            username: user.username,
             comment: placeholder? `${person} ${value}` : value,
             postID: post.id,
             commentID: commentID
         }
-
-        // console.log("TO SENDDDD", toSend)
 
         axios.post(baseURL.concat('/api/comment'), toSend)
         .then(res => {
@@ -47,10 +42,9 @@ const Comments = ({post, postF, mode, mainUser, onClick})=> {
         })
     }
 
-    const sets = (commentID, user)=> {
-        // console.log(commentID)
+    const sets = ()=> {
+
         setCommentID('')
-        // console.log(user)
         setPlaceholder(``)
         setValue('')
     }
@@ -58,14 +52,14 @@ const Comments = ({post, postF, mode, mainUser, onClick})=> {
     const cargarComments = ()=> {
         
         return comments.map((comment, i) => {
-            return <Comment key={i} post={post} setReload={setReload} setValue={setValue} comment={comment} mainUser={mainUser}  setPlaceholder={setPlaceholder} placeholder={placeholder} reload={reload} setCommentID={setCommentID}/>
+            return <Comment key={i} post={post} setReload={setReload} setValue={setValue} comment={comment} user={user}  setPlaceholder={setPlaceholder} placeholder={placeholder} reload={reload} setCommentID={setCommentID}/>
         })
     }
 
     return (
         <div className="comments-container">
             <div className="comments-salir-container">
-                <div className="comments-salir" onClick={()=>onClick({type:'none', post:null})}></div>
+                <div className="comments-salir" onClick={()=>setSeeOpt({type:'none', post:null})}></div>
             </div>
             <div className="comments-header-container">
                 <span className="comments-header">Comments  </span>

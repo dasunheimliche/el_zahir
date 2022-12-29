@@ -61,7 +61,7 @@ const ProfileMainOut = ({user, setUser})=> {
 
     
     const cargarPosts = (posts)=> {
-        return posts.map((post, i) => <Post onClick={setSeeOpt} postF={postF} mainUser={user} user={user} setUser={setUser} key={i} setPostF={setPostF} post={post} type={post.type} />)
+        return posts.map(post => <Post key={post.id} setSeeOpt={setSeeOpt} postF={postF} mainUser={user} user={user} setUser={setUser} setPostF={setPostF} post={post} type={post.type} />)
     }
 
 
@@ -70,12 +70,12 @@ const ProfileMainOut = ({user, setUser})=> {
         <div className={seeOpt.type === 'none'? "profile-main" : 'profile-main noOver'}>
             <div className={seeOpt.type === 'none'? 'poster-container little': seeOpt.post? 'poster-container' : 'poster-container darker'} >
 
-                {seeOpt.type === 'comments'? <Comments onClick={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
+                {seeOpt.type === 'comments'     && <Comments      setSeeOpt={setSeeOpt} post={seeOpt.post} user={user} />}
 
-                {seeOpt.type === 'imagePost'? <ShowImagePost onClick={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
-                {seeOpt.type === 'textPost'? <ShowTextPost onClick={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
-                {seeOpt.type === 'citaPost'? <ShowCitaPost onClick={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
-                {seeOpt.type === 'videoPost'? <ShowVideoPost onClick={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
+                {seeOpt.type === 'imagePost'    && <ShowImagePost setSeeOpt={setSeeOpt} post={seeOpt.post} />}
+                {seeOpt.type === 'textPost'     && <ShowTextPost  setSeeOpt={setSeeOpt} post={seeOpt.post} />}
+                {seeOpt.type === 'citaPost'     && <ShowCitaPost  setSeeOpt={setSeeOpt} post={seeOpt.post} />}
+                {seeOpt.type === 'videoPost'    && <ShowVideoPost setSeeOpt={setSeeOpt} post={seeOpt.post} />}
 
             </div>
 

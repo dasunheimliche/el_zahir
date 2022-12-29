@@ -2,13 +2,10 @@ import axios from "axios"
 import { useState } from "react"
 import baseURL from '../services/baseURL'
 
-const PostCita = ({className, setSeeOpt, setUser})=> {
+const PostCita = ({setSeeOpt, setUser})=> {
     let [author, setAuthor] = useState('')
     let [work, setWork] = useState('')
     let [cita, setCita] = useState('')
-
-    // let baseURL = "http://localhost:3001"
-    // let baseURL = ""
 
     const postear = (e)=> {
         e.preventDefault()
@@ -22,13 +19,14 @@ const PostCita = ({className, setSeeOpt, setUser})=> {
             }
         }
         axios.post(baseURL.concat("/api/post"), {title: author, subtitle:work, textPost:cita, type: 'cita'}, config)
-            .then(() => {
+            .then(savedPost => {
                 setAuthor('')
                 setWork('')
                 setCita('')
                 let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
-                window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser, posts: updateUser.posts + 1}))
-                setUser({...user, posts: updateUser.posts + 1})
+                updateUser = {...updateUser, posts: updateUser.posts.concat(savedPost.data.id)}
+                window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser}))
+                setUser({...updateUser})
             })
 
     }
@@ -36,7 +34,7 @@ const PostCita = ({className, setSeeOpt, setUser})=> {
 
 
     return (
-        <form className={className} onSubmit={(e=>postear(e))}>
+        <form className={'post-text'} onSubmit={(e=>postear(e))}>
             <div className="postText-inputs">
                 <input required className="postText-input" id="postText-title" placeholder="Author" onChange={(e)=> setAuthor(e.target.value)} value={author} autoComplete='off'/>
                 <input required className="postText-input" id="postText-sub" placeholder="Work" onChange={(e)=> setWork(e.target.value)} value={work} autoComplete='off'/>

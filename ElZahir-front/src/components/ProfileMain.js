@@ -18,63 +18,51 @@ import ShowCitaPost from '../components/ShowCitaPost'
 import ShowVideoPost from '../components/ShowVideoPost'
 import Comments from '../components/Comments'
 
-
 import baseURL from '../services/baseURL'
 
-const ProfileMain = ({user, setUser, posts, setPosts, moods, setMoods})=> {
+const ProfileMain = ({user, setUser})=> {
 
     // USESTATES
     let [sticky, setSticky] = useState(false)
     let [seeOpt, setSeeOpt] = useState({type: 'none', post: null})
 
-    let [postF, setPostF] = useState(false)
-    let [suser, setSuser] = useState({id:null, posts:[], followers: [], following: []})
+    let [myPosts, setMyPosts] = useState([])
+    let [otherPosts, setOtherPosts] = useState(false)
+    let [pestana, setPestana] = useState("me")
+
 
     // PROXIMA IMPLEMENTACION
     let [mood, setMood] = useState(0)
     // -------------------------
 
 
-    // USE EFECTS
     useEffect(()=> {
 
-        let localuser = JSON.parse(window.localStorage.getItem('loggedUser'))
-
-        setTimeout(()=> {
-            axios.get(baseURL.concat('/api/post'))
-            .then(postss => {
-
-                let postslist = postss.data.filter(post => post.user === localuser.userId)
-                setPosts(postslist.reverse())
+        axios.get(baseURL.concat('/api/post'))
+            .then(allposts => {
+                let posts2 = allposts.data.filter(post => post.user === user.userId)
+                setMyPosts(posts2.reverse())
             })
-        })  
-        // SI EMPIEZO A TENER ERRORES AGREGO 500 ms al setTimeout()
-    }, [])
-
-    useEffect(()=> {
-        if (suser) {
-            let currentSuser = JSON.parse(window.localStorage.getItem('currentSuser'))
-            setSuser(currentSuser)
-        }
-    }, [])
-
+    }, [otherPosts, user])
 
 
     const cargarPosts = (posts)=> {
 
-        if (postF) {
-            return posts.map((post) => <Post setSeeOpt={setSeeOpt} key={post.id} user={user} post={post} postF={postF} setPostF={setPostF} mode={'user'} />)
+        if (otherPosts) {
+            return posts.map((post) => <Post setSeeOpt={setSeeOpt} key={post.id} user={user} post={post} postF={otherPosts} mode={'user'} />)
         } else {
-            return posts.map((post) => <Post setSeeOpt={setSeeOpt} key={post.id} mainUser={user} post={post} postF={postF} setPostF={setPostF} user={user} setUser={setUser} />)
+            return posts.map((post) => <Post setSeeOpt={setSeeOpt} key={post.id} mainUser={user} post={post} postF={otherPosts} user={user} setUser={setUser} />)
         }
     }
 
-    const potsSeguidores = ()=> {
+    const potsSeguidos = ()=> {
+       
         axios.get(baseURL.concat('/api/post'))
             .then(allposts => {
                 let follows = user.following
                 let posts = allposts.data.filter(post => follows.includes(post.user))
-                setPostF(posts.reverse())
+                setOtherPosts(posts.reverse())
+                setPestana("following")
             })
     }
 
@@ -84,39 +72,44 @@ const ProfileMain = ({user, setUser, posts, setPosts, moods, setMoods})=> {
                 let follows = user.following
                 let posts = allposts.data.filter(post => !follows.includes(post.user))
                 let posts2 = posts.filter(post => post.user !== user.userId)
-                setPostF(posts2.reverse())
+                setOtherPosts(posts2.reverse())
+                setPestana("discover")
             })
     }
 
     const backtome = ()=> {
-        setPostF(false)
-    }
+        setOtherPosts(false)
+        axios.get(baseURL.concat('/api/post'))
+            .then(allposts => {
+                let posts2 = allposts.data.filter(post => post.user === user.userId)
+                setMyPosts(posts2.reverse())
+                setPestana("me")
+            })
 
+    }
 
 
     // RENDER
     return (
         <div className={seeOpt.type === 'none'? "profile-main" : 'profile-main noOver'}>
             <div className={seeOpt.type === 'none'? 'poster-container little': seeOpt.post? 'poster-container' : 'poster-container darker'} >
-                <PostImageUi setUser={setUser} setSeeOpt={setSeeOpt} className={seeOpt.type === 'image'? 'post-image': 'post-image notvisible'}/>
-                <PostTextUi setUser={setUser} user={user} setSeeOpt={setSeeOpt} className={seeOpt.type === 'text'? 'post-text': 'post-text notvisible'}/> 
-                <PostCitaUi setUser={setUser} setSeeOpt={setSeeOpt} className={seeOpt.type === 'cita'? 'post-text': 'post-text notvisible'}/>
-                <PostVideoUi setUser={setUser} setSeeOpt={setSeeOpt} className={seeOpt.type === 'video'? 'post-video': 'post-video notvisible'}/>
+                {seeOpt.type === 'image'        && <PostImageUi   setSeeOpt={setSeeOpt} setUser={setUser} />}
+                {seeOpt.type === 'text'         && <PostTextUi    setSeeOpt={setSeeOpt} setUser={setUser} />} 
+                {seeOpt.type === 'cita'         && <PostCitaUi    setSeeOpt={setSeeOpt} setUser={setUser} />}
+                {seeOpt.type === 'video'        && <PostVideoUi   setSeeOpt={setSeeOpt} setUser={setUser} />}
 
-                <ChangePI user={user} setUser={setUser} setSeeOpt={setSeeOpt} className={seeOpt.type === 'changePI'? 'post-image': 'post-image notvisible'}/>
-                <ChangePanImg user={user} setUser={setUser} setSeeOpt={setSeeOpt} className={seeOpt.type === 'changePanImg'? 'post-image': 'post-image notvisible'}/>
+                {seeOpt.type === 'changePI'     && <ChangePI      setSeeOpt={setSeeOpt} setUser={setUser} />}
+                {seeOpt.type === 'changePanImg' && <ChangePanImg  setSeeOpt={setSeeOpt} setUser={setUser} />}
                 
-                
-                {seeOpt.type === 'comments'? <Comments setSeeOpt={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
+                {seeOpt.type === 'comments'     && <Comments      setSeeOpt={setSeeOpt} post={seeOpt.post} user={user} />}
 
-                {seeOpt.type === 'imagePost'? <ShowImagePost setSeeOpt={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
-                {seeOpt.type === 'textPost'? <ShowTextPost setSeeOpt={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
-                {seeOpt.type === 'citaPost'? <ShowCitaPost setSeeOpt={setSeeOpt} post={seeOpt.post} user={user} mainUser={user} postF={postF}/>: console.log()}
-                {seeOpt.type === 'videoPost'? <ShowVideoPost setSeeOpt={setSeeOpt} post={seeOpt.post} mainUser={user} setUser={setUser} postF={postF}/>: console.log()}
+                {seeOpt.type === 'imagePost'    && <ShowImagePost setSeeOpt={setSeeOpt} post={seeOpt.post} />}
+                {seeOpt.type === 'textPost'     && <ShowTextPost  setSeeOpt={setSeeOpt} post={seeOpt.post} />}
+                {seeOpt.type === 'citaPost'     && <ShowCitaPost  setSeeOpt={setSeeOpt} post={seeOpt.post} />}
+                {seeOpt.type === 'videoPost'    && <ShowVideoPost setSeeOpt={setSeeOpt} post={seeOpt.post} />}
 
             </div>
 
-            {/* <Header seeOpt={seeOpt} user={user} setUser={setUser} sticky={sticky} setSticky={setSticky} setSuser={setSuser}/> */}
             <Header seeOpt={seeOpt} user={user} setUser={setUser} sticky={sticky} setSticky={setSticky}/>
 
 
@@ -124,7 +117,7 @@ const ProfileMain = ({user, setUser, posts, setPosts, moods, setMoods})=> {
 
                 <div className={'main-left'}>
                     {!seeOpt.post?
-                    <ProfilePanel mood={mood} setMood={setMood} setUser={setUser} user={user} sticky={sticky} setSeeOpt={setSeeOpt} seeOpt={seeOpt} posts={posts} />
+                    <ProfilePanel mood={mood} setMood={setMood} setUser={setUser} user={user} sticky={sticky} setSeeOpt={setSeeOpt} seeOpt={seeOpt} posts={myPosts} />
                     :
                     console.log()
                     }
@@ -133,13 +126,13 @@ const ProfileMain = ({user, setUser, posts, setPosts, moods, setMoods})=> {
                 <div className="main-right">
                     { seeOpt.type === 'none'? <div className={sticky? 'profile-main-pestañas profile-main-pestañas-sticky' : "profile-main-pestañas"}>
 
-                        <span onClick={backtome} className='pestaña pestaña-me pointer'>ME</span>
-                        <span onClick={potsSeguidores}  className='pestaña pestaña-social pointer'>FRIENDS</span>
-                        <span onClick={potsDescubrir} className='pestaña pestaña-discover pointer' >EXPLORE</span>
+                        <span onClick={backtome} style={pestana === 'me'? { borderBottom: "4px solid rgba(255, 255, 255, 0.25)" }: {}} className='pestaña pestaña-me pointer'>ME</span>
+                        <span onClick={potsSeguidos} style={pestana === 'following'? { borderBottom: "4px solid rgba(255, 255, 255, 0.25)" }: {}}  className='pestaña pestaña-social pointer'>FOLLOWING</span>
+                        <span onClick={potsDescubrir} style={pestana === 'discover'? { borderBottom: "4px solid rgba(255, 255, 255, 0.25)" }: {}} className='pestaña pestaña-discover pointer' >EXPLORE</span>
                                 
                     </div> : console.log()}
                     <div className={sticky === false? 'container': 'container container-stickymode'}>
-                        {cargarPosts(postF? postF: posts)}
+                        {cargarPosts(otherPosts? otherPosts: myPosts)}
                     </div>
                 </div>
             </div>

@@ -74,7 +74,7 @@ const ProfilePanel = ({setUser, setSuser, user, suser, posts, sticky, setSeeOpt,
                     </div>
                     <div className='posts stat'>
                         <span className='stat-title'>POSTS</span>
-                        <span>{mode === 'user'? (suser? String(suser.posts.length):"0"):(posts? String(user.posts):"0")}</span>
+                        <span>{mode === 'user'? (suser? String(suser.posts.length):"0"):(posts? String(user.posts.length):"0")}</span>
                     </div>
                 </div>
                 {mode === 'user' || seeOpt.post? 

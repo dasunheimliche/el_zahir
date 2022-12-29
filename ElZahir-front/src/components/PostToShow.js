@@ -2,17 +2,17 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import baseURL from '../services/baseURL'
 
-import ShowTextPost from '../components/ShowTextPostOut'
-import ShowCitaPost from '../components/ShowCitaPostOut'
-import ShowImagePost from '../components/showImagePostOut'
-import ShowVideoPost from '../components/ShowVideoPostOut'
+import ShowTextPost from './ShowTextPost'
+import ShowCitaPost from './ShowCitaPost'
+import ShowImagePost from './showImagePost'
+import ShowVideoPost from './ShowVideoPost'
 
 const PostToShow = ()=> {
 
     let [post, setPost] = useState('')
 
     let postID = window.location.href.split('/')[5]
-    // console.log(postID)
+    console.log("POST ID", postID)
 
     useEffect(()=> {
         axios.get(baseURL.concat(`/api/post/${postID}`))
@@ -21,23 +21,29 @@ const PostToShow = ()=> {
 
     if (post.type === 'text') {
         return (
-            <ShowTextPost post={post} />
+            <div className='ShowPostOut'>
+                <ShowTextPost post={post} mode={'out'}/>
+            </div>
         )
     } else if (post.type === 'cita') {
         return (
-            <ShowCitaPost post={post} />
+            <div className='ShowPostOut'>
+                <ShowCitaPost post={post} mode={'out'}/>
+            </div>
         )
     } else if (post.type === 'image') {
         return (
-            <ShowImagePost post={post} />
+            <div className='ShowPostOut'>
+                <ShowImagePost post={post} mode={'out'}/>
+            </div>
         )
     } else if (post.type === 'video') {
         return (
-            <ShowVideoPost post={post} />
+            <div className='ShowPostOut'>
+                <ShowVideoPost post={post} mode={'out'}/>
+            </div>
         )
     } 
-
-    
 }
 
 export default PostToShow

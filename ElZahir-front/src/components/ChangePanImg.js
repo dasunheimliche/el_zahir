@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import baseURL from '../services/baseURL'
 
-const ChangePanImg = ({className, onClick, setUser})=> {
+const ChangePanImg = ({setSeeOpt, setUser})=> {
 
     let [mode, setMode] = useState('idle')
     let [url, setUrl] = useState('')
@@ -117,11 +117,11 @@ const ChangePanImg = ({className, onClick, setUser})=> {
         setUrl('')
         setFile('')
         setError(false)
-        onClick({type: 'none', post: null})
+        setSeeOpt({type: 'none', post: null})
     }
 
     return (
-        <form className={className} onSubmit={error? e=>not(e): loading? e=>not(e) : e=>postear(e)}>
+        <form className={'post-image'} onSubmit={error? e=>not(e): loading? e=>not(e) : e=>postear(e)}>
             <div className="postImage-inputs">
                 <div className="post-options">
                     <textarea disabled  className="postImage-input" id="postImage-url" style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>

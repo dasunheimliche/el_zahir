@@ -1,7 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import Samples from './Samples'
 import './Login.css'
 import baseURL from '../services/baseURL'
 
@@ -34,7 +33,6 @@ const Login = ({setUser})=> {
             <div className="left-login">
 
                 <div className="card-login">
-
                     <div className="title-login">Bienvenido/a</div>
                     <div className="sub-login">Por favor ingrese sus datos</div>
                     <form className="login" onSubmit={login}>

@@ -9,12 +9,6 @@ commentRouter.get('/', async (request, response)=> {
     .then(res => response.json(res))
 })
 
-// commentRouter.get('/:id', (request, response) => {
-//     const id = request.params.id
-    
-//     Comment.findById(id)
-// })
-
 commentRouter.delete('/:id', (request, response)=> {
     const id = request.params.id
 
