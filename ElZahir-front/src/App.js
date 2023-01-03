@@ -9,14 +9,28 @@ import PostToShow from './components/PostToShow';
 import './components/PostBox.css'
 import { Routes, Route,  Navigate } from 'react-router-dom'
 
+import { useSelector, useDispatch} from 'react-redux'
+import { userSlice} from './reducers/userSlice'
 
 function App() {
   // USESTATES ---------------------------------------------------------------
 
-  // let [posts, setPosts] = useState([])
-  
   let [user, setUser] = useState(window.localStorage.getItem('loggedUser')? JSON.parse(window.localStorage.getItem('loggedUser')) : {username:null, loggued:false, userId: null})
   
+  const user1 = useSelector(state => state.user.value)
+  let dispatch =  useDispatch()
+
+  console.log("USER SLICE" , userSlice)
+  console.log("STORE USER STATE", user1)
+
+  // dispatch(update({hola: "nada"}))
+
+  console.log("STORE USER STATE", user1)
+
+
+
+
+
   // USEFFECTS ----------------------------------------------------------------
 
   useEffect(()=> {
