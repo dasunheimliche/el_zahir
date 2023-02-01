@@ -1,6 +1,5 @@
 
 import '../components/post.css'
-import { Link } from 'react-router-dom'
 
 const ShowVideoPost = ({post, mode, setSeeOpt})=> {
 
@@ -24,7 +23,7 @@ const ShowVideoPost = ({post, mode, setSeeOpt})=> {
                 {mode === 'user' || mode === 'out'?
                     <div className='post-user-info-video'>
                         <div className='post-user-profile'>
-                            <img className={'post-user-profile-image'} src={post.profileImg}></img>
+                            <img className={'post-user-profile-image'} src={post.profileImg} alt="profile img"></img>
                         </div>
 
                         <div className='post-user-username'>@{post.username}</div>
@@ -32,7 +31,7 @@ const ShowVideoPost = ({post, mode, setSeeOpt})=> {
                     </div> : console.log()}
                 <div className='dl'>
                     <div className="video-container" style={{paddingBottom: `${ar? ar: (1080/1920)*100}%`}}>
-                        <iframe style={{width: "100%", height:"100%"}} src={urlVideo} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                        <iframe title='youtube post' style={{width: "100%", height:"100%"}} src={urlVideo} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                     </div>
                 </div>
                 <div className="post-sub">

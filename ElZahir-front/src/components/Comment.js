@@ -2,20 +2,12 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import baseURL from '../services/baseURL'
 
+import { useSelector} from 'react-redux'
 
-const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload, setValue, user})=> {
+const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload, setValue})=> {
 
     let [subComments, setSubComments] = useState('')
-
-    // console.log("COMMMENT", comment)
-
-    const sets = (commentID, user)=> {
-        // console.log(commentID)
-        setCommentID(commentID)
-        // console.log(user)
-        setPlaceholder(`responder a @${user}`)
-        setValue('')
-    }
+    let user = useSelector(state => state.user.value)
 
     useEffect(()=> {
         axios.get(baseURL.concat('/api/comment'))
@@ -24,6 +16,14 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
             setSubComments(resultados)
         })
     }, [reload])
+
+
+    const sets = (commentID, user)=> {
+
+        setCommentID(commentID)
+        setPlaceholder(`responder a @${user}`)
+        setValue('')
+    }
 
     const borrar = (id)=> {
         axios.delete(baseURL.concat(`/api/comment/${id}`))
@@ -39,7 +39,6 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
                     <div className="sub-comment-content">{comment0.comment}</div>
                     <div className="comment-socials">
                         <div className="comment-socials-answ pointer" onClick={()=> sets(comment.id, comment0.username)}>Responder</div>
-                        {/* <div className="comment-socials-like pointer">Like</div> */}
                         {comment0.username === user.username || post.username === user.username? <div className="comment-socials-del pointer" onClick={()=>borrar(comment0.id)}>Delete</div> : console.log}
                     </div>
                 </div>
@@ -53,7 +52,6 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
             <div className="comment-content">{comment.comment}</div>
             <div className="comment-socials">
                 <div className="comment-socials-answ pointer" onClick={()=> sets(comment.id, comment.username)}>Responder</div>
-                {/* <div className="comment-socials-like pointer">Like</div> */}
                 {comment.username === user.username || post.username === user.username? <div className="comment-socials-del pointer" onClick={()=>borrar(comment.id)}>Delete</div> : console.log}
             </div>
             {subComments !== ''? cargarComments() : console.log()}

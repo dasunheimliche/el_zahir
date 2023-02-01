@@ -74,9 +74,6 @@ userRouter.put('/:id', async (request, response)=> {
         const meId = body.id
         const me = await User.findById(meId)
 
-        // user.followers = user.followers.concat(me._id)
-        // me.following = me.following.concat(user._id)
-
         me.following = me.following.filter(ide => ide.toString() !== id)
         user.followers = user.followers.filter(ide => ide.toString() !== me._id.toString())
         
@@ -96,7 +93,6 @@ userRouter.put('/:id', async (request, response)=> {
                 if (err) {
                     return response.status(500).send(err)
                 }
-                // console.log("START READ FILE IN", uploadPath)
     
                 let fileup = await fs.readFile(uploadPath)
         
@@ -137,7 +133,6 @@ userRouter.put('/:id', async (request, response)=> {
                 if (err) {
                     return response.status(500).send(err)
                 }
-                // console.log("START READ FILE IN", uploadPath)
     
                 let fileup = await fs.readFile(uploadPath)
         
@@ -163,12 +158,6 @@ userRouter.put('/:id', async (request, response)=> {
             response.json({mainPanelImg: user.mainPanelImg})
         }
 
-
-        // const user = await User.findById(id)
-        // user.mainPanelImg = body.mainPanelImg
-        
-        // await user.save()
-        // response.json({mainPanelImg: user.mainPanelImg})
     }
 
 })

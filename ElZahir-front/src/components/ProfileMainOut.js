@@ -13,10 +13,16 @@ import ShowCitaPost from './ShowCitaPost'
 import ShowVideoPost from './ShowVideoPost'
 import Comments from './Comments'
 
+import { useSelector, useDispatch} from 'react-redux'
+import { userSlice} from '../reducers/userSlice'
 
 import baseURL from '../services/baseURL'
 
-const ProfileMainOut = ({user, setUser})=> {
+// const ProfileMainOut = ({user, setUser})=> {
+const ProfileMainOut = ({setUser})=> {
+
+    let user = useSelector(state => state.user.value)
+    let dispatch = useDispatch()
 
     // USESTATES
     let [sticky, setSticky] = useState(false)

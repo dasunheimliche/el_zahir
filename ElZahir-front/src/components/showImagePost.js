@@ -1,7 +1,6 @@
 
 import {useEffect, useState } from 'react'
 import '../components/post.css'
-import { Link } from 'react-router-dom'
 
 const ShowImagePost = ({post, mode, setSeeOpt})=> {
 
@@ -19,6 +18,7 @@ const ShowImagePost = ({post, mode, setSeeOpt})=> {
     ancho = ((size.width/size.height)*(window.innerHeight - 200))
 
     const img = new Image();
+
     useEffect(()=> {
         img.addEventListener("load", function() {
             setSize({width: this.naturalWidth, height: this.naturalHeight})
@@ -35,7 +35,7 @@ const ShowImagePost = ({post, mode, setSeeOpt})=> {
                     {mode === 'user' || mode === 'out'?
                         <div className='post-user-info-image'>
                             <div className='post-user-profile'>
-                                <img className={'post-user-profile-image'} src={post.profileImg} />
+                                <img className={'post-user-profile-image'} src={post.profileImg} alt="profile-img"/>
                             </div>
 
                             <div className='post-user-username'>@{post.username}</div>

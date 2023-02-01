@@ -11,10 +11,16 @@ import axios from 'axios'
 import '../components/post.css'
 import baseURL from '../services/baseURL'
 
-const Post = ({post, mode, user, setUser, postF, setSeeOpt})=> {
+import { useSelector, useDispatch} from 'react-redux'
+import { userSlice} from '../reducers/userSlice'
+
+const Post = ({post, mode, postF, setSeeOpt})=> {
 
     let [liked, setLiked] = useState(false)
     let [loading, setLoading] = useState(false)
+
+    let user = useSelector(state => state.user.value)
+    let dispatch = useDispatch()
 
     let postURL = `http://zahir.onrender.com/#/post/${post.id}`
     // let postURL = `http://localhost:3000/#/post/${post.id}`
@@ -28,8 +34,7 @@ const Post = ({post, mode, user, setUser, postF, setSeeOpt})=> {
     }, [postF])
 
 
-    const deletePost = (e)=> {
-        e.stopPropagation()
+    const deletePost = ()=> {
         setLoading(true)
         let user = JSON.parse(window.localStorage.getItem('loggedUser'))
         let token = `Bearer ${user.token}`
@@ -50,15 +55,14 @@ const Post = ({post, mode, user, setUser, postF, setSeeOpt})=> {
 
             window.localStorage.setItem('loggedUser', JSON.stringify(loguedUser))
             
-            setUser({...loguedUser})
+            dispatch(userSlice.actions.update({...loguedUser}))
 
             
         })
         
     }
 
-    const like = (e)=> {
-        e.stopPropagation()
+    const like = ()=> {
         setLiked(true)
         setLoading(true)
         axios.put(baseURL.concat(`/api/post/${post.id}`), {meId: user.userId, mode: 'like'}) //
@@ -67,8 +71,8 @@ const Post = ({post, mode, user, setUser, postF, setSeeOpt})=> {
         })
     }
 
-    const unlike = (e)=> {
-        e.stopPropagation()
+    const unlike = ()=> {
+
         setLiked(false)
         setLoading(true)
         axios.put(baseURL.concat(`/api/post/${post.id}`), {meId: user.userId, mode: 'unlike'}) //
@@ -78,55 +82,63 @@ const Post = ({post, mode, user, setUser, postF, setSeeOpt})=> {
     }
 
     const not = (e)=> {
-        e.stopPropagation()
         e.preventDefault()
     }
 
-    const clipboard = (e)=> {
-        e.stopPropagation()
+    const clipboard = ()=> {
         navigator.clipboard.writeText(postURL)
     }
 
-    const openComments = (e)=> {
-        e.stopPropagation()
+    const openComments = ()=> {
         setSeeOpt({type: 'comments', post: post})
 
+    }
+
+    const p = {
+        like: like,
+        dislike: unlike,
+        comments: openComments,
+        share: clipboard,
+        del: deletePost,
+        doNothing: not,
     }
 
     
     if (post.type === "image") {
         return (
-            <ImagePost 
-                post={post} mode={mode} user={user} setSeeOpt={setSeeOpt} 
+
+            <ImagePost
+                post={post} mode={mode} setSeeOpt={setSeeOpt}
                 loading={loading} liked={liked}
-                deletePost={deletePost} like={like} unlike={unlike} not={not} clipboard={clipboard} openComments={openComments}
+                p={p}
             />
+
         )
     }
     if (post.type === "text") {
         return (
             <TextPost 
-                post={post} mode={mode} user={user} setUser={setUser} postF={postF} setSeeOpt={setSeeOpt} 
+                post={post} mode={mode} postF={postF} setSeeOpt={setSeeOpt} 
                 loading={loading} liked={liked}
-                deletePost={deletePost} like={like} unlike={unlike} not={not} clipboard={clipboard} openComments={openComments}
+                p={p}
             />
         )
     }
     if (post.type === "cita") {
         return(
             <CitaPost 
-                post={post} mode={mode} user={user} setUser={setUser} postF={postF} setSeeOpt={setSeeOpt} 
+                post={post} mode={mode} postF={postF} setSeeOpt={setSeeOpt} 
                 loading={loading} liked={liked}
-                deletePost={deletePost} like={like} unlike={unlike} not={not} clipboard={clipboard} openComments={openComments}
+                p={p}
             />
         )
     }
     if (post.type === "video") {
         return(
             <VideoPost 
-                post={post} mode={mode} user={user} setUser={setUser} postF={postF} setSeeOpt={setSeeOpt} 
+                post={post} mode={mode} postF={postF} setSeeOpt={setSeeOpt} 
                 loading={loading} liked={liked}
-                deletePost={deletePost} like={like} unlike={unlike} not={not} clipboard={clipboard} openComments={openComments}
+                p={p}
             />
         )
     }

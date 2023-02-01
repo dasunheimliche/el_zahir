@@ -1,7 +1,9 @@
-// IMPORTS
+// DEPENDENCIES
 import axios from 'axios'
 import { useState, useEffect } from "react"
-import './ProfileMain.css'
+import { useSelector} from 'react-redux'
+
+// COMPONENTES
 import Header from '../components/Header'
 import ProfilePanel from '../components/ProfilePanel'
 import Post from '../components/Post'
@@ -18,24 +20,31 @@ import ShowCitaPost from '../components/ShowCitaPost'
 import ShowVideoPost from '../components/ShowVideoPost'
 import Comments from '../components/Comments'
 
+// BASE URL
 import baseURL from '../services/baseURL'
 
-const ProfileMain = ({user, setUser})=> {
+// CSS
+import './ProfileMain.css'
 
-    // USESTATES
-    let [sticky, setSticky] = useState(false)
-    let [seeOpt, setSeeOpt] = useState({type: 'none', post: null})
 
-    let [myPosts, setMyPosts] = useState([])
+const ProfileMain = ()=> {
+
+    // STATES
+    let [sticky,     setSticky]     = useState(false)
+    let [seeOpt,     setSeeOpt]     = useState({type: 'none', post: null})
+
+    let [myPosts,    setMyPosts]    = useState([])
     let [otherPosts, setOtherPosts] = useState(false)
-    let [pestana, setPestana] = useState("me")
+    let [pestana,    setPestana]    = useState("me")
 
-
-    // PROXIMA IMPLEMENTACION
+    // próxima impmenentación
     let [mood, setMood] = useState(0)
     // -------------------------
 
+    // HOOKS
+    let user = useSelector(state => state.user.value)
 
+    // USE EFFECTS
     useEffect(()=> {
 
         axios.get(baseURL.concat('/api/post'))
@@ -46,15 +55,17 @@ const ProfileMain = ({user, setUser})=> {
     }, [otherPosts, user])
 
 
+    // ESTO DEBERIA IR EN UN COMPONENTE
     const cargarPosts = (posts)=> {
 
         if (otherPosts) {
-            return posts.map((post) => <Post setSeeOpt={setSeeOpt} key={post.id} user={user} post={post} postF={otherPosts} mode={'user'} />)
+            return posts.map((post) => <Post setSeeOpt={setSeeOpt} key={post.id} post={post} postF={otherPosts} mode={'user'} />)
         } else {
-            return posts.map((post) => <Post setSeeOpt={setSeeOpt} key={post.id} mainUser={user} post={post} postF={otherPosts} user={user} setUser={setUser} />)
+            return posts.map((post) => <Post setSeeOpt={setSeeOpt} key={post.id} post={post} postF={otherPosts} />)
         }
     }
 
+    // EVENT HANDLERS
     const potsSeguidos = ()=> {
        
         axios.get(baseURL.concat('/api/post'))
@@ -92,16 +103,17 @@ const ProfileMain = ({user, setUser})=> {
     // RENDER
     return (
         <div className={seeOpt.type === 'none'? "profile-main" : 'profile-main noOver'}>
-            <div className={seeOpt.type === 'none'? 'poster-container little': seeOpt.post? 'poster-container' : 'poster-container darker'} >
-                {seeOpt.type === 'image'        && <PostImageUi   setSeeOpt={setSeeOpt} setUser={setUser} />}
-                {seeOpt.type === 'text'         && <PostTextUi    setSeeOpt={setSeeOpt} setUser={setUser} />} 
-                {seeOpt.type === 'cita'         && <PostCitaUi    setSeeOpt={setSeeOpt} setUser={setUser} />}
-                {seeOpt.type === 'video'        && <PostVideoUi   setSeeOpt={setSeeOpt} setUser={setUser} />}
 
-                {seeOpt.type === 'changePI'     && <ChangePI      setSeeOpt={setSeeOpt} setUser={setUser} />}
-                {seeOpt.type === 'changePanImg' && <ChangePanImg  setSeeOpt={setSeeOpt} setUser={setUser} />}
+            <div className={seeOpt.type === 'none'? 'poster-container little': seeOpt.post? 'poster-container' : 'poster-container darker'} >
+                {seeOpt.type === 'image'        && <PostImageUi   setSeeOpt={setSeeOpt} />}
+                {seeOpt.type === 'text'         && <PostTextUi    setSeeOpt={setSeeOpt} />} 
+                {seeOpt.type === 'cita'         && <PostCitaUi    setSeeOpt={setSeeOpt} />}
+                {seeOpt.type === 'video'        && <PostVideoUi   setSeeOpt={setSeeOpt} />}
+
+                {seeOpt.type === 'changePI'     && <ChangePI      setSeeOpt={setSeeOpt} />}
+                {seeOpt.type === 'changePanImg' && <ChangePanImg  setSeeOpt={setSeeOpt} />}
                 
-                {seeOpt.type === 'comments'     && <Comments      setSeeOpt={setSeeOpt} post={seeOpt.post} user={user} />}
+                {seeOpt.type === 'comments'     && <Comments      setSeeOpt={setSeeOpt} post={seeOpt.post} />}
 
                 {seeOpt.type === 'imagePost'    && <ShowImagePost setSeeOpt={setSeeOpt} post={seeOpt.post} />}
                 {seeOpt.type === 'textPost'     && <ShowTextPost  setSeeOpt={setSeeOpt} post={seeOpt.post} />}
@@ -110,27 +122,28 @@ const ProfileMain = ({user, setUser})=> {
 
             </div>
 
-            <Header seeOpt={seeOpt} user={user} setUser={setUser} sticky={sticky} setSticky={setSticky}/>
-
+            <Header seeOpt={seeOpt} sticky={sticky} setSticky={setSticky}/>
 
             <div className={!seeOpt.post? "main-content" : "main-content notvisible"}>
 
                 <div className={'main-left'}>
                     {!seeOpt.post?
-                    <ProfilePanel mood={mood} setMood={setMood} setUser={setUser} user={user} sticky={sticky} setSeeOpt={setSeeOpt} seeOpt={seeOpt} posts={myPosts} />
+                    <ProfilePanel mood={mood} setMood={setMood} sticky={sticky} setSeeOpt={setSeeOpt} seeOpt={seeOpt} posts={myPosts} />
                     :
                     console.log()
                     }
                 </div>
 
                 <div className="main-right">
+
                     { seeOpt.type === 'none'? <div className={sticky? 'profile-main-pestañas profile-main-pestañas-sticky' : "profile-main-pestañas"}>
 
-                        <span onClick={backtome} style={pestana === 'me'? { borderBottom: "4px solid rgba(255, 255, 255, 0.25)" }: {}} className='pestaña pestaña-me pointer'>ME</span>
-                        <span onClick={potsSeguidos} style={pestana === 'following'? { borderBottom: "4px solid rgba(255, 255, 255, 0.25)" }: {}}  className='pestaña pestaña-social pointer'>FOLLOWING</span>
-                        <span onClick={potsDescubrir} style={pestana === 'discover'? { borderBottom: "4px solid rgba(255, 255, 255, 0.25)" }: {}} className='pestaña pestaña-discover pointer' >EXPLORE</span>
+                        <span onClick={backtome}      className={pestana === 'me'? 'pestaña pestaña-me neonText pointer': 'pestaña pestaña-me pointer'}>      ME</span>
+                        <span onClick={potsSeguidos}  className={pestana === 'following'? 'pestaña pestaña-social neonText pointer': 'pestaña pestaña-me pointer'}>  FOLLOWING</span>
+                        <span onClick={potsDescubrir} className={pestana === 'discover'? 'pestaña pestaña-discover neonText pointer': 'pestaña pestaña-me pointer'}>EXPLORE</span>
                                 
                     </div> : console.log()}
+
                     <div className={sticky === false? 'container': 'container container-stickymode'}>
                         {cargarPosts(otherPosts? otherPosts: myPosts)}
                     </div>

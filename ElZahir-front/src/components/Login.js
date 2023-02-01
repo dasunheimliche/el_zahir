@@ -1,30 +1,41 @@
+// DEPENDENCIES
+
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+
+// REDUCER
+import { userSlice} from '../reducers/userSlice'
+
+// CSS
 import './Login.css'
+
+// BASE URL
 import baseURL from '../services/baseURL'
 
-const Login = ({setUser})=> {
+
+
+const Login = ()=> {
     let [username, setUsername] = useState('')
     let [password, setPassword] = useState('')
     let [ok, setOk] = useState('')
 
+    let dispatch = useDispatch()
 
     let login = (e)=> {
         e.preventDefault()
     
         axios.post(baseURL.concat('/api/login'), {username, password})
-          .then(user => {
-              console.log("LOGGED USER DATA: ", user.data)
-              setUser({...user.data, loggued: true})
-              setOk(true)
-              window.localStorage.setItem('loggedUser', JSON.stringify(user.data))
-
+            .then(user => {
+                dispatch(userSlice.actions.update({...user.data, loggued: true}))
+                setOk(true)
+                window.localStorage.setItem('loggedUser', JSON.stringify(user.data))
           })
-          .catch(res => {
-            setOk(false)
-          })
-      }
+            .catch(() => {
+                setOk(false)
+            })
+        }
 
 
     return (
@@ -33,13 +44,15 @@ const Login = ({setUser})=> {
             <div className="left-login">
 
                 <div className="card-login">
-                    <div className="title-login">Bienvenido/a</div>
-                    <div className="sub-login">Por favor ingrese sus datos</div>
+
+                    <div  className="title-login">Bienvenido/a</div>
+                    <div  className="sub-login"  >Por favor ingrese sus datos</div>
+
                     <form className="login" onSubmit={login}>
 
                         <input required className='form-login'  type='text' onChange={(e)=> setUsername(e.target.value)} placeholder={'username'} />
                         <input required className='form-login'  type='password' onChange={(e)=> setPassword(e.target.value)} placeholder={'password'} />
-                        <div className={ok === false? 'failedLogin': ''}></div>
+                        <div className={ok === false? 'failedLogin' : ''}></div>
                         <button type='submit' className="in-login  pointer" >Log in</button>
 
                     </form>
@@ -60,7 +73,7 @@ const Login = ({setUser})=> {
                 <div className='right-login-text'>
 
                     <h1 className='right-login-title'>ZAHIR</h1>
-                    <p className='right-login-quote'>"Noches hubo en que me creí tan seguro de poder olvidar El Zahir, que voluntariamente lo recordaba. Lo cierto es que abusé de esos ratos: darles principio resultaba más fácil que darles fin"</p>
+                    <p  className='right-login-quote'>"Noches hubo en que me creí tan seguro de poder olvidar El Zahir, que voluntariamente lo recordaba. Lo cierto es que abusé de esos ratos: darles principio resultaba más fácil que darles fin"</p>
                     <b>El Zahir - </b><i>Jorge Luis Borges</i>
 
                 </div>

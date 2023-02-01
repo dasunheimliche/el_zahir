@@ -1,7 +1,6 @@
 
 import '../components/post.css'
 import quotes from '../images/quotes.png'
-import { Link } from 'react-router-dom'
 
 const ShowCitaPost = ({post, mode, setSeeOpt})=> {
 
@@ -11,7 +10,7 @@ const ShowCitaPost = ({post, mode, setSeeOpt})=> {
                     {mode === 'user' || mode === 'out'?
                         <div className='post-user-info'>
                             <div className='post-user-profile'>
-                                <img className={'post-user-profile-image'} src={post.profileImg}></img>
+                                <img className={'post-user-profile-image'} alt={"profile pic"} src={post.profileImg}></img>
                             </div>
                             <div className='post-user-username'>@{post.username}</div>
 
@@ -19,14 +18,14 @@ const ShowCitaPost = ({post, mode, setSeeOpt})=> {
                     <div>
                         <div className="post-cita-content">
                             <div className='post-text-left'>
-                                <img className='post-text-comilla-left' src={quotes}></img>
+                                <img className='post-text-comilla-left' alt={"comilla"} src={quotes}></img>
                             </div>
             
                             <div className='post-cita-text-container'>
                                 <div className='post-cita-text'>{post.textPost}</div>
                             </div>
                             <div className='post-text-right'>
-                                <img className='post-text-comilla-right' src={quotes}></img>
+                                <img className='post-text-comilla-right' alt={"comilla"} src={quotes}></img>
                             </div>
                         </div>
                         <div className='post-cita-detail'>

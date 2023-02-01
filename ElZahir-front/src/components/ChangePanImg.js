@@ -1,19 +1,30 @@
-import axios from "axios"
+
+// DEPENDENCIES
+import axios                           from "axios"
 import { useEffect, useRef, useState } from "react"
+import { useDispatch }                 from "react-redux"
+
+// REDUCERS
+import { userSlice }                   from "../reducers/userSlice"
+
+// CSS
 import baseURL from '../services/baseURL'
 
-const ChangePanImg = ({setSeeOpt, setUser})=> {
 
-    let [mode, setMode] = useState('idle')
-    let [url, setUrl] = useState('')
-    let [error, setError] = useState(false)
-    let [file, setFile] = useState(false)
+const ChangePanImg = ({setSeeOpt})=> {
+
+    let [mode,    setMode]    = useState('idle')
+    let [url,     setUrl]     = useState('')
+    let [error,   setError]   = useState(false)
+    let [file,    setFile]    = useState(false)
     let [loading, setLoading] = useState(false)
 
+    let dispatch = useDispatch()
+
+    // HOOKS
     let fileForm = useRef()
 
-    // console.log("FILE FOOOORM",fileForm)
-
+    // USE EFFECTS
     useEffect(()=> {
         if ((url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.bmp') || url.endsWith('.gif') || url.endsWith('.webp') || url.endsWith('.tiff')) && url.length > 0) {
             setError(false)
@@ -32,7 +43,7 @@ const ChangePanImg = ({setSeeOpt, setUser})=> {
         }
     }, [file])
 
-
+    // EVENT HANDLERS
     const copyfromcb = (e)=> {
         e.preventDefault()
         setError(false)
@@ -40,9 +51,9 @@ const ChangePanImg = ({setSeeOpt, setUser})=> {
         setMode('url')
         setFile('')
         navigator.clipboard.readText()
-        .then(text => {
-            setUrl(text)
-        })
+            .then(text => {
+                setUrl(text)
+            })
     }
     const upload = (e)=> {
         setError(false)
@@ -67,7 +78,6 @@ const ChangePanImg = ({setSeeOpt, setUser})=> {
 
 
         if (mode === 'url') {
-            // console.log("URL MODE")
             let config = {
                 headers: {
                     Authorization: token
@@ -82,11 +92,10 @@ const ChangePanImg = ({setSeeOpt, setUser})=> {
                     fileForm.current.value = null
                 }
                 window.localStorage.setItem('loggedUser', JSON.stringify({...user, mainPanelImg: respuesta.data.mainPanelImg}))
-                setUser({...user, mainPanelImg: respuesta.data.mainPanelImg})
+                dispatch(userSlice.actions.update({...user, mainPanelImg: respuesta.data.mainPanelImg}))
             })
 
         } else if (mode === 'file') {
-            // console.log("FILE MODE")
             let config = {
                 headers: {
                     Authorization: token,
@@ -103,7 +112,7 @@ const ChangePanImg = ({setSeeOpt, setUser})=> {
                     fileForm.current.value = null
                 }
                 window.localStorage.setItem('loggedUser', JSON.stringify({...user, mainPanelImg: respuesta.data.mainPanelImg}))
-                setUser({...user, mainPanelImg: respuesta.data.mainPanelImg})
+                dispatch(userSlice.actions.update({...user, mainPanelImg: respuesta.data.mainPanelImg}))
             })
         }
     }
@@ -122,25 +131,35 @@ const ChangePanImg = ({setSeeOpt, setUser})=> {
 
     return (
         <form className={'post-image'} onSubmit={error? e=>not(e): loading? e=>not(e) : e=>postear(e)}>
+
             <div className="postImage-inputs">
+
                 <div className="post-options">
+
                     <textarea disabled  className="postImage-input" id="postImage-url" style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
                     <div className="clip-up">
+
                         <div className="clipboard pointer" onClick={(e)=>copyfromcb(e)}></div>
                         <label className="upload pointer">
                             <input style={{display: "none"}} ref={fileForm} type="file" onClick={()=>setUrl('')} onChange={(e)=>upload(e)} />
                         </label>
+
                     </div>
+
                 </div>
                 <div>
                     {(error && url.length > 0) && <div className="post-invalid">{error === "invalid link" && error !== false? "invalid link": "invalid file"}</div>}
                 </div>
             </div>
+
             <div className="postImage-botones">
+
                 <div className="loadingGif" style={loading? {display: "block"} : {display: "none"}}></div>
                 <button className='postImage-button pointer' type="button" onClick={close} >CLOSE</button>
                 <button className="postImage-button pointer" >POST</button>
+
             </div>
+            
         </form>
     )
 }

@@ -2,14 +2,22 @@ import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import baseURL from '../services/baseURL'
 
-const PostImage = ({setSeeOpt, setUser})=> {
+import { userSlice} from '../reducers/userSlice'
+import { useDispatch} from 'react-redux'
+
+import imageButton from '../icons/imageButton.png'
+
+const PostImage = ({setSeeOpt})=> {
     let [mode, setMode] = useState('idle')
     let [url, setUrl] = useState('')
     let [title, setTitle] = useState('')
     let [sub, setSub] = useState('')
     let [error, setError] = useState(false)
     let [file, setFile] = useState(false)
+
     let [loading, setLoading] = useState(false)
+
+    let dispatch = useDispatch()
 
     let fileForm = useRef()
 
@@ -86,7 +94,7 @@ const PostImage = ({setSeeOpt, setUser})=> {
                     let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
                     updateUser = {...updateUser, posts: updateUser.posts.concat(savedPost.data.id)}
                     window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser}))
-                    setUser({...updateUser})
+                    dispatch(userSlice.actions.update({...updateUser}))
                     setError(false)
                 })
         } else if (mode === 'file') {
@@ -110,7 +118,7 @@ const PostImage = ({setSeeOpt, setUser})=> {
                     let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
                     updateUser = {...updateUser, posts: updateUser.posts.concat(savedPost.data.id)}
                     window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser}))
-                    setUser({...updateUser})
+                    dispatch(userSlice.actions.update({...updateUser}))
                     setError(false)
                 })
         }
@@ -133,6 +141,9 @@ const PostImage = ({setSeeOpt, setUser})=> {
 
     return (
         <form className={'post-image'} onSubmit={error? e=>not(e): loading? e=>not(e) : e=>postear(e)}>
+            <div class="postUI-header">
+                <img id="postUI-image-button" className="postUI-header-img" src={imageButton} alt="text-button"></img>
+            </div>
             <div className="postImage-inputs">
                 <input required className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
                 <input className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
@@ -151,8 +162,8 @@ const PostImage = ({setSeeOpt, setUser})=> {
             </div>
             <div className="postImage-botones">
                 <div className="loadingGif" style={loading? {display: "block"} : {display: "none"}}></div>
-                <button className='postImage-button pointer' type="button" onClick={close} >CLOSE</button>
-                <button className="postImage-button pointer" >POST</button>
+                <button className='postUI-button pointer' type="button" onClick={close} >CLOSE</button>
+                <button className="postUI-button pointer" >POST</button>
             </div>
         </form>
     )

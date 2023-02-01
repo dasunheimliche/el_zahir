@@ -1,14 +1,19 @@
-
+// DEPENDENCIES
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { HashRouter as Router } from 'react-router-dom'
+import { Provider } from 'react-redux';
+// import { BrowserRouter as Router } from 'react-router-dom'
+
+// COMPONENTS
 import App from './App';
 
-import { HashRouter as Router } from 'react-router-dom'
-
-import { Provider } from 'react-redux';
+// STORE
 import store from './store'
-// import { BrowserRouter as Router } from 'react-router-dom'
+
+// CSS
+import './index.css';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -19,3 +24,4 @@ root.render(
         </Provider>
     </Router>
 );
+

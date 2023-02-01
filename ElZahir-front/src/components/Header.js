@@ -4,11 +4,16 @@ import { Link } from 'react-router-dom'
 import logo from '../icons/search.png'
 import baseURL from '../services/baseURL'
 
-const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
+import { useSelector, useDispatch} from 'react-redux'
+import { userSlice} from '../reducers/userSlice'
+
+const Header = ({sticky, setSticky, setSuser, seeOpt})=> {
     let [see, setSee] = useState(false)
     let [search, setSearch] = useState('')
     let [results, setResults] = useState([])
 
+    let user = useSelector(state => state.user.value)
+    let dispatch = useDispatch()
 
     useEffect(()=> {
         axios.get(baseURL.concat('/api/users'))
@@ -105,7 +110,7 @@ const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
 
     let salir = ()=> {
         window.localStorage.clear()
-        setUser({...user, loggued:false})
+        dispatch(userSlice.actions.update({...user, loggued:false}))
       }
 
     return (
@@ -116,7 +121,7 @@ const Header = ({user, setUser, sticky, setSticky, setSuser, seeOpt})=> {
                     <div className="header-left">
 
                         <Link className='linknostyle' to={`/home`}>
-                            <div className="logo">Zahir</div>
+                            <div className="logo">Zahir.</div>
                         </Link>
                         
                         <div className="header-search">

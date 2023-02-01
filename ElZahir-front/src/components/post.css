@@ -30,7 +30,6 @@
   }
   
   .video-container iframe {
-    border-radius: 5px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
     position: absolute;
@@ -43,77 +42,50 @@
 
 
 .post-container {
-    border-radius: 5px;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     background-color: white;
-
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 }
-
 .post-user-info {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.post-user-info-image {
-
-    padding-top: 15px;
-    padding-bottom: 0px;
+.post-user-profile {
     display: flex;
     align-items: center;
-    gap: 5px;
+    margin-left: 10px;
 }
-
-.post-user-info-video {
-
-    padding-top: 15px;
-    padding-bottom: 0px;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-/* .post-user-profile {
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    margin-left: 15px;
-} */
 
 .post-user-profile-image {
     width: 30px;
     height: 30px;
     object-fit: cover;
     border-radius: 15px;
-    margin-left: 15px;
 }
 
 /* IMAGE POST */
 .post-image-content {
-    border-radius: 5px;
-    border: 14px solid white;
-}
 
-.img {
-    border-radius: 5px;
+    /* border-radius: 5px; */
+    border: 0px solid white;
 }
 
 
 /* TEXT POST*/
 
 .post-text-content {
-    padding-left: 25px;
-    padding-right: 25px;
+    padding: 25px;
 
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding-top: 10px;
-    padding-bottom: 10px;
     overflow-wrap: break-word;
     max-width: 500px;
     
@@ -195,6 +167,7 @@
 .post-sub {
 
     font-family: Circular-light;
+    font-size: 17px;
     /* background-color: rgb(255, 255, 255); */
     padding: 10px;
     display: flex;

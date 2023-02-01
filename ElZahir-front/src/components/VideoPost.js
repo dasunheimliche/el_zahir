@@ -1,12 +1,13 @@
 
 import '../components/post.css'
 import { Link } from 'react-router-dom'
+import { useSelector} from 'react-redux'
 
-const VidePost = ({post, mode, user, setSeeOpt,
-    liked, loading,
-    deletePost, like, unlike, not, clipboard, openComments})=>{
 
-    
+const VidePost = ({post, mode, setSeeOpt,liked, loading, p})=>{
+
+    let user = useSelector(state => state.user.value)
+
     let idVideo
     if (post.videoPost.startsWith("https://www.youtube.com/watch?")) {
         idVideo = post.videoPost.replace('https://www.youtube.com/watch?v=',"")
@@ -26,9 +27,9 @@ const VidePost = ({post, mode, user, setSeeOpt,
     return (
         <div className="post-container figure">
             {mode === 'user'? 
-                <div className='post-user-info-video'>
+                <div className='post-user-info'>
                     <div className='post-user-profile'>
-                        <img className={'post-user-profile-image'} src={post.profileImg}></img>
+                        <img className={'post-user-profile-image'} src={post.profileImg} alt="profile img"></img>
                     </div>
                     <Link className='linknostyle' to={`/user/${post.user}`}>
                         <div className='post-user-username'>@{post.username}</div>
@@ -36,7 +37,7 @@ const VidePost = ({post, mode, user, setSeeOpt,
                 </div> : console.log()}
             <div className='dl'>
                 <div className="video-container" style={{paddingBottom: `${ar? ar: (1080/1920)*100}%`}}>
-                    <iframe style={{width: "100%", height:"100%"}} src={urlVideo} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                    <iframe title='youtube video post' style={{width: "100%", height:"100%"}} src={urlVideo} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                 </div>
             </div>
             <div className="post-sub" >
@@ -48,10 +49,10 @@ const VidePost = ({post, mode, user, setSeeOpt,
                 <div className='post-sub-area'>
                     <div className='post-sub-size' onClick={()=>setSeeOpt({type: 'videoPost', post: post})}></div>
                     <div className={'social-icons'}>
-                        <span onClick={loading? e=>not(e) : liked? unlike : like} className={liked? 'social-icon social-liked pointer' : 'social-icon social-notliked pointer'}></span>
-                        <span className={'social-icon social-comment pointer'} onClick={e=>openComments(e)}></span>
-                        <span className={'social-icon social-share pointer'} onClick={e=> clipboard(e)}></span>
-                        {(mode !== 'user' && user? user.userId === post.user: "" === post.user)? <span className={'social-icon social-delete pointer'} onClick={loading? e=>not(e): deletePost}></span> : console.log()}
+                        <span onClick={loading? e=>p.doNothing(e) : liked? p.dislike : p.like} className={liked? 'social-icon social-liked pointer' : 'social-icon social-notliked pointer'}></span>
+                        <span className={'social-icon social-comment pointer'} onClick={p.comments}></span>
+                        <span className={'social-icon social-share pointer'} onClick={p.share}></span>
+                        {(mode !== 'user' && user? user.userId === post.user: "" === post.user)? <span className={'social-icon social-delete pointer'} onClick={loading? e=>p.doNothing(e): p.del}></span> : console.log()}
                     </div>
                 </div>
             </div>

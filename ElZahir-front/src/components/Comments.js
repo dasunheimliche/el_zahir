@@ -2,20 +2,20 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import baseURL from '../services/baseURL'
 import Comment from '../components/Comment'
+import { useSelector} from 'react-redux'
 
-
-const Comments = ({post, user, setSeeOpt})=> {
+const Comments = ({post, setSeeOpt})=> {
     let [reload, setReload] = useState(false)
     let [comments, setComments] = useState('')
     let [value, setValue] = useState('')
     let [placeholder, setPlaceholder] = useState('')
     let [commentID, setCommentID] = useState('')
 
+    let user = useSelector(state => state.user.value)
 
     useEffect(()=> {
         axios.get(baseURL.concat('/api/comment'))
         .then(comments => {
-            // console.log(comments.data)
             let resultados = comments.data.filter(comment => (comment.postID === post.id && !comment.commentID))
             setComments(resultados)
         })

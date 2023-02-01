@@ -2,8 +2,11 @@ import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import baseURL from '../services/baseURL'
 
+import { useDispatch } from "react-redux"
+import { userSlice } from "../reducers/userSlice"
 
-const ChangePI = ({setSeeOpt, setUser})=> {
+
+const ChangePI = ({setSeeOpt})=> {
 
     let [mode, setMode] = useState('idle')
     let [url, setUrl] = useState('')
@@ -11,8 +14,9 @@ const ChangePI = ({setSeeOpt, setUser})=> {
     let [file, setFile] = useState(false)
     let [loading, setLoading] = useState(false)
 
-    let fileForm = useRef()
+    let dispatch = useDispatch()
 
+    let fileForm = useRef()
 
     useEffect(()=> {
         if ((url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.bmp') || url.endsWith('.gif') || url.endsWith('.webp') || url.endsWith('.tiff')) && url.length > 0) {
@@ -89,7 +93,8 @@ const ChangePI = ({setSeeOpt, setUser})=> {
                     fileForm.current.value = null
                 }
                 window.localStorage.setItem('loggedUser', JSON.stringify({...user, profileImg: respuesta.data.profileImg}))
-                setUser({...user, profileImg: respuesta.data.profileImg})
+                // setUser({...user, profileImg: respuesta.data.profileImg})
+                dispatch(userSlice.actions.update({...user, profileImg: respuesta.data.profileImg}))
             })
         } else if (mode === 'file') {
             let config = {
@@ -108,7 +113,8 @@ const ChangePI = ({setSeeOpt, setUser})=> {
                     fileForm.current.value = null
                 }
                 window.localStorage.setItem('loggedUser', JSON.stringify({...user, profileImg: respuesta.data.profileImg}))
-                setUser({...user, profileImg: respuesta.data.profileImg})
+                // setUser({...user, profileImg: respuesta.data.profileImg})
+                dispatch(userSlice.actions.update({...user, profileImg: respuesta.data.profileImg}))
             })
 
         }

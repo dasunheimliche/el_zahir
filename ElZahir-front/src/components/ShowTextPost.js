@@ -1,6 +1,5 @@
 
 import '../components/post.css'
-import { Link } from 'react-router-dom'
 
 const ShowTextPost = ({post, mode, setSeeOpt})=> {
 
@@ -10,7 +9,7 @@ const ShowTextPost = ({post, mode, setSeeOpt})=> {
                     {mode === 'user' || mode === 'out'?
                         <div className='post-user-info'>
                             <div className='post-user-profile'>
-                                <img className={'post-user-profile-image'} src={post.profileImg}></img>
+                                <img className={'post-user-profile-image'} src={post.profileImg} alt="profile img"></img>
                             </div>
                             <div className='post-user-username'>@{post.username}</div>
                             

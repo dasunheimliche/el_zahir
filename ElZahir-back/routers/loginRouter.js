@@ -1,4 +1,4 @@
-// ESTO ME PERMITE ACCEDER ARCHIVO .ENV
+// ESTO ME PERMITE ACCEDER AL ARCHIVO .ENV
 require('dotenv').config()
 // ESTO ME PERMITE CREAR UN TOKEN
 const jwt = require('jsonwebtoken')
@@ -40,6 +40,7 @@ loginRouter.post('/', async (request, response)=> {
     const token = jwt.sign(userForToken, process.env.SECRET)
 
     // ENVIO LA RESPUESTA A LA SOLICITUD
+    // con toObject() convierto la respuesta del modelo, a un objeto javascript comun.
     console.log("USER FROM NODE", user.toObject)
     response
         .status(200)
