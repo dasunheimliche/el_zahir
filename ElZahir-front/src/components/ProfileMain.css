@@ -167,6 +167,7 @@
     font-size: 29px;
     font-weight: bolder;
     letter-spacing: 1px;
+    padding-left: 3px;
 
     position: relative;
     top: 3px;
@@ -310,6 +311,7 @@
     height: 35px;
     border-radius: 20px;
     margin-left: 10px;
+    margin-left: 3px;
 }
 
 .h-user-name {

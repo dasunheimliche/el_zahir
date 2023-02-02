@@ -393,7 +393,7 @@
     max-height: 90%;
     background-color: white;
     padding: 20px;
-    border-radius: 5px;
+    border-radius: 15px;
     justify-self: flex-end;
 }
 
@@ -413,15 +413,18 @@
 /* COMMENT INPUT */
 
 .comments-input-container {
-    outline-offset: -1px;
+    /* outline: 1px solid red;
+    outline-offset: -1px; */
 
     display: flex;
     align-items: center;
-    background-color: rgb(236, 236, 236);
+    background-color: rgb(255, 233, 233);
     border-radius: 15px;
-    min-height: 37px;
+    height: 37px;
 
     margin-bottom: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+
 }
 
 .comment-cancel {
@@ -478,7 +481,7 @@
 }
 
 .comments-send:hover {
-    background-color: rgb(222, 222, 222);
+    background-color: rgb(255, 221, 221);
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
 }
@@ -486,21 +489,21 @@
 /* FIN DE COMMENT INPUT*/
 
 .comments-square {
-    background-color: rgb(236, 236, 236);
-    border-radius: 10px;
-    border: 1px solid rgb(215, 215, 215);
+    background-color: rgb(255, 233, 233);
+    border-radius: 15px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     min-height: 100px;
     overflow-y: auto;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 }
 
 .comment-container {
-    background-color: rgb(215, 215, 215);
+    background-color: rgba(255, 251, 251, 0.603);
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 15px;
 }
 
 .sub-comment-contaner {
@@ -533,6 +536,52 @@
     font-size: 15px;
     margin-left: 3px;
     overflow-wrap: break-word;
+}
+
+/* FIN DE COMMENTS */
+/* INICIO DE FOLLOW - FOLLOWINGS */
+
+.followers-container {
+    background-color: white;
+    width: 250px;
+    border-radius: 15px;
+    padding: 15px;
+}
+.followers-header {
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+.followers-list-container {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content:flex-start;
+    background-color: rgb(254, 241, 243);
+    padding: 10px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+}
+.follower {
+    padding: 5px;
+    background-color: rgb(255, 247, 248);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+}
+.follower-username {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    color: rgb(39, 39, 39);
+}
+.follower-profile-img {
+    height: 30px;
+    width: 30px;
+    border-radius: 50px;
 }
 
 @media only screen and (max-width: 920px) {

@@ -38,7 +38,7 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
                     <div className="sub-comment-username">@{comment0.username}</div>
                     <div className="sub-comment-content">{comment0.comment}</div>
                     <div className="comment-socials">
-                        <div className="comment-socials-answ pointer" onClick={()=> sets(comment.id, comment0.username)}>Responder</div>
+                        <div className="comment-socials-answ pointer" onClick={()=> sets(comment.id, comment0.username)}>Answer</div>
                         {comment0.username === user.username || post.username === user.username? <div className="comment-socials-del pointer" onClick={()=>borrar(comment0.id)}>Delete</div> : console.log}
                     </div>
                 </div>
@@ -51,7 +51,7 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
             <div className="comment-username">@{comment.username}</div>
             <div className="comment-content">{comment.comment}</div>
             <div className="comment-socials">
-                <div className="comment-socials-answ pointer" onClick={()=> sets(comment.id, comment.username)}>Responder</div>
+                <div className="comment-socials-answ pointer" onClick={()=> sets(comment.id, comment.username)}>Answer</div>
                 {comment.username === user.username || post.username === user.username? <div className="comment-socials-del pointer" onClick={()=>borrar(comment.id)}>Delete</div> : console.log}
             </div>
             {subComments !== ''? cargarComments() : console.log()}

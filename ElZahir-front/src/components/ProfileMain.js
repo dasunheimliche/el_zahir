@@ -20,6 +20,9 @@ import ShowCitaPost from '../components/ShowCitaPost'
 import ShowVideoPost from '../components/ShowVideoPost'
 import Comments from '../components/Comments'
 
+import Followers from '../components/Followers'
+import Following from '../components/Following'
+
 // BASE URL
 import baseURL from '../services/baseURL'
 
@@ -119,6 +122,9 @@ const ProfileMain = ()=> {
                 {seeOpt.type === 'textPost'     && <ShowTextPost  setSeeOpt={setSeeOpt} post={seeOpt.post} />}
                 {seeOpt.type === 'citaPost'     && <ShowCitaPost  setSeeOpt={setSeeOpt} post={seeOpt.post} />}
                 {seeOpt.type === 'videoPost'    && <ShowVideoPost setSeeOpt={setSeeOpt} post={seeOpt.post} />}
+
+                {seeOpt.type === 'seeFollowers' && <Followers setSeeOpt={setSeeOpt} />}
+                {seeOpt.type === 'seeFollowings' && <Following setSeeOpt={setSeeOpt} />}
 
             </div>
 

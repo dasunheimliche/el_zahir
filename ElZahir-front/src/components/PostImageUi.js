@@ -147,6 +147,9 @@ const PostImage = ({setSeeOpt})=> {
             <div className="postImage-inputs">
                 <input required className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
                 <input className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
+                
+
+
                 <div className="post-options">
                     <textarea disabled  className="postImage-input" id="postImage-url" style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
                     <div className="clip-up">
@@ -156,9 +159,13 @@ const PostImage = ({setSeeOpt})=> {
                         </label>
                     </div>
                 </div>
+
                 <div>
                     {(error && url.length > 0) && <div className="post-invalid">{error === "invalid link" && error !== false? "invalid link": "invalid file"}</div>}
                 </div>
+
+
+
             </div>
             <div className="postImage-botones">
                 <div className="loadingGif" style={loading? {display: "block"} : {display: "none"}}></div>

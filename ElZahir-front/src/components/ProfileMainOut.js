@@ -13,16 +13,17 @@ import ShowCitaPost from './ShowCitaPost'
 import ShowVideoPost from './ShowVideoPost'
 import Comments from './Comments'
 
-import { useSelector, useDispatch} from 'react-redux'
-import { userSlice} from '../reducers/userSlice'
+import { useSelector} from 'react-redux'
 
 import baseURL from '../services/baseURL'
+
+import Followers from '../components/Followers'
+import Following from '../components/Following'
 
 // const ProfileMainOut = ({user, setUser})=> {
 const ProfileMainOut = ({setUser})=> {
 
     let user = useSelector(state => state.user.value)
-    let dispatch = useDispatch()
 
     // USESTATES
     let [sticky, setSticky] = useState(false)
@@ -82,6 +83,9 @@ const ProfileMainOut = ({setUser})=> {
                 {seeOpt.type === 'textPost'     && <ShowTextPost  setSeeOpt={setSeeOpt} post={seeOpt.post} />}
                 {seeOpt.type === 'citaPost'     && <ShowCitaPost  setSeeOpt={setSeeOpt} post={seeOpt.post} />}
                 {seeOpt.type === 'videoPost'    && <ShowVideoPost setSeeOpt={setSeeOpt} post={seeOpt.post} />}
+
+                {seeOpt.type === 'seeFollowers' && <Followers setSeeOpt={setSeeOpt} />}
+                {seeOpt.type === 'seeFollowings' && <Following setSeeOpt={setSeeOpt} />}
 
             </div>
 

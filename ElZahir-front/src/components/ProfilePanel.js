@@ -89,12 +89,12 @@ const ProfilePanel = ({setSuser, suser, posts, sticky, setSeeOpt, seeOpt, mode, 
 
                     <div className='followers stat'>
                         <span className='stat-title'>Followers</span>
-                        <span>{mode === 'user'? String(suser.followers.length) : String(user.followers.length)}</span>
+                        <span className='pointer' onClick={()=>setSeeOpt({type: 'seeFollowers' , post: null})}>{mode === 'user'? String(suser.followers.length) : String(user.followers.length)}</span>
                     </div>
 
                     <div className='following stat'>
                         <span className='stat-title'>Following</span>
-                        <span>{mode === 'user'? String(suser.following.length) : String(user.following.length)}</span>
+                        <span className='pointer' onClick={()=>setSeeOpt({type: 'seeFollowings' , post: null})}>{mode === 'user'? String(suser.following.length) : String(user.following.length)}</span>
                     </div>
 
                     <div className='posts stat'>
