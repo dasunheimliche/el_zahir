@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@100;300&family=Heebo:wght@400;900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
 
 @font-face {
   font-family: Circular;
@@ -17,8 +18,6 @@
 }
 
 body {
-  /* outline: 1px solid green;
-  outline-offset: -1px; */
   margin: 0;
   width: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -26,16 +25,30 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x:visible;
+  /* overflow-x:visible; */
 }
+
 
 html {
   width: 100%;
+  overflow-y: overlay;
 }
 
-html {
-  overflow-y: scroll;
-  /* overflow-y: overlay; */
+.p {
+  cursor: pointer;
+}
+
+.background {
+  z-index: -100;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  transform: scale(1);
+  background-image: linear-gradient(45deg, #FA8BFF 0%, #2BD2FF 52%, #2BFF88 90%);
+}
+
+.invisible {
+  visibility: hidden;
 }
 
 code {
@@ -48,11 +61,35 @@ code {
   text-decoration: none;
 }
 
+.logo {
+  align-self: flex-start;
+  z-index: 1;
+  font-family: 'Patua One', cursive;
+  text-shadow: -3px -3px 0px rgb(255, 255, 255);
+  font-size: 29px;
+  font-weight: bolder;
+  letter-spacing: 1px;
+  padding-left: 3px;
+
+  position: relative;
+  top: 2px;
+
+  background: url('./images/fondo-letra.gif') 0 0 / cover no-repeat;
+  color: #de466c;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  filter: saturate(130%);
+}
+
+.post-logo {
+  margin-bottom: 10px;
+}
+
 .ShowPostOut {
   position: absolute;
   left: 0px;
-  /* outline: 10px solid red;
-  outline-offset: -10px; */
   width: 100%;
   height: 100%;
 
@@ -62,8 +99,72 @@ code {
   flex-direction: column;
 }
 
+.bottom-logo-off {
+  display: none;
+}
 
 
 
+
+@media (max-width: 1600px) {
+  .logo {
+
+    text-shadow: -2px -2px 0px rgb(255, 255, 255);
+    font-size: 24px;
+    letter-spacing: 1px;
+    padding-left: 2px;
+    top: 2px;
+  }
+  
+  .post-logo {
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 1366px) {
+  .logo {
+
+    text-shadow: -2px -2px 0px rgb(255, 255, 255);
+    font-size: 21px;
+    letter-spacing: 1px;
+    padding-left: 2px;
+    top: 1px;
+  }
+  
+  .post-logo {
+    margin-bottom: 7px;
+  }
+}
+
+@media (max-width: 900px) and (orientation: portrait) {
+  .post-logo {
+    margin-left: 2%;
+  }
+
+}
+
+@media (max-width: 490px) and (orientation: portrait) {
+
+  .logo {
+    text-shadow: -3px -3px 0px rgb(255, 255, 255);
+  }
+
+  .post-logo {
+    margin-left: 2%;
+  }
+
+  .bottom-logo-on {
+    opacity: 100%;
+    z-index: 1;
+    position: fixed;
+    transition: opacity 0.25s;
+    transition-delay: 0.1s;
+    top: 95%;
+    bottom: 0;
+    right: 4.5%;
+    left: auto;
+  }
+
+}
 
 

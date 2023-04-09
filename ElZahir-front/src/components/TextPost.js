@@ -1,39 +1,39 @@
 
-import '../components/post.css'
+import style from '../styles/post.module.css'
 import { Link } from 'react-router-dom'
 
 import { useSelector} from 'react-redux'
 
-const TextPost = ({post, mode, setSeeOpt,
-    liked, loading,
-    p})=>  {
+const TextPost = ({post, mode,
+    liked, loading, setToFront,
+    p, visibility, setVisibility})=>  {
 
     let user = useSelector(state => state.user.value)
 
     return (
-        <div className="post-container figure">
-            {mode === 'user'? 
-                <div className='post-user-info'>
-                    <div className='post-user-profile'>
-                        <img className={'post-user-profile-image'} src={post.profileImg} alt="profile img"></img>
+        <div className={!visibility? `${style.post} ${style.figure} ${style.shadows} ${style['mobile-post']}` : `${style.post} ${style.figure}`}>
+            {mode === 'user' &&
+                <div className={style.user}>
+                    <div className={style['user-profile']}>
+                        <img className={style['profile-image']} src={post.profileImg} alt="profile img"></img>
                     </div>
                     <Link className='linknostyle' to={`/user/${post.user}`}>
-                        <div className='post-user-username'>@{post.username}</div>
+                        <div>@{post.username}</div>
                     </Link>
-                </div> : console.log()}
-            <div className="post-text-content">
-                <div className='post-text-title'>{post.title}</div>
-                <div className='post-text-text'>{post.textPost}</div>
+                </div>}
+            <div className={style['text-post']}>
+                <div className={style['text-title']}>{post.title}</div>
+                <div className={style['text-content']}>{post.textPost}</div>
             </div>
-            <div className="post-sub">
-                <div className='post-sub-text'></div>
-                <div className='post-sub-area'>
-                    <div className='post-sub-size' onClick={()=>setSeeOpt({type: 'textPost', post: post})}></div>
-                    <div className={'social-icons'}>
-                        <span onClick={loading? (e)=>p.doNothing(e) : liked? p.dislike : p.like} className={liked? 'social-icon social-liked pointer' : 'social-icon social-notliked pointer'}></span>
-                        <span className={'social-icon social-comment pointer'} onClick={p.comments}></span>
-                        <span className={'social-icon social-share pointer'} onClick={p.share}></span>
-                        {(mode !== 'user' && user? user.userId === post.user: "" === post.user)? <span className={'social-icon social-delete pointer'} onClick={loading? e=>p.doNothing(e): p.del}></span> : console.log()}
+            <div className={style.footer}>
+                <div className={style['footer-middle']}></div>
+                <div className={style['footer-icons']}>
+                    <div className={style.open} onClick={visibility? ()=>{setVisibility(false);setToFront(true)} : ()=>{setVisibility(true);setToFront(false)}}></div> 
+                    <div className={style['social-icons']}>
+                        <span onClick={loading? e=>p.doNothing(e) : liked? p.dislike : p.like} className={liked? `${style.icon} ${style.liked} p` : `${style.icon} ${style.notliked} p`}></span>
+                        <span className={`${style.icon} ${style.comment} p`} onClick={p.comments}></span>
+                        <span className={`${style.icon} ${style.share} p`} onClick={p.share}></span>
+                        {(mode !== 'user' && user? user.userId === post.user: "" === post.user)? <span className={`${style.icon} ${style.delete} p`} onClick={loading? e=>p.doNothing(e): p.del}></span> : console.log()}
                     </div>
                 </div>
             </div>

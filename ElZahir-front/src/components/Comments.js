@@ -4,7 +4,9 @@ import baseURL from '../services/baseURL'
 import Comment from '../components/Comment'
 import { useSelector} from 'react-redux'
 
-const Comments = ({post, setSeeOpt})=> {
+import style from '../styles/comments.module.css'
+
+const Comments = ({post, setPopUp})=> {
     let [reload, setReload] = useState(false)
     let [comments, setComments] = useState('')
     let [value, setValue] = useState('')
@@ -57,24 +59,26 @@ const Comments = ({post, setSeeOpt})=> {
     }
 
     return (
-        <div className="comments-container">
-            <div className="comments-salir-container">
-                <div className="comments-salir" onClick={()=>setSeeOpt({type:'none', post:null})}></div>
-            </div>
-            <div className="comments-header-container">
-                <span className="comments-header">Comments  </span>
-                <span className="comments-number">{comments.length}</span>
-            </div>
+        <div className={style.background}>
+            <div className={style['comments-container']}>
+                <div className={style.header}>
+                    <div className={style.close} onClick={()=>setPopUp({type:'none', post:null})}></div>
+                </div>
+                <div className={style.counter}>
+                    <span className={style.title}>Comments  </span>
+                    <span className={style.count}>{comments.length}</span>
+                </div>
+                <form className={style['input-container']} onSubmit={send}>
+                    <div className={style.testear} >
+                        {(placeholder || value !== '') && <div className={placeholder || value !== '' ? style.cancel : `${style.cancel} ${style['cancel-off']}` } onClick={sets}></div> }
 
-            <form className="comments-input-container" onSubmit={send}>
-                {placeholder || value !== '' ? <div className={placeholder || value !== '' ? "comment-cancel" : "comment-cancel comment-cancel-off" } onClick={sets}></div> : <div></div>}
-                <form action="">
-                    <input className={placeholder || value !== ''? "comments-input" : "comments-input comments-input-off" } value={value} type={'text'} placeholder={placeholder === ''? 'comenta algo...' : placeholder} onChange={(e)=>setValue(e.target.value)} />
+                        <input className={placeholder || value !== ''? style.input : `${style.input} ${style['input-off']}` } value={value} type={'text'} placeholder={placeholder === ''? 'comenta algo...' : placeholder} onChange={(e)=>setValue(e.target.value)} />
+                    </div>
+                    <button className={style.send}>SEND</button>
                 </form>
-                <button className="comments-send">SEND</button>
-            </form>
-            <div className="comments-square">
-                {comments !== '' ? cargarComments(): console.log()}
+                <div className={style.comments}>
+                    {comments !== '' ? cargarComments(): console.log()}
+                </div>
             </div>
         </div>
     )

@@ -99,7 +99,7 @@ postRouter.post('/', async (request, response)=> {
     const user = await User.findById(decodedToken.id)
 
     // lo siguiente se toma como "si hay un archivo en la solicitud..."
-    if (request.files) {
+    if (request.files && body.type === 'image') {
         // extraigo la imagen de request.files
         let sampleFile = request.files.image
         // construyo la dirección de descarga: la direccion de la carpeta actual (__dirname) + la carpeta upload ('\\uploads\\') + el nombre del archivo (sampleFile.name)
@@ -138,6 +138,65 @@ postRouter.post('/', async (request, response)=> {
                 imagePost: promesa.url,
                 imgkitID: promesa.fileId,
                 videoPost: body.videoPost,
+                videoAr: body.videoAr,
+                date: new Date(),
+                user: user._id,
+                username: user.username,
+                profileImg: user.profileImg,
+            })
+            
+            // salvo el nuevo post creado
+            const savedPost = await post.save()
+
+            // guardo el post en la lista de posts del usuario
+            user.posts = user.posts.concat(savedPost._id)
+            // guardo los cambios
+            await user.save()
+            
+            // devuelvo el post creado
+            response.json(savedPost)
+            
+        })
+
+        // lo siguiente se lee como "si no hay un archivo en la solicitud pero si un link a una imagen"
+    } else if (request.files && body.type === 'video-file') {
+        // extraigo la imagen de request.files
+        let sampleFile = request.files.video
+        // construyo la dirección de descarga: la direccion de la carpeta actual (__dirname) + la carpeta upload ('\\uploads\\') + el nombre del archivo (sampleFile.name)
+        let uploadPath = __dirname + '\\uploads\\' + sampleFile.name
+
+        // mv significa move, y permite mover un archivo de un lugar a otro, este toma como argumento el destino, y un callback.
+        // el callback corre luego de mover el archivo
+        sampleFile.mv(uploadPath, async function (err) {
+
+            // si hay un error definido, devuelvo un error
+            if (err) {
+                return response.status(500).send(err)
+            }
+
+            // con fs.readFile(direccion) leo el archivo
+            let fileup = await fs.readFile(uploadPath)
+            
+            // con imagekit.upload() subo la imagen a imagekit
+            // imagekit.upload() toma como argumento un objeto con el archivo y el nombre del archivo
+            let promesa = await imagekit.upload({
+                file: fileup,
+                fileName: sampleFile.name
+            })
+
+            // con fs.unlink() elimino el archivo local
+            // fs.unlink() toma como argumento la direccion del archivo
+            fs.unlink(uploadPath)
+
+            // creo un nuevo post
+            const post = new Post ({
+                // ERROR: demasiados atributos innecesarios
+                type: body.type,
+                title: body.title,
+                subtitle: body.subtitle,
+                textPost: body.textPost,
+                imgkitID: promesa.fileId,
+                videoPost: promesa.url,
                 videoAr: body.videoAr,
                 date: new Date(),
                 user: user._id,

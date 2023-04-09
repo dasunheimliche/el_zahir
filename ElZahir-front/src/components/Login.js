@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux'
 import { userSlice} from '../reducers/userSlice'
 
 // CSS
-import './Login.css'
+import style from '../styles/auth.module.css'
 
 // BASE URL
 import baseURL from '../services/baseURL'
@@ -19,7 +19,7 @@ import baseURL from '../services/baseURL'
 const Login = ()=> {
     let [username, setUsername] = useState('')
     let [password, setPassword] = useState('')
-    let [ok, setOk] = useState('')
+    let [ok, setOk] = useState(true)
 
     let dispatch = useDispatch()
 
@@ -35,48 +35,53 @@ const Login = ()=> {
             .catch(() => {
                 setOk(false)
             })
-        }
+    }
+
+    let demoLogin = (e)=> {
+        e.preventDefault()
+        axios.post(baseURL.concat('/api/login'), {username: "horrorshow", password: "87651234"})
+            .then(user => {
+                dispatch(userSlice.actions.update({...user.data, loggued: true}))
+                setOk(true)
+                window.localStorage.setItem('loggedUser', JSON.stringify(user.data))
+          })
+            .catch(() => {
+                setOk(false)
+            })
+    }
 
 
     return (
-        <div className="main-login">
+        <div className={style.main}>
 
-            <div className="left-login">
+            <div className={style['left-side']}>
 
-                <div className="card-login">
+                <div className={style.card}>
 
-                    <div  className="title-login">Bienvenido/a</div>
-                    <div  className="sub-login"  >Por favor ingrese sus datos</div>
+                    <div>Bienvenido/a</div>
+                    <div>Por favor ingrese sus datos</div>
 
-                    <form className="login" onSubmit={login}>
+                    <form onSubmit={login}>
 
-                        <input required className='form-login'  type='text' onChange={(e)=> setUsername(e.target.value)} placeholder={'username'} />
-                        <input required className='form-login'  type='password' onChange={(e)=> setPassword(e.target.value)} placeholder={'password'} />
-                        <div className={ok === false? 'failedLogin' : ''}></div>
-                        <button type='submit' className="in-login  pointer" >Log in</button>
+                        <input required type='text'     onChange={(e)=> setUsername(e.target.value)} placeholder={'username'} />
+                        <input required type='password' onChange={(e)=> setPassword(e.target.value)} placeholder={'password'} />
+                        {!ok && <div className={style.failedLogin}></div>}
+                        <button type='submit' className="p" >Log in</button>
+                        <button type='submit' className="p" onClick={demoLogin}>Demo</button>
 
                     </form>
 
-                    <div className='qup-login'>
-
-                        <p className="q-login">¿No tienes una cuenta?</p>
-                        <Link className="up-login  pointer" to={'/register'}>Regístrate gratis</Link>
-
+                    <div className={style.toRegister}>
+                        <p >¿No tienes una cuenta?</p>
+                        <Link className="p" to={'/register'}>Regístrate gratis</Link>
                     </div>
 
                 </div>
 
             </div>
 
-            <div className="right-login">
+            <div className={style['right-side']}>
 
-                <div className='right-login-text'>
-
-                    <h1 className='right-login-title'>ZAHIR</h1>
-                    <p  className='right-login-quote'>"Noches hubo en que me creí tan seguro de poder olvidar El Zahir, que voluntariamente lo recordaba. Lo cierto es que abusé de esos ratos: darles principio resultaba más fácil que darles fin"</p>
-                    <b>El Zahir - </b><i>Jorge Luis Borges</i>
-
-                </div>
 
             </div>
 

@@ -1,0 +1,378 @@
+.main {
+    outline-offset: -1px;
+    z-index: -10;
+    display: flex;
+    flex-direction: column;
+
+    margin:0 5%;
+
+}
+
+
+
+/* POP UPS*/
+
+.popups {
+    z-index: 4;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 0px;
+}
+
+.open {
+    background-color: rgba(0, 0, 0, 0.898);
+}
+
+.hidden {
+    display: none;
+}
+
+/* MAIN CONTENT*/
+
+.content {
+    display: flex;
+}
+
+.toFront {
+    z-index: 2;
+}
+
+/* LEFT */
+
+.left-side {
+    display: flex;
+    justify-content: flex-start;
+    padding-right: 2.8%;
+}
+
+/* RIGHT */
+
+.right-side {
+    z-index: 0;
+    width: 100%;
+}
+
+.tabs {
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    color: rgba(32, 32, 32, 0.711);
+    background-color: rgba(255, 245, 245, 0.291);
+    display: flex;
+    justify-content: space-evenly;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: none;
+
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding-top: 15px;
+    /* padding-bottom: 10px; */
+    
+}
+
+.sticky-tabs {
+    height: 0px;
+    visibility: hidden;
+}
+
+.tab {
+    
+    letter-spacing: 1px;
+    width: 33.3333333%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 16px;
+}
+
+.tab:hover {
+    color: #fff;
+    text-shadow:
+        0 0 7px #fff,
+        0 0 10px #fff,
+        0 0 151px #0fa;
+}
+
+.tab:first-child {
+    border-top-left-radius: 10px ;
+}
+
+
+.tab:last-child {
+    border-top-right-radius: 10px;
+}
+
+.neonText {
+    color: #fff;
+    text-shadow:
+        0 0 7px #fff,
+        0 0 10px #fff,
+        0 0 151px #0fa;
+}
+
+/* GRID */
+
+.grid {
+    /* outline: 1px solid red; */
+    background-color: rgba(255, 245, 245, 0.291);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+
+    border-radius: 0 0 10px 10px;
+    padding: 33px 22px 30px;
+    min-width: 1030px;
+    min-height: calc(100vh - 300px);
+    column-count: 2;
+    column-gap: 12px;
+}
+
+.noTab {
+    border-top-left-radius: 10px ;
+    border-top-right-radius: 10px;
+}
+
+.sticky-grid {
+    z-index: -1;
+    position: relative;
+
+    top: 140px;
+    border-radius: 10px ;
+    /* padding-top: 30px; */
+}
+
+.other-user-sticky-grid {
+    top: 125px;
+}
+
+
+/* .main {
+        margin:0 5%;
+    }
+        
+    .left-side {
+        padding-right: 2.8%;
+    }
+        
+    .tabs {
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        padding-top: 15px;
+        padding-bottom: 10px;
+        
+    }
+    
+    .tab {
+        font-size: 16px;
+    }
+    
+    .tab:first-child {
+        border-top-left-radius: 10px ;
+    }
+    
+    
+    .tab:last-child {
+        border-top-right-radius: 10px;
+    }
+    
+    .neonText {
+        color: #fff;
+        text-shadow:
+            0 0 7px #fff,
+            0 0 10px #fff,
+            0 0 151px #0fa;
+    }
+        
+    .grid {
+    
+        border-radius: 0 0 10px 10px;
+        padding: 22px 22px 30px;
+        min-width: 1030px;
+        min-height: calc(100vh - 300px);
+        column-count: 2;
+        column-gap: 12px;
+    }
+    
+    .noTab {
+        border-top-left-radius: 10px ;
+        border-top-right-radius: 10px;
+    }
+    
+    .sticky-grid {
+        top: 165px;
+        border-radius: 10px ;
+        padding-top: 30px;
+    } */
+
+
+@media (max-width: 1600px) {
+
+    .main {
+        margin:0 5%;
+    }
+        
+    .left-side {
+        padding-right: 2.8%;
+    }
+        
+    .tabs {
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        padding-top: 12px;
+        /* padding-bottom: 8px; */
+        
+    }
+    
+    .tab {
+        font-size: 13px;
+    }
+    
+    .tab:first-child {
+        border-top-left-radius: 8px ;
+    }
+    
+    
+    .tab:last-child {
+        border-top-right-radius: 8px;
+    }
+    
+    .neonText {
+        color: #fff;
+        text-shadow:
+            0 0 6px #fff,
+            0 0 8px #fff,
+            0 0 126px #0fa;
+    }
+        
+    .grid {
+    
+        border-radius: 0 0 8px 8px;
+        padding: 26px 18px 25px;
+        min-width: 858px;
+        min-height: calc(100vh - 250px);
+        column-count: 2;
+        column-gap: 10px;
+    }
+    
+    .noTab {
+        border-top-left-radius: 8px ;
+        border-top-right-radius: 8px;
+    }
+    
+    .sticky-grid {
+        top: 137px;
+        border-radius: 8px ;
+        /* padding-top: 25px; */
+    }
+
+
+    
+}
+  
+@media (max-width: 1366px) {
+
+    .main {
+        margin:0 5%;
+    }
+        
+    .left-side {
+        padding-right: 2.8%;
+    }
+        
+    .tabs {
+        border-top-left-radius: 11px;
+        border-top-right-radius: 11px;
+        padding-top: 11px;
+        /* padding-bottom: 7px; */
+        
+    }
+    
+    .tab {
+        font-size: 11px;
+    }
+    
+    .tab:first-child {
+        border-top-left-radius: 7px ;
+    }
+    
+    
+    .tab:last-child {
+        border-top-right-radius: 7px;
+    }
+    
+    .neonText {
+        color: #fff;
+        text-shadow:
+            0 0 5px #fff,
+            0 0 7px #fff,
+            0 0 107px #0fa;
+    }
+        
+    .grid {
+    
+        border-radius: 0 0 7px 7px;
+        padding: 23px 16px 2px;
+        min-width: 732px;
+        min-height: calc(100vh - 213px);
+        column-gap: 9px;
+    }
+    
+    .noTab {
+        border-top-left-radius: 7px ;
+        border-top-right-radius: 7px;
+    }
+    
+    .sticky-grid {
+        top: 117px;
+        border-radius: 7px ;
+        /* padding-top: 21px; */
+    }
+
+}
+  
+@media (max-width: 912px) and (orientation: portrait) {
+    .grid {
+        columns: 1;
+        min-width: 332px;
+    }
+}
+  
+@media (max-width: 490px) and (orientation: portrait) {
+    .content {
+        flex-direction: column;
+    }
+
+    .main {
+        margin: 0 0%;
+    }
+
+    .left-side {
+        padding-right: 0px;
+    }
+
+    .tabs {
+        border-radius: 0px;
+    }
+
+    .grid {
+        min-width: 250px; /* test */
+        width: auto; /* test */
+
+        column-gap: 0px;
+        padding-top: 2%;
+        padding-left: 2%;
+        padding-right: 2%;
+        padding-bottom: 10%;
+    }
+
+    .sticky-grid {
+        position: static;
+    }
+
+    .sticky-tabs {
+        height: inherit;
+        visibility: visible;
+    }
+}

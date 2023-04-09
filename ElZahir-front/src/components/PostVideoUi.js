@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import baseURL from '../services/baseURL'
 
 import { userSlice} from '../reducers/userSlice'
@@ -7,108 +7,177 @@ import { useDispatch} from 'react-redux'
 
 import videoButton from '../icons/videoButton.png'
 
-const PostVideo = ({setSeeOpt})=> {
+// CSS
+import style from '../styles/popups.module.css'
+
+const updateLocalStorage = (postId) => {
+    const user = JSON.parse(window.localStorage.getItem('loggedUser'))
+    const updatedUser = {...user, posts: user.posts.concat(postId)}
+    window.localStorage.setItem('loggedUser', JSON.stringify(updatedUser))
+    return updatedUser
+}
+
+const postWithUrl = async (title, subtitle, url, aspectRatio, token) => {
+    let config = {
+        headers: {
+            Authorization: token
+        }
+    }
+
+    return await axios.post(baseURL.concat("/api/post"), {title, subtitle, videoPost:url, videoAr: aspectRatio, type: 'video'}, config)
+}
+
+const postWithFile = async (formData, token) => {
+    let config = {
+        headers: {
+            Authorization: token,
+            "Content-Type": "multipart/form-data"
+        }
+    }
+    
+    return await axios.post(baseURL.concat("/api/post"), formData, config)
+}
+
+const PostVideoUI = ({setPopUp})=> {
     let [mode, setMode] = useState('idle')
+    let [file, setFile] = useState(false)
 
     let [url, setUrl] = useState('')
     let [title, setTitle] = useState('')
-    let [sub, setSub] = useState('')
-    let [ar, setAr] = useState('')
+    let [subtitle, setSubtitle] = useState('')
+    let [aspectRatio, setAspectRatio] = useState('')
     let [error, setError] = useState(false)
 
     let [loading, setLoading] = useState(false)
-    let [file, setFile] = useState(false)
-
     let dispatch = useDispatch()
 
-    const copyfromcb = (e)=> {
+    let fileForm = useRef()
+
+    useEffect(()=> {
+        if ((url.endsWith('.webm') || url.endsWith('.mp4') || url.endsWith('.mov')) && url.length > 0) {
+            setError(false)
+        } else {
+            setError("invalid link")
+        }
+    }, [url])
+
+    useEffect(()=> {
+        if (file.type) {
+            const isImage = file.type.startsWith('video/');
+            setError(!isImage && file !== false ? "invalid file" : false);
+        }
+    }, [file])
+
+    const upload = (e)=> {
+        console.log(e.target.files[0])
+        setError(false)
+        setMode('file')
+        setUrl(e.target.files[0].name)
+        setFile(e.target.files[0])
+    }
+
+    const copyClipboard = (e)=> {
         e.preventDefault()
+        setError(false)
+        setUrl('')
+        setMode('url')
+        setFile('')
         navigator.clipboard.readText()
-        .then(text => setUrl(text))
+        .then(text => {
+            setUrl(text)
+        })
     }
 
     useEffect(()=> {
-        if (!url.includes("youtu")) {
+        if (!url.includes("youtu") && mode !== "file") {
             setError(true)
         } else {
             setError(false)
         }
-    }, [url])
+    }, [url]) //eslint-disable-line
 
-    const postear = (e)=> {
-        setLoading(true)
-        e.preventDefault()
-        let user = JSON.parse(window.localStorage.getItem('loggedUser'))
-        let token = `Bearer ${user.token}`
-
-        let config = {
-            headers: {
-                Authorization: token
+    const postear = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+      
+        const formData = new FormData();
+        formData.append("video", file);
+        formData.append("title", title);
+        formData.append("subtitle", subtitle);
+        formData.append("type", 'video-file');
+        
+        const user = JSON.parse(window.localStorage.getItem('loggedUser'));
+        const token = `Bearer ${user.token}`;
+      
+        let updatedUser;
+        let savedPost;
+      
+        try {
+            if (mode === 'url') {
+                savedPost = await postWithUrl(title, subtitle, url, aspectRatio, token);
+            } else if (mode === 'file') {
+                savedPost = await postWithFile(formData, token);
             }
+      
+            updatedUser = updateLocalStorage(savedPost.data.id);
+            dispatch(userSlice.actions.update({...updatedUser}));
+      
+            if (fileForm.current.value) {
+                fileForm.current.value = null;
+            }
+      
+            setLoading(false);
+            setError(false);
+            setUrl('');
+            setTitle('');
+            setSubtitle('');
+            setAspectRatio('')
+            setFile('');
+      
+        } catch (error) {
+            console.log(error);
+            setError(true);
+            setLoading(false);
         }
-        axios.post(baseURL.concat("/api/post") , {title: title, subtitle:sub, videoPost:url,videoAr: ar, type: 'video'}, config)
-            .then(savedPost => {
-                setLoading(false)
-                setUrl('')
-                setTitle('')
-                setSub('')
-                setAr('')
-                let updateUser = JSON.parse(window.localStorage.getItem('loggedUser'))
-                updateUser = {...updateUser, posts: updateUser.posts.concat(savedPost.data.id)}
-                window.localStorage.setItem('loggedUser', JSON.stringify({...updateUser}))
-                dispatch(userSlice.actions.update({...updateUser}))
+    };
 
-            })
 
-    }
-
-    const not = (e)=> {
+    const doNothing = (e)=> {
         e.preventDefault()
     }
-
-    let fileForm
-    let upload
 
     return (
-        <form className={'post-video'} onSubmit={error? e=>not(e): loading? e=>not(e) : e=>postear(e)}>
-            <div class="postUI-header">
-                <img id="postUI-image-button" className="postUI-header-img" src={videoButton} alt="text-button"></img>
+        <form className={style.popup} onSubmit={error? doNothing: loading? doNothing : postear}>
+            <div className={style['post-ui-header']}>
+                <img id={style['header-img']} className={style['header-img']} src={videoButton} alt="text-button"></img>
             </div>
-            <div className="postImage-inputs">
-                <input required className="postImage-input" id="postImage-title" placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off'/>
-                <input className="postImage-input" id="postImage-sub" placeholder="Description" onChange={(e)=> setSub(e.target.value)} value={sub} autoComplete='off'/>
-                <input className="postImage-input" id="postImage-ar" placeholder="Aspect ratio (Ej.: 16:9) optional" onChange={(e)=> setAr(e.target.value)} value={ar} autoComplete='off'/>
-                {/* <textarea required className="postImage-input" id="postImage-url" placeholder="URL" onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/> */}
+            <div className={style.main}>
+                <input className={`${style.input} ${style.title}`}  placeholder="Title"                             onChange={(e)=> setTitle(e.target.value)}        value={title}       autoComplete='off' required/>
+                <input className={`${style.input} ${style.subtitle}`}    placeholder="Description"                       onChange={(e)=> setSubtitle(e.target.value)}     value={subtitle}    autoComplete='off'/>
+                <input className={`${style.input} ${style.subtitle}`}     placeholder="Optional: Aspect ratio (Ej.: 16:9)" onChange={(e)=> setAspectRatio(e.target.value)}  value={aspectRatio} autoComplete='off' disabled={mode !== "url"? true : false} />
                 
-
-
-                <div className="post-options">
-                    <textarea disabled  className="postImage-input" id="postImage-url" style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
-                    <div className="clip-up">
-                        <div className="clipboard pointer" onClick={(e)=>copyfromcb(e)}></div>
-                        <label className="upload pointer">
-                            <input style={{display: "none"}} ref={fileForm} type="file" onClick={()=>setUrl('')} onChange={(e)=>upload(e)} />
+                <div className={style.uploader}>
+                    <textarea className={`${style.input} ${style['file-textarea']}`} style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off' disabled />
+                    <div className={style.options}>
+                        <div className={`${style.clipboard} p`} onClick={copyClipboard}></div>
+                        <label className={`${style.upload} p`} >
+                            <input style={{display: "none"}} ref={fileForm} type="file" onClick={()=>setUrl('')} onChange={upload} />
                         </label>
                     </div>
                 </div>
 
                 <div>
-                    {(error && url.length > 0) && <div className="post-invalid">{error === "invalid link" && error !== false? "invalid link": "invalid file"}</div>}
+                    {(error && url.length > 0) && <div className={style.error}>{error === "invalid link" && error !== false? "invalid link": "invalid file"}</div>}
                 </div>
-
                 
-                
-                {/* {(error && url.length > 0) && <div className="post-invalid">invalid url</div>} */}
-
             </div>
-            <div className="postImage-botones">
-                {/* <button className="postUI-button pointer" onClick={(e)=>copyfromcb(e)} >CLIPBOARD</button> */}
-                <div className="loadingGif" style={loading? {display: "block"} : {display: "none"}}></div>
-                <button className='postUI-button pointer' type="button" onClick={()=>setSeeOpt({type: 'none', post: null})} >CLOSE</button>
-                <button typeof="submit" className="postUI-button pointer" >POST</button>
+            <div className={style.footer}>
+                <div className={style.loading} style={loading? {display: "block"} : {display: "none"}}></div>
+                <button className={`${style.button} p`} type="button" onClick={()=>setPopUp({type: 'none', post: null})} >CLOSE</button>
+                <button typeof="submit" className={`${style.button} p`} >POST</button>
             </div>
         </form>
     )
 }
 
-export default PostVideo
+export default PostVideoUI

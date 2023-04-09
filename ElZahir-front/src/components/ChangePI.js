@@ -5,8 +5,39 @@ import baseURL from '../services/baseURL'
 import { useDispatch } from "react-redux"
 import { userSlice } from "../reducers/userSlice"
 
+// CSS
+import style from '../styles/popups.module.css'
 
-const ChangePI = ({setSeeOpt})=> {
+const updateLocalStorage = (url) => {
+    const user = JSON.parse(window.localStorage.getItem('loggedUser'))
+    const updatedUser = {...user, profileImg: url}
+    window.localStorage.setItem('loggedUser', JSON.stringify(updatedUser))
+    return updatedUser
+}
+
+const postWithUrl = async (user, url, token) => {
+    let config = {
+        headers: {
+            Authorization: token
+        }
+    }
+
+    return await axios.put(baseURL.concat(`/api/users/${user.userId}`), {profileImg: url, mode:'profileImgURL'}, config)
+}
+  
+const postWithFile = async (user, formData, token) => {
+    let config = {
+        headers: {
+            Authorization: token,
+            "Content-Type": "multipart/form-data"
+        }
+    }
+    
+    return await axios.put(baseURL.concat(`/api/users/${user.userId}`), formData, config)
+}
+
+
+const ChangePI = ({setPopUp})=> {
 
     let [mode, setMode] = useState('idle')
     let [url, setUrl] = useState('')
@@ -28,15 +59,12 @@ const ChangePI = ({setSeeOpt})=> {
 
     useEffect(()=> {
         if (file.type) {
-            if (!file.type.startsWith('image/') && file !== false) {
-                setError("invalid file")
-            } else {
-                setError(false)
-            }
+            const isImage = file.type.startsWith('image/');
+            setError(!isImage && file !== false ? "invalid file" : false);
         }
     }, [file])
 
-    const copyfromcb = (e)=> {
+    const copyClipboard = (e)=> {
         e.preventDefault()
         setError(false)
         setUrl('')
@@ -61,14 +89,14 @@ const ChangePI = ({setSeeOpt})=> {
         setUrl('')
         setFile('')
         setError(false)
-        setSeeOpt({type: 'none', post: null})
+        setPopUp({type: 'none', post: null})
     }
 
-    const not = (e)=> {
+    const doNothing = (e)=> {
         e.preventDefault()
     }
 
-    const postear = (e)=> {
+    const postear = async (e) => {
         setLoading(true)
         e.preventDefault()
         const formData = new FormData()
@@ -77,70 +105,58 @@ const ChangePI = ({setSeeOpt})=> {
         
         let user = JSON.parse(window.localStorage.getItem('loggedUser'))
         let token = `Bearer ${user.token}`
+      
+        let updatedUser;
+        let savedUser;
 
-        if (mode === 'url') {
-            let config = {
-                headers: {
-                    Authorization: token
-                }
+        try {
+            if (mode === 'url') {
+                savedUser = await postWithUrl(user, url, token);
+            } else if (mode === 'file') {
+                savedUser = await postWithFile(user, formData, token);
             }
-            axios.put(baseURL.concat(`/api/users/${user.userId}`), {profileImg: url, mode:'profileImgURL'}, config)
-            .then(respuesta => {
-                setLoading(false)
-                setError(false)
-                setUrl('')
-                if (fileForm.current.value) {
-                    fileForm.current.value = null
-                }
-                window.localStorage.setItem('loggedUser', JSON.stringify({...user, profileImg: respuesta.data.profileImg}))
-                // setUser({...user, profileImg: respuesta.data.profileImg})
-                dispatch(userSlice.actions.update({...user, profileImg: respuesta.data.profileImg}))
-            })
-        } else if (mode === 'file') {
-            let config = {
-                headers: {
-                    Authorization: token,
-                    "Content-Type": "multipart/form-data"
-                }
+            updatedUser = updateLocalStorage(savedUser.data.profileImg);
+            dispatch(userSlice.actions.update({...updatedUser}));
+      
+            if (fileForm.current.value) {
+                fileForm.current.value = null;
             }
-            axios.put(baseURL.concat(`/api/users/${user.userId}`), formData, config)
-            .then(respuesta => {
-                setLoading(false)
-                setError(false)
-                setUrl('')
-                setFile('')
-                if (fileForm.current.value) {
-                    fileForm.current.value = null
-                }
-                window.localStorage.setItem('loggedUser', JSON.stringify({...user, profileImg: respuesta.data.profileImg}))
-                // setUser({...user, profileImg: respuesta.data.profileImg})
-                dispatch(userSlice.actions.update({...user, profileImg: respuesta.data.profileImg}))
-            })
-
+      
+            setLoading(false);
+            setError(false);
+            setUrl('');
+            setFile('');
+      
+        } catch (error) {
+            console.log(error);
+            setError(true);
+            setLoading(false);
         }
-
-    }
+    };
 
     return (
-        <form className={'post-image'} onSubmit={error? e=>not(e): loading? e=>not(e) : e=>postear(e)}>
-            <div className="postImage-inputs">
-                <div className="post-options">
-                    <textarea disabled required  className="postImage-input" id="postImage-url" style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off'/>
-                    <div className="clip-up">
-                        <div className="clipboard pointer" onClick={(e)=>copyfromcb(e)}></div>
-                        <label className="upload pointer">
-                            <input style={{display: "none"}} ref={fileForm} type="file" onClick={()=>setUrl('')} onChange={(e)=>upload(e)} />
+        <form className={style.popup} onSubmit={error? doNothing: loading? doNothing : postear}>
+            <div className={style.main}>
+                <div className={ style['post-ui-header'] }>
+                    <span>Change profile image</span>
+                </div>
+                <div className={style.uploader}>
+                    <textarea className={`${style.input} ${style['file-textarea']}`} style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off' disabled required  />
+                    <div className={style.options}>
+                        <div className={`${style.clipboard} p`} onClick={copyClipboard}></div>
+                        <label className={`${style.upload} p`} >
+                            <input style={{display: "none"}} ref={fileForm} type="file" onClick={()=>setUrl('')} onChange={upload} />
                         </label>
                     </div>
                 </div>
                 <div>
-                    {(error && url.length > 0) && <div className="post-invalid">{error === "invalid link" && error !== false? "invalid link": "invalid file"}</div>}
+                    {(error && url.length > 0) && <div className={style.error}>{error === "invalid link" && error !== false? "invalid link": "invalid file"}</div>}
                 </div>
             </div>
-            <div className="postImage-botones">
-                <div className="loadingGif" style={loading? {display: "block"} : {display: "none"}}></div>
-                <button className='postImage-button pointer' type="button" onClick={close} >CLOSE</button>
-                <button className="postImage-button pointer" >POST</button>
+            <div className={style.footer}>
+                <div className={style.loading} style={loading? {display: "block"} : {display: "none"}}></div>
+                <button className={`${style.button} p`} type="button" onClick={close} >CLOSE</button>
+                <button className={`${style.button} p`} >POST</button>
             </div>
         </form>
     )
