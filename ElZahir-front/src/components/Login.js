@@ -23,32 +23,33 @@ const Login = ()=> {
 
     let dispatch = useDispatch()
 
-    let login = (e)=> {
-        e.preventDefault()
-    
-        axios.post(baseURL.concat('/api/login'), {username, password})
-            .then(user => {
-                dispatch(userSlice.actions.update({...user.data, loggued: true}))
-                setOk(true)
-                window.localStorage.setItem('loggedUser', JSON.stringify(user.data))
-          })
-            .catch(() => {
-                setOk(false)
-            })
-    }
+    let login = async (e) => {
+        e.preventDefault();
+      
+        try {
+            const user = await axios.post(`${baseURL}/api/login`, { username, password });
+            dispatch(userSlice.actions.update({ ...user.data, loggued: true }));
+            setOk(true);
+            window.localStorage.setItem('loggedUser', JSON.stringify(user.data));
+        } catch (error) {
+            setOk(false);
+            console.error('ERROR LOGGING IN:', error);
+        }
+    };
 
-    let demoLogin = (e)=> {
-        e.preventDefault()
-        axios.post(baseURL.concat('/api/login'), {username: "horrorshow", password: "87651234"})
-            .then(user => {
-                dispatch(userSlice.actions.update({...user.data, loggued: true}))
-                setOk(true)
-                window.localStorage.setItem('loggedUser', JSON.stringify(user.data))
-          })
-            .catch(() => {
-                setOk(false)
-            })
-    }
+    let demoLogin = async (e) => {
+        e.preventDefault();
+      
+        try {
+            const user = await axios.post(`${baseURL}/api/login`, { username: 'horrorshow', password: '87651234' });
+            dispatch(userSlice.actions.update({ ...user.data, loggued: true }));
+            setOk(true);
+            window.localStorage.setItem('loggedUser', JSON.stringify(user.data));
+        } catch (error) {
+            setOk(false);
+            console.error('ERROR DEMO LOGIN:', error);
+        }
+    };
 
 
     return (

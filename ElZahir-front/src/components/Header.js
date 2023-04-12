@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../icons/search.png'
 import baseURL from '../services/baseURL'
+import getConfig from '../services/getConfig'
 
 import { useSelector, useDispatch} from 'react-redux'
 import { userSlice} from '../reducers/userSlice'
@@ -25,8 +26,18 @@ const Header = ({sticky, setSticky})=> {
     let searchRef = useRef()
 
     const searchUsers = async (query) => {
+
+        // const loggedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
+        // const token = `Bearer ${loggedUser.token}`;
+
+        // let config = {
+        //     headers: {
+        //         Authorization: token
+        //     }
+        // }
+
         try {
-            const { data : users } = await axios.get(SEARCH_URL);
+            const { data : users } = await axios.get(SEARCH_URL, getConfig());
             // Debería hacer lo siguiente en el backend, en lugar de aquí
             const results = query.length > 0
                 ? users.filter(user => user.username.toLowerCase().startsWith(query.toLowerCase()))

@@ -5,6 +5,8 @@ import ImagePost from '../components/ImagePost'
 import VideoPost from '../components/VideoPost'
 import VideoFilePost from '../components/VideoFilePost'
 
+import getConfig from '../services/getConfig'
+
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import style from '../styles/post.module.css'
@@ -27,7 +29,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     let dispatch = useDispatch()
 
     // IMAGE POST
-    let [size, setSize] = useState({width: 0, height: 0})
+    let [size] = useState({width: post.width, height: post.height})
     let [ancho, setAncho] = useState((size.width/size.height)*window.innerHeight)
 
     const handleResize = () => {
@@ -42,14 +44,6 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
             window.removeEventListener('load', handleResize);
         };
     }, [size.width, size.height]); //eslint-disable-line
-
-    useEffect(() => {
-        const img = new Image();
-        img.addEventListener('load', function () {
-          setSize({ width: this.naturalWidth, height: this.naturalHeight });
-        });
-        img.src = post.imagePost;
-      }, [post.imagePost]);
 
     // VIDEO POST
 
@@ -98,17 +92,21 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
         }
     };
 
-    const toggleLike = (mode) => {
+    const toggleLike = async(mode) => {
         const newLikedState = mode === 'like' ? true : false;
         setLiked(newLikedState);
         setLoading(true);
-        axios.put(baseURL.concat(`/api/post/${post.id}`), { meId: user.userId, mode })
-            .then(() => {
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+
+        
+
+        try {
+            await axios.put(baseURL.concat(`/api/post/like/${post.id}`), { meId: user.userId, mode }, getConfig())
+            setLoading(false)
+        } catch(error) {
+            console.error(error)
+            setLoading(false)
+        }
+
     };
 
     const doNothing = (e)=> {
@@ -137,7 +135,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     if (post.type === "image") {
         return (
             <div className={visibility? {} : style.container}>
-                <div id={style['mobile-container']} style={(size.height > (window.innerHeight - 150) && !visibility)? {width: `${ancho}px`, maxWidth: '90vw'} : {}}>
+                <div id={!visibility && style['mobile-container']} style={(size.height > (window.innerHeight - 150) && !visibility)? {width: `${ancho}px`, maxWidth: '90vw'} : {}}>
                     {!visibility && <div className="logo post-logo">Zahir.</div>}
                     <ImagePost
                         post={post} mode={mode} setPopUp={setPopUp}
@@ -153,7 +151,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     if (post.type === "text") {
         return (
             <div className={visibility? {} : style.container}>
-                <div id={style['mobile-container']} style={!visibility? {width: "30%"} : {}}>
+                <div id={!visibility && style['mobile-container']} style={!visibility? {width: "30%"} : {}}>
                     {!visibility && <div className="logo post-logo">Zahir.</div>}
                     <TextPost
                         post={post} mode={mode} setPopUp={setPopUp}
@@ -167,7 +165,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     if (post.type === "cita") {
         return(
             <div className={visibility? {} : style.container}>
-                <div id={style['mobile-container']} style={!visibility? {width: "30%"} : {}}>
+                <div id={!visibility && style['mobile-container']} style={!visibility? {width: "30%"} : {}}>
                     {!visibility && <div className="logo post-logo">Zahir.</div>}
                     <QuotePost
                         post={post} mode={mode} setPopUp={setPopUp}
@@ -181,7 +179,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     if (post.type === "video") {
         return(
             <div className={visibility? {} : style.container}>
-                <div id={style['mobile-container']} style={!visibility?  ar >= 100?  (ar >= 170? {width:"23%"}: {width: "32%"}) : {width: "50%"} : {}}>
+                <div id={!visibility && style['mobile-container']} style={!visibility?  ar >= 100?  (ar >= 170? {width:"23%"}: {width: "32%"}) : {width: "50%"} : {}}>
                     {!visibility && <div className="logo post-logo">Zahir.</div>}
                     <VideoPost 
                         post={post} mode={mode} setPopUp={setPopUp} 
@@ -195,7 +193,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     if (post.type === "video-file") {
         return (
             <div className={visibility? {} : style.container}>
-                <div id={style['mobile-container']} style={size.height > (window.innerHeight - 150) && !visibility? {width: `${ancho}px`, maxWidth: '90vw'} : console.log()}>
+                <div id={!visibility && style['mobile-container']} style={(size.height > (window.innerHeight - 150) && !visibility)? {width: `${ancho}px`, maxWidth: '90vw'} : {}}>
                     {!visibility && <div className="logo post-logo">Zahir.</div>}
                     <VideoFilePost
                         post={post} mode={mode} setPopUp={setPopUp}

@@ -14,6 +14,7 @@ const userRouter = require('./routers/userRoutes')
 const loginRouter = require('./routers/loginRouter')
 const postRouter = require('./routers/postRouter')
 const commentRouter = require('./routers/commentRouter')
+const registerRouter = require('./routers/registerRouter')
 
 // esto me permite acceder al archivo de la solocitud con request.files.<<filename>>
 const fileupload = require('express-fileupload')
@@ -55,10 +56,20 @@ app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/post', postRouter)
 app.use('/api/comment', commentRouter)
+app.use('/api/register', registerRouter)
 
 
 // POST - MIDDLEWARES
 
+app.use((_req, res, _next) => {
+    res.status(404).json({ error: 'Not found' })
+  })
+
+app.use((err, _req, res, _next) => {
+    console.error(err)
+    res.status(500).json({ error: 'Something went wrong' })
+})
+  
 
 // EXPORT APP
 

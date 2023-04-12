@@ -12,36 +12,45 @@ const Comments = ({post, setPopUp})=> {
     let [value, setValue] = useState('')
     let [placeholder, setPlaceholder] = useState('')
     let [commentID, setCommentID] = useState('')
+    let [loading, setLoading] = useState(false)
 
     let user = useSelector(state => state.user.value)
 
-    useEffect(()=> {
-        axios.get(baseURL.concat('/api/comment'))
-        .then(comments => {
-            let resultados = comments.data.filter(comment => (comment.postID === post.id && !comment.commentID))
-            setComments(resultados)
-        })
-    }, [reload])
+    useEffect(() => {
+        axios.get(baseURL.concat('/api/comment'), { params: { postId: post.id } })
+            .then( ({ data: comments }) => {
+                const resultados = comments.filter(comment => (comment.postID === post.id && !comment.commentID));
+                setComments(resultados);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, [reload]); //eslint-disable-line
 
-    const send = (e)=> {
-        e.preventDefault()
-        let person = `@${placeholder.split('@')[1]}`
-        let toSend
-
-        toSend = {
+    const handleSubmit = async (e)=> {
+        e.preventDefault();
+        setLoading(true)
+        const person = `@${placeholder.split('@')[1]}`;
+        const commentText = placeholder ? `${person} ${value}` : value;
+        const comment = {
             username: user.username,
-            comment: placeholder? `${person} ${value}` : value,
+            comment: commentText,
             postID: post.id,
-            commentID: commentID
-        }
+            commentID: commentID,
+            userID: post.user
+        };
 
-        axios.post(baseURL.concat('/api/comment'), toSend)
-        .then(res => {
-            setPlaceholder('')
-            setCommentID('')
-            setReload(!reload)
-            setValue('')
-        })
+        try {
+            await axios.post(baseURL.concat('/api/comment'), comment);
+            setPlaceholder('');
+            setCommentID('');
+            setReload((prev) => !prev);
+            setValue('');
+            setLoading(false)
+        } catch (error) {
+            console.error(error);
+            setLoading(false)
+        }
     }
 
     const sets = ()=> {
@@ -68,7 +77,7 @@ const Comments = ({post, setPopUp})=> {
                     <span className={style.title}>Comments  </span>
                     <span className={style.count}>{comments.length}</span>
                 </div>
-                <form className={style['input-container']} onSubmit={send}>
+                <form className={style['input-container']} onSubmit={loading? undefined :  handleSubmit}>
                     <div className={style.testear} >
                         {(placeholder || value !== '') && <div className={placeholder || value !== '' ? style.cancel : `${style.cancel} ${style['cancel-off']}` } onClick={sets}></div> }
 
@@ -77,7 +86,7 @@ const Comments = ({post, setPopUp})=> {
                     <button className={style.send}>SEND</button>
                 </form>
                 <div className={style.comments}>
-                    {comments !== '' ? cargarComments(): console.log()}
+                    {comments !== '' ? cargarComments(): ""}
                 </div>
             </div>
         </div>

@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import baseURL from '../services/baseURL'
+import getConfig from '../services/getConfig'
+
 
 import axios from 'axios'
 import { Link } from 'react-router-dom'
@@ -17,8 +19,17 @@ const Followers = ({setPopUp})=> {
     let user = useSelector(state => state.user.value)
     let params = useParams()
 
+    // const loggedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
+    // const token = `Bearer ${loggedUser.token}`;
+
+    // let config = {
+    //     headers: {
+    //         Authorization: token
+    //     }
+    // }
+
     useEffect(()=> {
-        axios.get(baseURL.concat('/api/users'))
+        axios.get(baseURL.concat('/api/users'), getConfig())
         .then(users => {
             
             if (params["*"]) {

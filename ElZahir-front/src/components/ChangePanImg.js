@@ -27,7 +27,7 @@ const postWithUrl = async (user, url, token) => {
         }
     }
 
-    return await axios.put(baseURL.concat(`/api/users/${user.userId}`), {mainPanelImg: url, mode:'panelImgUrl'}, config)
+    return await axios.put(baseURL.concat(`/api/users/profile-panel-image/${user.userId}`), {mainPanelImg: url, mode:'panelImgUrl'}, config)
 }
   
 const postWithFile = async (user, formData, token) => {
@@ -38,7 +38,7 @@ const postWithFile = async (user, formData, token) => {
         }
     }
     
-    return await axios.put(baseURL.concat(`/api/users/${user.userId}`), formData, config)
+    return await axios.put(baseURL.concat(`/api/users/profile-panel-image/${user.userId}`), formData, config)
 }
 
 const ChangePanImg = ({setPopUp})=> {

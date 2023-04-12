@@ -24,7 +24,7 @@ const postWithUrl = async (title, subtitle, url, token) => {
         }
     }
 
-    return await axios.post(baseURL.concat("/api/post"), {title, subtitle, imagePost:url, type: 'image'}, config)
+    return await axios.post(baseURL.concat("/api/post/image-url"), {title, subtitle, imagePost:url, type: 'image'}, config)
 }
   
 const postWithFile = async (formData, token) => {
@@ -35,7 +35,7 @@ const postWithFile = async (formData, token) => {
         }
     }
     
-    return await axios.post(baseURL.concat("/api/post"), formData, config)
+    return await axios.post(baseURL.concat("/api/post/image-file"), formData, config)
 }
 
 const PostImageUI = ({setPopUp})=> {

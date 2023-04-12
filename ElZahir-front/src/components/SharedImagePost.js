@@ -16,9 +16,8 @@ const SharedImagePost = ({post, p})=> {
                 <div>@{post.username}</div>
             </div>
 
-            {/* <div> */}
-                <img className='img' src={post.imagePost} alt="A windmill" />
-            {/* </div> */}
+            <img className='img' src={post.imagePost} alt="A windmill" />
+            
             <div className={style.footer}>
                 <div className={style['footer-header']}>
                     <i>{post.title}</i> {(post.title && post.subtitle)? "-" : console.log()} <b>{post.subtitle}</b>

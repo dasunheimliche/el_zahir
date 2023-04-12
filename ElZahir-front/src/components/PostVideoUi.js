@@ -35,7 +35,7 @@ const postWithFile = async (formData, token) => {
         }
     }
     
-    return await axios.post(baseURL.concat("/api/post"), formData, config)
+    return await axios.post(baseURL.concat("/api/post/video-file"), formData, config)
 }
 
 const PostVideoUI = ({setPopUp})=> {

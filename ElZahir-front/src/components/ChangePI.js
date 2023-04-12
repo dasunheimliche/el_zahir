@@ -22,7 +22,7 @@ const postWithUrl = async (user, url, token) => {
         }
     }
 
-    return await axios.put(baseURL.concat(`/api/users/${user.userId}`), {profileImg: url, mode:'profileImgURL'}, config)
+    return await axios.put(baseURL.concat(`/api/users/profile-image/${user.userId}`), {profileImg: url, mode:'profileImgURL'}, config)
 }
   
 const postWithFile = async (user, formData, token) => {
@@ -33,7 +33,7 @@ const postWithFile = async (user, formData, token) => {
         }
     }
     
-    return await axios.put(baseURL.concat(`/api/users/${user.userId}`), formData, config)
+    return await axios.put(baseURL.concat(`/api/users/profile-image/${user.userId}`), formData, config)
 }
 
 

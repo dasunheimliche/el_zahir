@@ -7,12 +7,15 @@ const jwt = require('jsonwebtoken')
 // estos son los modelos que voy a usar
 const User = require('../models/User')
 const Post = require('../models/Post')
+const Comment = require('../models/Comment')
 // creo el router con require('express').Router()
 const postRouter = require('express').Router()
 // import imagekit
 const Imagekit = require('imagekit')
 // import fs q me permite manipular archivos locales, en un modo que me genere promesas
 const fs = require('fs/promises')
+const { default: mongoose } = require('mongoose')
+const { response } = require('../App')
 
 // creo un objeto imagekit con el constructor "new Imagekit()"
 // este constructor toma 3 argumentos, que son claves que obtengo en la pagina 
@@ -38,159 +41,165 @@ const getToken = (request)=> {
     return null
 }
 
-postRouter.put('/:id', async(request, response)=> {
-    const body = request.body
-    const id = request.params.id
-    
+postRouter.put('/like/:id', async(request, response)=> {
+
+    const token = getToken(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        response.status(401).json({error: 'token missing or invalid'})
+    }
+
+    const body = request.body;
+    const postId = request.params.id;
+    const meId = body.meId
+
+    const post = await Post.findById(postId);
+    const user = await User.findById(meId);
 
     if (body.mode === 'like') {
-        // extraigo el id del usuario
-        const meId = body.meId
-        
-        // acceso al post y al usuario que dio el like
-        const post = await Post.findById(id)
-        const user = await User.findById(meId)
+    
+        post.likes.push(user._id);
+        user.likedPosts.push(post._id);
 
-        // agrego el usuario al atributo likes del post
-        post.likes = post.likes.concat(user._id)
+        await post.save();
+        await user.save();
 
-        // agrego el post al atributo likedposts del usuario
-        user.likedPosts = user.likedPosts.concat(post._id)
+      response.status(200).json({ success: true, message: 'Post liked', post });
+    } else if (body.mode === 'unlike') {
 
-        // guardo los cambios
-        await post.save()
+        post.likes.pull(meId);
+        user.likedPosts.pull(post._id)
+
+        await post.save();
         await user.save()
 
-        // aquí deberia devolver  el post actualizado
-        response.json({hola: 'hola'})
-
-    } else if (body.mode === 'unlike') {
-        // elimino el like de la lista de posts likeados del usuario
-        // lo siguiente dice...
-        // de todos los documentos user ({}), elimino ($pull) de una lista (likedPosts), el objeto id igual a ObjectId(id) 
-        await User.update({}, {$pull: {likedPosts: ObjectId(id)}})
-
-        // acceso al post por el id
-        const post = await Post.findById(id)
-
-        // ERROR: deberia eliminar el usuario que deslikeo, no todos los likes
-        post.likes = []
-
-        // guardo el post
-        await post.save()
-
-        // deberia devolver el post actualizado
-        response.json({hola: 'hola'})
+        response.status(200).json({ success: true, message: 'Post unliked', post });
+    } else {
+        response.status(400).json({ success: false, message: 'Invalid request' });
     }
 
 })
 
-postRouter.post('/', async (request, response)=> {
+postRouter.post('/image-file', async (request, response)=> {
     const body = request.body
-  
-    // debo agregar esto a las otras rutas
     const token = getToken(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!token || !decodedToken.id) {
-        return response.status(401).json({error: 'token missing or invalid'})
+        response.status(401).json({error: 'token missing or invalid'})
     }
 
-    // aca a diferencia de antes, uso el id que me da el token para buscar al usuario
     const user = await User.findById(decodedToken.id)
 
-    // lo siguiente se toma como "si hay un archivo en la solicitud..."
-    if (request.files && body.type === 'image') {
-        // extraigo la imagen de request.files
-        let sampleFile = request.files.image
-        // construyo la dirección de descarga: la direccion de la carpeta actual (__dirname) + la carpeta upload ('\\uploads\\') + el nombre del archivo (sampleFile.name)
-        let uploadPath = __dirname + '\\uploads\\' + sampleFile.name
+    let sampleFile = request.files.image
+    let uploadPath = __dirname + '\\uploads\\' + sampleFile.name
 
-        // mv significa move, y permite mover un archivo de un lugar a otro, este toma como argumento el destino, y un callback.
-        // el callback corre luego de mover el archivo
-        sampleFile.mv(uploadPath, async function (err) {
+    sampleFile.mv(uploadPath, async function (err) {
 
-            // si hay un error definido, devuelvo un error
-            if (err) {
-                return response.status(500).send(err)
-            }
+        if (err) {
+            response.status(500).send(err)
+        }
 
-            // con fs.readFile(direccion) leo el archivo
-            let fileup = await fs.readFile(uploadPath)
-            
-            // con imagekit.upload() subo la imagen a imagekit
-            // imagekit.upload() toma como argumento un objeto con el archivo y el nombre del archivo
-            let promesa = await imagekit.upload({
-                file: fileup,
-                fileName: sampleFile.name
-            })
-
-            // con fs.unlink() elimino el archivo local
-            // fs.unlink() toma como argumento la direccion del archivo
-            fs.unlink(uploadPath)
-
-            // creo un nuevo post
-            const post = new Post ({
-                // ERROR: demasiados atributos innecesarios
-                type: body.type,
-                title: body.title,
-                subtitle: body.subtitle,
-                textPost: body.textPost,
-                imagePost: promesa.url,
-                imgkitID: promesa.fileId,
-                videoPost: body.videoPost,
-                videoAr: body.videoAr,
-                date: new Date(),
-                user: user._id,
-                username: user.username,
-                profileImg: user.profileImg,
-            })
-            
-            // salvo el nuevo post creado
-            const savedPost = await post.save()
-
-            // guardo el post en la lista de posts del usuario
-            user.posts = user.posts.concat(savedPost._id)
-            // guardo los cambios
-            await user.save()
-            
-            // devuelvo el post creado
-            response.json(savedPost)
-            
+        let fileup = await fs.readFile(uploadPath)
+        
+        let promesa = await imagekit.upload({
+            file: fileup,
+            fileName: sampleFile.name
         })
 
-        // lo siguiente se lee como "si no hay un archivo en la solicitud pero si un link a una imagen"
-    } else if (request.files && body.type === 'video-file') {
-        // extraigo la imagen de request.files
-        let sampleFile = request.files.video
-        // construyo la dirección de descarga: la direccion de la carpeta actual (__dirname) + la carpeta upload ('\\uploads\\') + el nombre del archivo (sampleFile.name)
+        fs.unlink(uploadPath)
+
+        const post = new Post ({
+            type: body.type,
+            title: body.title,
+            subtitle: body.subtitle,
+            textPost: body.textPost,
+            imagePost: promesa.url,
+            imgkitID: promesa.fileId,
+            date: new Date(),
+            user: user._id,
+            username: user.username,
+            profileImg: user.profileImg,
+            mediaWidth: promesa.width,
+            mediaHeight: promesa.height 
+        })
+         
+        const savedPost = await post.save()
+
+        user.posts = user.posts.concat(savedPost._id)
+        await user.save()
+        
+        response.json(savedPost)
+    })
+})
+
+postRouter.post('/image-url', async (request, response)=> {
+    const body = request.body
+  
+    const token = getToken(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        response.status(401).json({error: 'token missing or invalid'})
+    }
+
+    const user = await User.findById(decodedToken.id)
+
+    let promesa = await imagekit.upload({
+        file: body.imagePost,
+        fileName: "randomname"
+    })
+
+    const post = new Post ({
+        type: body.type,
+        title: body.title,
+        subtitle: body.subtitle,
+        textPost: body.textPost,
+        imagePost: promesa.url,
+        imgkitID: promesa.fileId,
+        date: new Date(),
+        user: user._id,
+        username: user.username,
+        profileImg: user.profileImg,
+        mediaWidth: promesa.width,
+        mediaHeight: promesa.height 
+    })
+
+    const savedPost = await post.save()
+    user.posts = user.posts.concat(savedPost._id)
+    await user.save()
+
+    response.json(savedPost)
+})
+
+postRouter.post('/video-file', async (request, response)=> {
+    const body = request.body
+  
+    const token = getToken(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        response.status(401).json({error: 'token missing or invalid'})
+    }
+
+    const user = await User.findById(decodedToken.id)
+
+    let sampleFile = request.files.video
         let uploadPath = __dirname + '\\uploads\\' + sampleFile.name
 
-        // mv significa move, y permite mover un archivo de un lugar a otro, este toma como argumento el destino, y un callback.
-        // el callback corre luego de mover el archivo
         sampleFile.mv(uploadPath, async function (err) {
 
-            // si hay un error definido, devuelvo un error
             if (err) {
-                return response.status(500).send(err)
+                response.status(500).send(err)
             }
 
-            // con fs.readFile(direccion) leo el archivo
             let fileup = await fs.readFile(uploadPath)
             
-            // con imagekit.upload() subo la imagen a imagekit
-            // imagekit.upload() toma como argumento un objeto con el archivo y el nombre del archivo
             let promesa = await imagekit.upload({
                 file: fileup,
                 fileName: sampleFile.name
             })
 
-            // con fs.unlink() elimino el archivo local
-            // fs.unlink() toma como argumento la direccion del archivo
             fs.unlink(uploadPath)
 
-            // creo un nuevo post
             const post = new Post ({
-                // ERROR: demasiados atributos innecesarios
                 type: body.type,
                 title: body.title,
                 subtitle: body.subtitle,
@@ -202,83 +211,106 @@ postRouter.post('/', async (request, response)=> {
                 user: user._id,
                 username: user.username,
                 profileImg: user.profileImg,
+                mediaWidth: promesa.width,
+                mediaHeight: promesa.height 
             })
             
-            // salvo el nuevo post creado
             const savedPost = await post.save()
 
-            // guardo el post en la lista de posts del usuario
             user.posts = user.posts.concat(savedPost._id)
-            // guardo los cambios
             await user.save()
             
-            // devuelvo el post creado
             response.json(savedPost)
-            
         })
-
-        // lo siguiente se lee como "si no hay un archivo en la solicitud pero si un link a una imagen"
-    } else if (!request.files && body.type === "image") {
-
-        // con imagekit.upload() tambien puedo subir desde una dirección
-        let promesa = await imagekit.upload({
-            file: body.imagePost,
-            fileName: "randomname"
-        })
-
-        const post = new Post ({
-            type: body.type,
-            title: body.title,
-            subtitle: body.subtitle,
-            textPost: body.textPost,
-            imagePost: promesa.url,
-            imgkitID: promesa.fileId,
-            videoPost: body.videoPost,
-            videoAr: body.videoAr,
-            date: new Date(),
-            user: user._id,
-            username: user.username,
-            profileImg: user.profileImg,
-        })
-
-        const savedPost = await post.save()
-        user.posts = user.posts.concat(savedPost._id)
-        await user.save()
-
-        response.json(savedPost)
-
-    } else if (body.type === "text" || body.type === "cita" || body.type === "video") {
-        const post = new Post ({
-            type: body.type,
-            title: body.title,
-            subtitle: body.subtitle,
-            textPost: body.textPost,
-            imagePost: body.imagePost,
-            videoPost: body.videoPost,
-            videoAr: body.videoAr,
-            date: new Date(),
-            user: user._id,
-            username: user.username,
-            profileImg: user.profileImg,
-        })
-
-        const savedPost = await post.save()
-        user.posts = user.posts.concat(savedPost._id)
-        await user.save()
-
-        response.json(savedPost)
-    }
 })
 
-postRouter.get('/', async (request, response)=> {
-    // ERROR: falta verificacion de token
-    let posts = await Post.find({})
-    response.json(posts)
+postRouter.post('/', async (request, response)=> {
+    const body = request.body
+  
+    const token = getToken(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        response.status(401).json({error: 'token missing or invalid'})
+    }
 
+    const user = await User.findById(decodedToken.id)
+
+    const post = new Post ({
+        type: body.type,
+        title: body.title,
+        subtitle: body.subtitle,
+        textPost: body.textPost,
+        imagePost: body.imagePost,
+        videoPost: body.videoPost,
+        videoAr: body.videoAr,
+        date: new Date(),
+        user: user._id,
+        username: user.username,
+        profileImg: user.profileImg,
+    })
+
+    const savedPost = await post.save()
+    user.posts = user.posts.concat(savedPost._id)
+    await user.save()
+
+    response.json(savedPost)
+})
+
+postRouter.get('/my-posts', async (request, response)=> {
+
+    const token = getToken(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        response.status(401).json({error: 'token missing or invalid'})
+    }
+
+    let posts = await Post.find({user: decodedToken.id})
+
+    response.json(posts)
+})
+
+postRouter.get('/following-posts', async (request, response)=> {
+    const token = getToken(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        response.status(401).json({error: 'token missing or invalid'})
+    }
+    const user = await User.findById(decodedToken.id)
+    const following = user.following
+    const posts = await Post.find({user: {$in: following}})
+
+    response.json(posts)
+})
+
+postRouter.get('/discover-posts', async (request, response)=> {
+    const token = getToken(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        response.status(401).json({error: 'token missing or invalid'})
+    }
+
+    const user = await User.findById(decodedToken.id)
+    const following = user.following
+    const posts = await Post.find({user: {$nin: [...following, new mongoose.Types.ObjectId(decodedToken.id)]}})
+
+    response.json(posts)
+})
+
+postRouter.get('/user-posts', async (request, response) => {
+    const token = getToken(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        response.status(401).json({error: 'token missing or invalid'})
+    }
+    
+    const id = request.query.userID
+    const posts = await Post.find({user: new mongoose.Types.ObjectId(id)})
+
+    response.json(posts)
 })
 
 postRouter.get('/:id', async (request, response)=> {
-    // ERROR: falta verificacion de token
+    // No es necesaria verificacion, esta ruta va a ser utilizada para los posts compartidos.
     const id = request.params.id
     Post.findById(id)
     .then(post => {
@@ -292,19 +324,19 @@ postRouter.delete('/:id', async(request, response) => {
     const token = getToken(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!token || !decodedToken.id) {
-        return response.status(401).json({error: 'token missing or invalid'})
+        response.status(401).json({error: 'token missing or invalid'})
     }
 
     const id = request.params.id
+    const idObject = new mongoose.Types.ObjectId(id)
 
-    await User.update({}, {$pull: {posts: ObjectId(id)}}, {new: true})
+    await User.updateMany({}, { $pull: { posts: idObject, likedPosts: idObject } });
+    await Comment.deleteMany({postID: idObject});
 
-    // lo siguiente se lee como "si hay un id de imagekit definido"
     if (body.imgkitID) {
-        // con imagekit.deleteFile() elimino el archivo de imagekit
-        imagekit.deleteFile(body.imgkitID)
+        await imagekit.deleteFile(body.imgkitID)
     }
-    // elimino el post de la base de datos
+
     await Post.findByIdAndDelete(id)
     .then(deletedPost => {
         response.json(deletedPost)

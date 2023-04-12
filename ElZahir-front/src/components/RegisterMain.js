@@ -14,42 +14,59 @@ const Register = ()=> {
 
     // STATES
     let [inputs, setInputs] = useState({ name: null, lastname: null, username: null, email: null, password: '', password2: '' })
-    let [validUsers, setValidUsers] = useState('')
-    let [ok, setOk] = useState('')
+    let [validUsers, setValidUsers] = useState([])
+
+    let [isPassOk, setIsPassOk] = useState(false)
+    let [isUsernameOk, setIsUserameOk] = useState(false) 
 
     // HOOKS
     const navegar = useNavigate()
 
     // USE EFFECTS
     useEffect(()=> {
-        axios.get(baseURL.concat('/api/users'))
-        .then(users => {
-            let usernames = users.data.map(user => user.username)
-            setValidUsers(usernames)
-        })
+        axios.get(baseURL.concat('/api/register'))
+            .then( ({data: usernames}) => {
+                setValidUsers(usernames)
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }, [])
 
-    useEffect((validUsers)=> {
-        if (!validUsers) return
-        if (validUsers.includes(inputs.username) || inputs.password !== inputs.password2) {
-            setOk(false)
+    useEffect(()=> {
+        if (inputs.password !== inputs.password2 || inputs.password.length < 1) {
+            setIsPassOk(false)
         } else {
-            setOk(true)
+            setIsPassOk(true)
         }
-    }, [inputs])
+    }, [inputs.password, inputs.password2])
+
+    useEffect(()=> {
+        if (!validUsers) return
+
+        if (validUsers.includes(inputs.username)) {
+            setIsUserameOk(false)
+        } else {
+            setIsUserameOk(true)
+        }
+
+    }, [inputs.username, validUsers])
 
     // EVENT HANDLERS
-    let signin = (e)=> {
-        e.preventDefault()
-        
-        if (inputs.password === inputs.password2 && inputs.password.length >= 5) {
-          axios.post(baseURL.concat('/api/users'), {
-            name: inputs.name, lastname: inputs.lastname, username: inputs.username, email: inputs.email, password: inputs.password
-          })
-          navegar('/login')
-        } 
-    }
-
+    let signin = async (e) => {
+        e.preventDefault();
+      
+        const { name, lastname, username, email, password, password2 } = inputs;
+      
+        if (password === password2 && password.length >= 5) {
+            try {
+                await axios.post(`${baseURL}/api/register`, { name, lastname, username, email, password });
+                navegar('/login');
+            } catch (error) {
+                console.error('ERROR REGISTERING:', error);
+            }
+        }
+    };
 
     return (
         <div className={style.main}>
@@ -60,7 +77,7 @@ const Register = ()=> {
 
                     <div>Bienvenido a Zahir</div>
                     <div>Por favor ingrese sus datos</div>
-                    <form onSubmit={ok? (e)=>signin(e) : console.log()}>
+                    <form onSubmit={isPassOk && isUsernameOk? signin : undefined}>
 
                         <input required  type='text' onChange={(e)=> setInputs({...inputs, name: e.target.value})}     placeholder={'name'} />
                         <input required  type='text' onChange={(e)=> setInputs({...inputs, lastname: e.target.value})} placeholder={'lastname'} />

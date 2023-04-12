@@ -22,9 +22,9 @@ const ImagePost = ({post, mode,
                         <div>@{post.username}</div>
                     </Link>
                 </div>}
-            <div>
-                <img className={style.img} src={post.imagePost} alt="A windmill" />
-            </div>
+                
+            <img className={style.img} src={post.imagePost} alt="A windmill" />
+
             <div className={style.footer}>
                 <div className={style['footer-header']}>
                     <i>{post.title}</i> {(post.title && post.subtitle)? "-" : ""} <b>{post.subtitle}</b>

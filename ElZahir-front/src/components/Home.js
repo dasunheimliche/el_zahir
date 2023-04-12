@@ -21,6 +21,7 @@ import Following from './Following'
 
 // BASE URL
 import baseURL from '../services/baseURL'
+import getConfig from '../services/getConfig'
 
 // CSS
 import style from  '../styles/home.module.css'
@@ -37,8 +38,6 @@ const Home = ()=> {
     let [otherPosts, setOtherPosts] = useState(false)
     let [tab,        setTab]        = useState("me")
 
-    let [postBackImg ,setPostBackImg] = useState()
-
     // próxima impmenentación
     let [mood,       setMood]       = useState(0)
     // -------------------------
@@ -50,9 +49,8 @@ const Home = ()=> {
     // USE EFFECTS
     const fetchUserPosts = async () => {
         try {
-          const { data:allposts } = await axios.get(baseURL.concat('/api/post'));
-          const posts = allposts.filter(post => post.user === user.userId);
-          setMyPosts(posts.reverse());
+          const { data:allposts } = await axios.get(baseURL.concat('/api/post/my-posts'), getConfig());
+          setMyPosts(allposts.reverse());
         } catch (error) {
           console.error(error)
         }
@@ -82,10 +80,8 @@ const Home = ()=> {
     // EVENT HANDLERS
     const followingPosts = async()=> {
         try {
-            const { data: allposts } = await axios.get(baseURL.concat('/api/post'))
-            const follows = user.following
-            const posts = allposts.filter(post => follows.includes(post.user))
-            const reversedPosts = posts.slice().reverse()
+            const { data: allposts } = await axios.get(baseURL.concat('/api/post/following-posts'), getConfig())
+            const reversedPosts = allposts.slice().reverse()
             setOtherPosts(reversedPosts)
             setTab("following")
         } catch (error) {
@@ -95,7 +91,8 @@ const Home = ()=> {
 
     const discoverPosts = async()=> {
         try {
-            const { data: allposts } = await axios.get(baseURL.concat('/api/post'))
+            const { data: allposts } = await axios.get(baseURL.concat('/api/post/discover-posts'), getConfig())
+            console.log("ALL POSTS", allposts)
             const follows = user.following
             const posts = allposts.filter(post => !follows.includes(post.user) && post.user !== user.userId)
             const reversedPosts = posts.slice().reverse()
@@ -126,12 +123,6 @@ const Home = ()=> {
             behavior: "smooth"
         });
     };
-
-    const img = new Image();
-    img.src = '../images//trippy-back3.gif';
-    img.onload = ()=> {
-        setPostBackImg(img)
-    }
 
     // RENDER
     return (
@@ -174,7 +165,7 @@ const Home = ()=> {
                     </div> 
 
                     <div className={sticky === false? style.grid : `${style.grid} ${style['sticky-grid']}`}>
-                        {renderPosts(otherPosts? otherPosts: myPosts)}
+                        {renderPosts(otherPosts? otherPosts : myPosts)}
                     </div>
                 </div>
             </div>

@@ -19,7 +19,7 @@ const VideoFilePost = ({post, mode,
                         <div>@{post.username}</div>
                     </Link>
                 </div>}
-                <video width="100%" heigth="auto" muted autoPlay controls loop>
+                <video muted autoPlay controls loop>
                     <source src={post.videoPost} type="video/webm"/>
                 </video>
             <div className={style.footer}>

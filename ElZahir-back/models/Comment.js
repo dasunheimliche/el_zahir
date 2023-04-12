@@ -6,6 +6,10 @@ const commentSchema = new mongoose.Schema({
     // el constructor new mongoose.Schema toma como argumento un objeto...
     // donde las llaves son los atributos del modelo, y sus valores el tipo de variable aceptado.
     username: String,
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
     comment: String,
     date: Date,
 
@@ -32,7 +36,7 @@ const commentSchema = new mongoose.Schema({
 // y posteriormente eliminamos los atributos _id y __v
 
 commentSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
+    transform: (_document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v

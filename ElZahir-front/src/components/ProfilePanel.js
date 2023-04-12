@@ -10,9 +10,10 @@ import baseURL from '../services/baseURL'
 
 // CSS
 import style from '../styles/userCard.module.css'
+import getConfig from '../services/getConfig'
 
 
-const ProfilePanel = ({setOtherUser, otherUser, posts, sticky, setPopUp, mode, mood, setMood})=> {
+const ProfilePanel = ({setOtherUser, otherUser, posts, sticky, setPopUp, mode})=> {
 
     // STATES
     let user = useSelector(state => state.user.value)
@@ -25,40 +26,45 @@ const ProfilePanel = ({setOtherUser, otherUser, posts, sticky, setPopUp, mode, m
     // USE EFFECTS
     useEffect(()=> {
 
-        const user = JSON.parse(window.localStorage.getItem('loggedUser'))
-        const curr = JSON.parse(window.localStorage.getItem('currentSuser'))
-        if (!user || !curr) {
+        if (!user || !otherUser) {
             return
         }
         if (mode === 'user') {
-            if (user.following.includes(curr.id)) {
+            if (user.following.includes(otherUser.id)) {
                 setFollowing(true)
             }
         }
-    },[]) //eslint-disable-line
+    },[otherUser]) //eslint-disable-line
 
     // EVENT HANDLERS
 
     const toggleFollow = async () => {
+        
         setLoadingState(true);
         try {
-          const url = `${baseURL}/api/users/${otherUser.id}`;
-          const mode = following ? 'unfollow' : 'follow';
-          const { data } = await axios.put(url, { id: user.userId, mode });
-      
-          const loggedUser = { ...user, following: data.me.following };
-          window.localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
-          dispatch(userSlice.actions.update(loggedUser));
-      
-          const currentSuser = { ...otherUser, followers: data.user.followers };
-          window.localStorage.setItem('currentSuser', JSON.stringify(currentSuser));
-          setOtherUser(currentSuser);
-      
-          setFollowing((prevState) => !prevState);
+            let userData
+
+            if (following) {
+                userData = await axios.put(`${baseURL}/api/users/unfollow/${otherUser.id}`, { id: user.userId }, getConfig());
+                userData = userData.data
+            } else {
+                userData = await axios.put(`${baseURL}/api/users/follow/${otherUser.id}`, { id: user.userId }, getConfig());
+                userData = userData.data
+            }
+        
+            const loggedUser = { ...user, following: userData.me.following };
+            window.localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
+            dispatch(userSlice.actions.update(loggedUser));
+        
+            const currentSuser = { ...otherUser, followers: userData.user.followers };
+            window.localStorage.setItem('currentSuser', JSON.stringify(currentSuser));
+            setOtherUser(currentSuser);
+        
+            setFollowing((prevState) => !prevState);
         } catch (error) {
-          console.error(error);
+            console.error(error);
         } finally {
-          setLoadingState(false);
+            setLoadingState(false);
         }
       };
 

@@ -16,6 +16,7 @@ import Followers from './Followers'
 import Following from './Following'
 
 import style from  '../styles/home.module.css'
+import getConfig from '../services/getConfig'
 
 const OtherUserHome = ({setUser})=> {
 
@@ -31,17 +32,27 @@ const OtherUserHome = ({setUser})=> {
     const navigate = useNavigate()
     const { "*": userID } = useParams()
 
-    const fetchUser = useCallback(async () => {
+    const fetchUser = async () => {
+        const loggedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
+        const token = `Bearer ${loggedUser.token}`;
+
+        const config = {
+            headers: {
+                Authorization: token
+            },
+            params: {userID}
+        }
+
         try {
-            const { data:user } = await axios.get(baseURL.concat(`/api/users/${userID}`))
-            const { data:posts} = await axios.get(baseURL.concat('/api/post'))
-            const filteredPosts = posts.filter(post => post.user === userID).reverse()
-            const updatedUser = {...user, posts:filteredPosts}
+            const { data:user } = await axios.get(baseURL.concat(`/api/users/${userID}`), getConfig())
+            const { data:allposts} = await axios.get(baseURL.concat('/api/post/user-posts'), config)
+            const updatedUser = {...user, posts:allposts.reverse()}
+            console.log("UPDATING OTHER USER WITH", updatedUser)
             setOtherUser(updatedUser)
         } catch (error) {
             navigate(`/`)
         }
-    }, [userID, navigate])
+    }
 
     useEffect(() => {
         if (userID !== '' && userID.length === 24) {
