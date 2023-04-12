@@ -1,6 +1,6 @@
 // IMPORTS
 import axios from 'axios'
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import Header from './Header'
 import ProfilePanel from './ProfilePanel'
 import Post from './Post'

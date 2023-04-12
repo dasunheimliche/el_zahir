@@ -239,3 +239,61 @@
     width: 30px;
     border-radius: 50px;
 }
+
+/* DELETE ALERT */
+
+.delete-background {
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.898);
+    position: fixed;
+    min-width: 100%;
+    min-height: 100%;
+    top: 0;
+    left: 0px;
+    padding: 0px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    overflow: hidden;
+}
+
+.delete-alert-container {
+    background-color: white;
+    padding: 25px;
+    color: black;
+    font-size: 20px;
+    border-radius: 15px;
+    width: 300px;
+    position: relative;
+  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.delete-alert-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    font-size: 17px;
+    width: 100%;
+}
+
+.delete-alert-buttons button {
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 13px;
+}
+
+.delete-alert-buttons button:nth-child(2):hover {
+    background-color: rgb(255, 61, 47);
+}
+  
+/* .delete-alert-buttons button {
+    all: unset;
+    cursor: pointer;
+} */

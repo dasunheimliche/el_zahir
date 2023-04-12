@@ -60,7 +60,12 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     }
         
     useEffect(()=> {
-        if (post.likes && post.likes.includes(user.userId)) { 
+        console.log("USER", user)
+        console.log("POST", post)
+        console.log("POST LIKES", post.likes)
+        console.log("USER ID", user.userId)
+        // if (post.likes && post.likes.includes(user.userId)) { 
+        if (user.likedPosts && user.likedPosts.includes(post.id)) { // test
             setLiked(true)
         } else {
             setLiked(false)
@@ -68,28 +73,29 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     }, []) //eslint-disable-line
 
     const deletePost = async () => {
-        try {
-            setLoading(true);
-            const { imgkitID, id } = post;
-            const { token } = JSON.parse(window.localStorage.getItem('loggedUser'));
+        setPopUp({type: 'delete', post: post})
+        // try {
+        //     setLoading(true);
+        //     const { imgkitID, id } = post;
+        //     const { token } = JSON.parse(window.localStorage.getItem('loggedUser'));
       
-            const config = {
-                data: { imgkitID },
-                headers: { Authorization: `Bearer ${token}` },
-            };
+        //     const config = {
+        //         data: { imgkitID },
+        //         headers: { Authorization: `Bearer ${token}` },
+        //     };
       
-            await axios.delete(`${baseURL}/api/post/${id}`, config);
+        //     await axios.delete(`${baseURL}/api/post/${id}`, config);
       
-            const loguedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
-            const updatedPostList = loguedUser.posts.filter((singlePost) => singlePost !== id);
+        //     const loguedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
+        //     const updatedPostList = loguedUser.posts.filter((singlePost) => singlePost !== id);
       
-            window.localStorage.setItem('loggedUser', JSON.stringify({ ...loguedUser, posts: updatedPostList }));
-            dispatch(userSlice.actions.update({ ...loguedUser, posts: updatedPostList }));
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
+        //     window.localStorage.setItem('loggedUser', JSON.stringify({ ...loguedUser, posts: updatedPostList }));
+        //     dispatch(userSlice.actions.update({ ...loguedUser, posts: updatedPostList }));
+        // } catch (error) {
+        //     console.error(error);
+        // } finally {
+        //     setLoading(false);
+        // }
     };
 
     const toggleLike = async(mode) => {
@@ -97,10 +103,20 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
         setLiked(newLikedState);
         setLoading(true);
 
-        
-
         try {
             await axios.put(baseURL.concat(`/api/post/like/${post.id}`), { meId: user.userId, mode }, getConfig())
+
+            if (mode === "like") {
+                dispatch(userSlice.actions.update({ ...user, likedPosts: [...user.likedPosts, post.id] })); // test
+                const loguedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
+                window.localStorage.setItem('loggedUser', JSON.stringify({ ...loguedUser, likedPosts: [...user.likedPosts, post.id] }));
+            } else {
+                const updatedLikedPosts = user.likedPosts.filter((postId) => postId !== post.id);
+                dispatch(userSlice.actions.update({ ...user, likedPosts: updatedLikedPosts })); // test
+                const loguedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
+                window.localStorage.setItem('loggedUser', JSON.stringify({ ...loguedUser, likedPosts: updatedLikedPosts }));
+            }
+
             setLoading(false)
         } catch(error) {
             console.error(error)
@@ -193,7 +209,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     if (post.type === "video-file") {
         return (
             <div className={visibility? {} : style.container}>
-                <div id={!visibility && style['mobile-container']} style={(size.height > (window.innerHeight - 150) && !visibility)? {width: `${ancho}px`, maxWidth: '90vw'} : {}}>
+                <div id={!visibility && style['mobile-container']} style={!visibility? {maxWidth: '50vw', maxHeight: '90vh'} : {}}>
                     {!visibility && <div className="logo post-logo">Zahir.</div>}
                     <VideoFilePost
                         post={post} mode={mode} setPopUp={setPopUp}
