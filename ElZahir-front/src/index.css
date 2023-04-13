@@ -39,6 +39,8 @@ html {
 }
 
 .background {
+  outline: 5px solid red;
+  outline-offset: -5px;
   z-index: -100;
   position: fixed;
   width: 100%;

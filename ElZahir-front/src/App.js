@@ -35,8 +35,8 @@ function App() {
 
 
   return (
-    <div className="App background">
-      <div></div>
+    <div className="App">
+      <div className='background'></div>
       <Routes>
         <Route path="/"          element={user.loggued === false? <Navigate replace to='/login'/>:<Navigate replace to={`/home`}/>} />
 
