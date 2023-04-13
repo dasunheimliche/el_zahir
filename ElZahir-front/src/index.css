@@ -104,7 +104,15 @@ code {
 }
 
 .bottom-logo-off {
-  display: none;
+  opacity: 0%;
+  z-index: 1;
+  position: fixed;
+  transition: opacity 0.0s;
+  transition-delay: 0.0s;
+  top: 95%;
+  bottom: 10px;
+  right: 4.5%;
+  left: auto;
 }
 
 
@@ -148,7 +156,7 @@ code {
 @media (max-width: 490px) and (orientation: portrait) {
 
   .logo {
-    text-shadow: -3px -3px 0px rgb(255, 255, 255);
+    text-shadow: -2px -2px 0px rgb(255, 255, 255);
   }
 
   .post-logo {
@@ -159,8 +167,8 @@ code {
     opacity: 100%;
     z-index: 1;
     position: fixed;
-    transition: opacity 0.25s;
-    transition-delay: 0.1s;
+    transition: opacity 0.40s;
+    transition-delay: 0.0s;
     top: 95%;
     bottom: 10px;
     right: 4.5%;

@@ -21,10 +21,12 @@
     justify-content: center;
     align-items: center;
     left: 0px;
+    padding-bottom: 20%;
 }
 
 .open {
     background-color: rgba(0, 0, 0, 0.898);
+    
 }
 
 .hidden {

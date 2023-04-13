@@ -17,15 +17,6 @@ const Following = ({setPopUp})=> {
     let user = useSelector(state => state.user.value)
     let params = useParams()
 
-    // const loggedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
-    // const token = `Bearer ${loggedUser.token}`;
-
-    // let config = {
-    //     headers: {
-    //         Authorization: token
-    //     }
-    // }
-
     useEffect(()=> {
         axios.get(baseURL.concat('/api/users'), getConfig())
         .then(users => {
@@ -46,7 +37,7 @@ const Following = ({setPopUp})=> {
 
         return list.map((person, i) => {
             return (
-                <Link className='linknostyle' to={`/user/${person.id}`}>
+                <Link className='linknostyle' onClick={()=>setPopUp({type:'none', post:null})} to={user.userId === person.id? '/home'  :`/user/${person.id}`}>
                     <div className={style.user} key={i}>
                         <img  className={style['profile-img']} src={person.profileImg} alt='profile-pic' />
                         <span className={style.username}>{`@${person.username}`}</span>

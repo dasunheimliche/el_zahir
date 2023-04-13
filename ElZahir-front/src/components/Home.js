@@ -22,7 +22,7 @@ import Followers from './Followers'
 import Following from './Following'
 
 
-import useWindowSize from './useWindowSize'
+import useScrollAndHold from '../hooks/useScrollAndHold'
 
 // BASE URL
 import baseURL from '../services/baseURL'
@@ -40,7 +40,6 @@ const Home = ()=> {
     let [toFront,    setToFront]    = useState(false) 
 
     let [myPosts,    setMyPosts]    = useState([])
-    let [otherPosts, setOtherPosts] = useState(false)
     let [tab,        setTab]        = useState("me")
 
 
@@ -50,7 +49,7 @@ const Home = ()=> {
 
     // próxima impmenentación
     let [mood,       setMood]       = useState(0)
-    const [, windowHeight] = useWindowSize();
+    const isScrolling = useScrollAndHold();
     // -------------------------
 
     // HOOKS
@@ -73,7 +72,7 @@ const Home = ()=> {
         fetchUserPosts()
         fetchFollowingPosts()
         fecthDiscoverPosts()
-    }, [otherPosts, user]) // eslint-disable-line
+    }, [user]) // eslint-disable-line
 
     useEffect(()=> {
         if (params === "me") {
@@ -94,12 +93,10 @@ const Home = ()=> {
     const renderPosts = (posts) => {
         return posts.map((post) => (
           <Post
-            // toFront={toFront}
             setToFront={setToFront}
             setPopUp={setPopUp}
             key={post.id}
             post={post}
-            // postF={otherPosts}
             mode={tab !== "me" ? 'user' : undefined}
           />
         ));
@@ -110,9 +107,7 @@ const Home = ()=> {
         try {
             const { data: allposts } = await axios.get(baseURL.concat('/api/post/following-posts'), getConfig())
             const reversedPosts = allposts.slice().reverse()
-            // setOtherPosts(reversedPosts)
             setFollPosts(reversedPosts)
-            // setTab("following")
         } catch (error) {
             console.error(error)
         }
@@ -123,9 +118,7 @@ const Home = ()=> {
             const follows = user.following
             const posts = allposts.filter(post => !follows.includes(post.user) && post.user !== user.userId)
             const reversedPosts = posts.slice().reverse()
-            // setOtherPosts(reversedPosts)
             setDiscoverPosts(reversedPosts)
-            // setTab("discover")
         } catch (error) {
             console.error(error)
         }
@@ -137,17 +130,8 @@ const Home = ()=> {
     }
 
     const backtome = async()=> {
-        try {
-            // setOtherPosts(false)
-            // const { data: allposts } = await axios.get(baseURL.concat('/api/post'))
-            // const posts = allposts.filter(post => post.user === user.userId)
-            // const reversedPosts = posts.slice().reverse()
-            // setMyPosts(reversedPosts)
-            setTab("me")
-            navigate('/home')
-        } catch (error) {
-            console.error(error)
-        }
+        setTab("me")
+        navigate('/home')
     }
 
     const toDiscover = ()=> {
@@ -187,7 +171,7 @@ const Home = ()=> {
 
             <Header popUp={popUp} sticky={sticky} setSticky={setSticky}/>
 
-            {/* <div className={sticky?  'logo bottom-logo-on p' : 'logo bottom-logo-off'} onClick={scrollToTop}>Zahir.</div> */}
+            <div className={sticky && !isScrolling?  'logo bottom-logo-on p' : 'logo bottom-logo-off'} onClick={scrollToTop}>Zahir.</div>
 
             <div className={!toFront? style.content : `${style.content} ${style.toFront}`}>
 
@@ -204,10 +188,6 @@ const Home = ()=> {
                     </div> 
 
                     <div className={sticky === false? style.grid : `${style.grid} ${style['sticky-grid']}`}>
-                        {/* {renderPosts(otherPosts? otherPosts : myPosts)} */}
-                        {/* {tab === 'me' && renderPosts(myPosts)} */}
-                        {/* {tab === 'follwing' && renderPosts(follPosts)}
-                        {tab === 'discover' && renderPosts(disPosts)} */}
                         <Routes>
                             <Route  path="/" element={renderPosts(myPosts)} />
                             <Route  path="/following" element={renderPosts(follPosts)} />

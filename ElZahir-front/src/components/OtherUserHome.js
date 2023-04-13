@@ -18,6 +18,8 @@ import Following from './Following'
 import style from  '../styles/home.module.css'
 import getConfig from '../services/getConfig'
 
+import useScrollAndHold from '../hooks/useScrollAndHold'
+
 const OtherUserHome = ({setUser})=> {
 
     let user = useSelector(state => state.user.value)
@@ -25,7 +27,8 @@ const OtherUserHome = ({setUser})=> {
     // USESTATES
     let [sticky,  setSticky]  = useState(false)
     let [popUp,   setPopUp]   = useState({type: 'none', post: null})
-    let [toFront, setToFront] = useState(false) 
+    let [toFront, setToFront] = useState(false)
+    const isScrolling = useScrollAndHold();
 
     let [otherUser, setOtherUser] = useState({id:null, posts:[], followers: [], following: []})
 
@@ -84,7 +87,7 @@ const OtherUserHome = ({setUser})=> {
                 {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} />}
             </div>
 
-            <div className={sticky?  'logo bottom-logo-on p' : 'logo bottom-logo-off'} onClick={scrollToTop}>Zahir.</div>
+            <div className={sticky && !isScrolling?  'logo bottom-logo-on p' : 'logo bottom-logo-off'} onClick={scrollToTop}>Zahir.</div>
 
 
             <Header popUp={popUp} user={user} setUser={setUser} sticky={sticky} setSticky={setSticky} />

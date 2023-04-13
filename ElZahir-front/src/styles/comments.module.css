@@ -3,10 +3,12 @@
     width: 100%;
     height: 100%;
     position: fixed;
+    left: 0px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-bottom: 20%;
 }
 
 .comments-container {
@@ -22,6 +24,7 @@
 
     overflow: hidden; /* test */
     position: relative;
+
 }
 
 .header {

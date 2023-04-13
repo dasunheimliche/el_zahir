@@ -251,6 +251,7 @@
     top: 0;
     left: 0px;
     padding: 0px;
+    padding-bottom: 20%;
   
     display: flex;
     align-items: center;
@@ -262,10 +263,11 @@
 .delete-alert-container {
     background-color: white;
     padding: 25px;
+    padding-bottom: 15px;
     color: black;
     font-size: 20px;
     border-radius: 15px;
-    width: 300px;
+    width: 250px;
     position: relative;
   
     display: flex;

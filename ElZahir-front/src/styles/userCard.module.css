@@ -247,6 +247,9 @@
     margin-bottom: 20px;
     width: 90px;
     height: 37px;
+
+    /* padding-left: 7px;
+    padding-right: 7px; */
 }
 
 .unfollow:hover::after {
@@ -260,6 +263,9 @@
     width: 90px;
     height: 37px;
     border-radius: 14px;
+
+    /* padding-left: 7px;
+    padding-right: 7px; */
 }
 
 
@@ -481,12 +487,20 @@
         margin-bottom: 17px;
         width: 75px;
         height: 31px;
+
+        /* padding-left: 6px;
+        padding-right: 6px; */
+        font-size: 13px;
     }
     
     .unfollow:hover::after {
         width: 75px;
         height: 31px;
         border-radius: 12px;
+
+        /* padding-left: 6px;
+        padding-right: 6px; */
+        font-size: 13px;
     }
 
     
@@ -598,12 +612,20 @@
         margin-bottom: 14px;
         width: 64px;
         height: 26px;
+
+        /* padding-left: 5px;
+        padding-right: 5px; */
+        font-size: 11px;
     }
     
     .unfollow:hover::after {
         width: 64px;
         height: 26px;
         border-radius: 10px;
+
+        /* padding-left: 5px;
+        padding-right: 5px; */
+        font-size: 11px;
     }
 
 }
