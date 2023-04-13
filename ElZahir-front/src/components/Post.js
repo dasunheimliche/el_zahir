@@ -15,10 +15,10 @@ import baseURL from '../services/baseURL'
 import { useSelector, useDispatch} from 'react-redux'
 import { userSlice} from '../reducers/userSlice'
 
+
 const Post = ({post, mode, setPopUp, setToFront})=> {
 
-    // let postURL = `http://zahir.onrender.com/#/post/${post.id}`
-    let postURL = `http://localhost:3000/#/post/${post.id}`
+    let postURL = `${baseURL}}/#/post/${post.id}`
 
 
     let [liked, setLiked] = useState(false)
@@ -60,11 +60,6 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     }
         
     useEffect(()=> {
-        console.log("USER", user)
-        console.log("POST", post)
-        console.log("POST LIKES", post.likes)
-        console.log("USER ID", user.userId)
-        // if (post.likes && post.likes.includes(user.userId)) { 
         if (user.likedPosts && user.likedPosts.includes(post.id)) { // test
             setLiked(true)
         } else {
@@ -74,28 +69,6 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
 
     const deletePost = async () => {
         setPopUp({type: 'delete', post: post})
-        // try {
-        //     setLoading(true);
-        //     const { imgkitID, id } = post;
-        //     const { token } = JSON.parse(window.localStorage.getItem('loggedUser'));
-      
-        //     const config = {
-        //         data: { imgkitID },
-        //         headers: { Authorization: `Bearer ${token}` },
-        //     };
-      
-        //     await axios.delete(`${baseURL}/api/post/${id}`, config);
-      
-        //     const loguedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
-        //     const updatedPostList = loguedUser.posts.filter((singlePost) => singlePost !== id);
-      
-        //     window.localStorage.setItem('loggedUser', JSON.stringify({ ...loguedUser, posts: updatedPostList }));
-        //     dispatch(userSlice.actions.update({ ...loguedUser, posts: updatedPostList }));
-        // } catch (error) {
-        //     console.error(error);
-        // } finally {
-        //     setLoading(false);
-        // }
     };
 
     const toggleLike = async(mode) => {

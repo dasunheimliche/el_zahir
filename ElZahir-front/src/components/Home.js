@@ -56,7 +56,9 @@ const Home = ()=> {
     let user = useSelector(state => state.user.value)
     let navigate = useNavigate()
     let { "*" : params} = useParams()
-    console.log("PARAMS", params)
+
+    const myImage = new Image();
+    myImage.src = '../images/trippy-back3.gif';
 
     // USE EFFECTS
     const fetchUserPosts = async () => {
@@ -149,7 +151,6 @@ const Home = ()=> {
     // RENDER
     return (
         <div className={style.main}>
-
             <div className={popUp.type === 'none'? `${style.popups} ${style.hidden}` : popUp.post? style.popups : `${style.popups} ${style.open}`} >
                 {popUp.type === 'image'         && <PostImageUi   setPopUp={setPopUp} />}
                 {popUp.type === 'text'          && <PostTextUi    setPopUp={setPopUp} />} 

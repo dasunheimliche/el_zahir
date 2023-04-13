@@ -69,7 +69,6 @@ const PostVideoUI = ({setPopUp})=> {
     }, [file])
 
     const upload = (e)=> {
-        console.log(e.target.files[0])
         setError(false)
         setMode('file')
         setUrl(e.target.files[0].name)

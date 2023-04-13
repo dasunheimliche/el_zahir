@@ -72,7 +72,7 @@ const PostCitaUI = ({setPopUp})=> {
             <div className={style.main}>
                 <input className={`${style.input} ${style.title}`} placeholder="Author" onChange={(e)=> setAuthor(e.target.value)} value={author} autoComplete='off' required/>
                 <input className={`${style.input} ${style.subtitle}`} placeholder="Work" onChange={(e)=> setWork(e.target.value)} value={work} autoComplete='off' required/>
-                <textarea className={`${style.input} ${style['url-textarea']}`} placeholder="Cita" onChange={(e)=> setQuote(e.target.value)} value={quote} autoComplete='off' required/>
+                <textarea className={`${style.input} ${style['url-textarea']}`} placeholder="Quote" onChange={(e)=> setQuote(e.target.value)} value={quote} autoComplete='off' required/>
             </div>
 
             <div className={style.footer}>

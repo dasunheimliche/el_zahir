@@ -50,7 +50,6 @@ const OtherUserHome = ({setUser})=> {
             const { data:user } = await axios.get(baseURL.concat(`/api/users/${userID}`), getConfig())
             const { data:allposts} = await axios.get(baseURL.concat('/api/post/user-posts'), config)
             const updatedUser = {...user, posts:allposts.reverse()}
-            console.log("UPDATING OTHER USER WITH", updatedUser)
             setOtherUser(updatedUser)
         } catch (error) {
             navigate(`/`)

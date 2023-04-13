@@ -138,7 +138,7 @@ const SharedPost = ()=> {
     if (post.type === "video-file") {
         return (
             <div className={style.container}>
-                <div id={style['mobile-container']} style={{width: `${ancho}px`, maxWidth: '90vw'}}>
+                <div id={style['mobile-container']} style={{maxWidth: '50vw', maxHeight: '90vh'} }>
                     <div className="logo post-logo">Zahir.</div>
                     <SharedVideoFilePost
                         post={post}
