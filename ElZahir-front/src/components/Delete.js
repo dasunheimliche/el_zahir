@@ -23,11 +23,12 @@ const Delete = ({post, setPopUp})=> {
             };
       
             await axios.delete(`${baseURL}/api/post/${id}`, config);
-      
+            setPopUp({type:'none', post:null})
             const loguedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
             const updatedPostList = loguedUser.posts.filter((singlePost) => singlePost !== id);
       
             window.localStorage.setItem('loggedUser', JSON.stringify({ ...loguedUser, posts: updatedPostList }));
+
             dispatch(userSlice.actions.update({ ...loguedUser, posts: updatedPostList }));
         } catch (error) {
             console.error(error);
@@ -42,7 +43,7 @@ const Delete = ({post, setPopUp})=> {
                 <div>Are you sure you want to delete this post?</div>
                 <div className={style[`delete-alert-buttons`]}>
                     <button className={`${style.button} p`} onClick={()=>setPopUp({type:'none', post:null})}>CANCEL</button>
-                    <button className={`${style.button} ${style.delete} p`} onClick={deletePost} >DELETE</button>
+                    <button className={`${style.button} ${style.delete} p`} onClick={loading? undefined : deletePost} >DELETE</button>
                 </div>
             </div>    
         </div>            
