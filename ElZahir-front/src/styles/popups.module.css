@@ -47,6 +47,7 @@
 
 .input {
     all: unset;
+    touch-action: none;
     border-radius: 7px;
     outline: none;
     border: none;

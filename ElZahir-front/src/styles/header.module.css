@@ -65,6 +65,8 @@
 
     width: 75%;
     font-size: 17px;
+
+    touch-action: none;
 }
 
 .user-list {
