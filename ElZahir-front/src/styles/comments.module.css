@@ -1,5 +1,5 @@
 .background {
-    background-color: rgba(0, 0, 0, 0.898);
+    /* background-color: rgba(0, 0, 0, 0.898);
     width: 100%;
     height: 100%;
     position: fixed;
@@ -8,7 +8,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-bottom: 20%; */
+
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.898);
+    position: fixed;
+    min-width: 100%;
+    min-height: 100%;
+    top: 0;
+    left: 0px;
+    padding: 0px;
     padding-bottom: 20%;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    overflow: hidden;
 }
 
 .comments-container {
