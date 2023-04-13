@@ -167,8 +167,8 @@ code {
     opacity: 100%;
     z-index: 1;
     position: fixed;
-    transition: opacity 0.40s;
-    transition-delay: 0.3s;
+    transition: opacity 0.60s;
+    transition-delay: 0.5s;
     top: 95%;
     bottom: 10px;
     right: 4.5%;
