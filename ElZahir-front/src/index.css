@@ -168,7 +168,7 @@ code {
     z-index: 1;
     position: fixed;
     transition: opacity 0.40s;
-    transition-delay: 0.0s;
+    transition-delay: 0.3s;
     top: 95%;
     bottom: 10px;
     right: 4.5%;

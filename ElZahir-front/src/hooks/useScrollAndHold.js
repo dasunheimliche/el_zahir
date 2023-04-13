@@ -1,68 +1,68 @@
 import { useState, useEffect } from 'react';
 
-function useTouchScroll() {
-  const [isScrolling, setIsScrolling] = useState(false);
+
+function useScrollAndHold() {
+  const [isMoving, setIsMoving] = useState(false);
 
   useEffect(() => {
-    let timer = null;
+    function handleTouchStart() {
+      setIsMoving(true);
+    }
 
-    const handleTouchStart = () => setIsScrolling(true);
-    const handleTouchEnd = () => setIsScrolling(false);
-    const handleScroll = () => {
-      clearTimeout(timer);
-      setIsScrolling(true);
-      timer = setTimeout(() => setIsScrolling(false), 100);
-    };
+    function handleTouchEnd() {
+      setIsMoving(false);
+    }
 
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchend', handleTouchEnd);
-    window.addEventListener('scroll', handleScroll);
+    function handleMotion(event) {
+      if (event.acceleration.x !== null || event.acceleration.y !== null || event.acceleration.z !== null) {
+        setIsMoving(true);
+      } else {
+        setIsMoving(false);
+      }
+    }
+
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("devicemotion", handleMotion);
 
     return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(timer);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("devicemotion", handleMotion);
     };
   }, []);
 
-  return isScrolling;
+  return isMoving;
+  // const [isScrollingAndHolding, setIsScrollingAndHolding] = useState(false);
+
+  // useEffect(() => {
+  //   function handleTouchStart() {
+  //     setIsScrollingAndHolding(true);
+  //   }
+
+  //   function handleTouchEnd() {
+  //     setIsScrollingAndHolding(false);
+  //   }
+
+  //   function handleTouchMove() {
+  //     if (isScrollingAndHolding) {
+  //       setIsScrollingAndHolding(true);
+  //     }
+  //   }
+
+  //   window.addEventListener('touchstart', handleTouchStart);
+  //   window.addEventListener('touchend', handleTouchEnd);
+  //   window.addEventListener('touchmove', handleTouchMove);
+
+  //   return () => {
+  //     window.removeEventListener('touchstart', handleTouchStart);
+  //     window.removeEventListener('touchend', handleTouchEnd);
+  //     window.removeEventListener('touchmove', handleTouchMove);
+
+  //   };
+  // }, [isScrollingAndHolding]);
+
+  // return isScrollingAndHolding;
 }
 
-export default useTouchScroll;
-
-// import { useState, useEffect } from 'react';
-
-// function useScrollAndHold() {
-//   const [isScrollingAndHolding, setIsScrollingAndHolding] = useState(false);
-
-//   useEffect(() => {
-//     function handleTouchStart() {
-//       setIsScrollingAndHolding(true);
-//     }
-
-//     function handleTouchEnd() {
-//       setIsScrollingAndHolding(false);
-//     }
-
-//     function handleTouchMove() {
-//       if (isScrollingAndHolding) {
-//         setIsScrollingAndHolding(true);
-//       }
-//     }
-
-//     window.addEventListener('touchstart', handleTouchStart);
-//     window.addEventListener('touchend', handleTouchEnd);
-//     window.addEventListener('touchmove', handleTouchMove);
-
-//     return () => {
-//       window.removeEventListener('touchstart', handleTouchStart);
-//       window.removeEventListener('touchend', handleTouchEnd);
-//       window.removeEventListener('touchmove', handleTouchMove);
-//     };
-//   }, [isScrollingAndHolding]);
-
-//   return isScrollingAndHolding;
-// }
-
-// export default useScrollAndHold
+export default useScrollAndHold
