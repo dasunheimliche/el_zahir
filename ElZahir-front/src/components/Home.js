@@ -21,6 +21,9 @@ import Delete from './Delete'
 import Followers from './Followers'
 import Following from './Following'
 
+
+import useWindowSize from './useWindowSize'
+
 // BASE URL
 import baseURL from '../services/baseURL'
 import getConfig from '../services/getConfig'
@@ -47,6 +50,7 @@ const Home = ()=> {
 
     // próxima impmenentación
     let [mood,       setMood]       = useState(0)
+    const [, windowHeight] = useWindowSize();
     // -------------------------
 
     // HOOKS
@@ -183,7 +187,7 @@ const Home = ()=> {
 
             <Header popUp={popUp} sticky={sticky} setSticky={setSticky}/>
 
-            <div className={sticky?  'logo bottom-logo-on p' : 'logo bottom-logo-off'} onClick={scrollToTop}>Zahir.</div>
+            {/* <div className={sticky?  'logo bottom-logo-on p' : 'logo bottom-logo-off'} onClick={scrollToTop}>Zahir.</div> */}
 
             <div className={!toFront? style.content : `${style.content} ${style.toFront}`}>
 

@@ -11,6 +11,8 @@ import OtherUserHome from './components/OtherUserHome';
 import RegisterMain from './components/RegisterMain'
 import SharedPost from './components/SharedPost';
 
+import useWindowSize from './components/useWindowSize';
+
 // APP
 
 function App() {
@@ -18,6 +20,9 @@ function App() {
   
   let user = useSelector(state => state.user.value)
   let dispatch =  useDispatch()
+  const [, windowHeight] = useWindowSize();
+
+  console.log("HEIGH", windowHeight)
 
 
   // USEFFECTS ----------------------------------------------------------------
