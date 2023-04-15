@@ -186,7 +186,7 @@ code {
     display: block;
     opacity: 100%;  
     height: 30px;
-    z-index: 1;
+    z-index: 0;
     position: fixed;
     transition: opacity 0.45s;
     transition-delay: 0.5s;
@@ -195,6 +195,10 @@ code {
     left: auto;
     -webkit-user-select:none;
     user-select: none;
+  }
+
+  .hide-logo {
+    display: none;
   }
 
 }
