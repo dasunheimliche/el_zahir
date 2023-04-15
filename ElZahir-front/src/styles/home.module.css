@@ -347,6 +347,9 @@
 
     .main {
         margin: 0px 0px;
+
+        max-height: 100dvh;
+        overflow: hidden;
     }
 
     .left-side {
@@ -375,5 +378,11 @@
     .sticky-tabs {
         height: inherit;
         visibility: visible;
+    }
+
+    .mobile-main {
+        overflow: scroll;
+        position: relative;
+        min-width: 100%;
     }
 }

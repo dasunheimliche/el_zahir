@@ -543,7 +543,7 @@
 
     .sticky-bar {
         width: 95%;
-        position: absolute;
+        position: static;
         margin: 0px;
         top: 0.5%;
 

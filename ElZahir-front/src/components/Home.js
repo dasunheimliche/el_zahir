@@ -1,8 +1,9 @@
 // DEPENDENCIES
 import axios from 'axios'
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useSelector} from 'react-redux'
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom'
+import React from 'react';
 
 // COMPONENTES
 import Header from './Header'
@@ -22,7 +23,9 @@ import Followers from './Followers'
 import Following from './Following'
 
 
-import useScrollAndHold from '../hooks/useScrollAndHold'
+// CUSTOM HOOKS
+
+import useElementAtTopOfPage from '../hooks/useElementAtTopOfPage'
 
 // BASE URL
 import baseURL from '../services/baseURL'
@@ -49,11 +52,14 @@ const Home = ()=> {
 
     // próxima impmenentación
     let [mood,       setMood]       = useState(0)
-    const isScrolling = useScrollAndHold();
+    
     // -------------------------
 
     // HOOKS
+    const ref = useRef(null)
+    const parentRef = useRef(null)
     let user = useSelector(state => state.user.value)
+    const isAtTop = useElementAtTopOfPage(ref, parentRef)
     let navigate = useNavigate()
     let { "*" : params} = useParams()
 
@@ -102,7 +108,8 @@ const Home = ()=> {
             mode={tab !== "me" ? 'user' : undefined}
           />
         ));
-      };
+    };
+
 
     // EVENT HANDLERS
     const fetchFollowingPosts = async()=> {
@@ -142,7 +149,7 @@ const Home = ()=> {
     }
 
     const scrollToTop = () => {
-        window.scrollTo({
+        parentRef.current.scrollTo({
             top: 0,
             behavior: "smooth"
         });
@@ -150,54 +157,46 @@ const Home = ()=> {
 
     // RENDER
     return (
-        <div className={style.main}>
-            <div className={popUp.type === 'none'? `${style.popups} ${style.hidden}` : popUp.post? style.popups : `${style.popups} ${style.open}`} >
-                {popUp.type === 'image'         && <PostImageUi   setPopUp={setPopUp} />}
-                {popUp.type === 'text'          && <PostTextUi    setPopUp={setPopUp} />} 
-                {popUp.type === 'cita'          && <PostCitaUi    setPopUp={setPopUp} />}
-                {popUp.type === 'video'         && <PostVideoUi   setPopUp={setPopUp} />}
-
-                {popUp.type === 'changePI'      && <ChangePI      setPopUp={setPopUp} />}
-                {popUp.type === 'changePanImg'  && <ChangePanImg  setPopUp={setPopUp} />}
+        <div className={style.main}>            
+            <div ref={parentRef} className={style['mobile-main']}>
+                <div ref={ref}></div>
+                <div className={popUp.type === 'none'? `${style.popups} ${style.hidden}` : popUp.post? style.popups : `${style.popups} ${style.open}`} >
+                    {popUp.type === 'image'         && <PostImageUi   setPopUp={setPopUp} />}
+                    {popUp.type === 'text'          && <PostTextUi    setPopUp={setPopUp} />}
+                    {popUp.type === 'cita'          && <PostCitaUi    setPopUp={setPopUp} />}
+                    {popUp.type === 'video'         && <PostVideoUi   setPopUp={setPopUp} />}
+                    {popUp.type === 'changePI'      && <ChangePI      setPopUp={setPopUp} />}
+                    {popUp.type === 'changePanImg'  && <ChangePanImg  setPopUp={setPopUp} />}
                 
-                {popUp.type === 'comments'      && <Comments      setPopUp={setPopUp} post={popUp.post} />}
-                {popUp.type === 'delete'        && <Delete        setPopUp={setPopUp} post={popUp.post}/>}
-
-                {popUp.type === 'seeFollowers'  && <Followers     setPopUp={setPopUp} />}
-                {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} />}
-
-            </div>
-
-            
-
-            <Header popUp={popUp} sticky={sticky} setSticky={setSticky}/>
-
-            <div className={sticky && !isScrolling?  'logo bottom-logo-on p' : 'logo bottom-logo-off'} onClick={scrollToTop}>Zahir.</div>
-
-            <div className={!toFront? style.content : `${style.content} ${style.toFront}`}>
-
-                <div className={style['left-side']}>
-                    <ProfilePanel mood={mood} setMood={setMood} sticky={sticky} setPopUp={setPopUp} popUp={popUp} posts={myPosts} />
+                    {popUp.type === 'comments'      && <Comments      setPopUp={setPopUp} post={popUp.post} />}
+                    {popUp.type === 'delete'        && <Delete        setPopUp={setPopUp} post={popUp.post}/>}
+                    {popUp.type === 'seeFollowers'  && <Followers     setPopUp={setPopUp} />}
+                    {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} />}
                 </div>
+                
+                <Header popUp={popUp} sticky={sticky} setSticky={setSticky} toFront={toFront} />
 
-                <div  className={style['right-side']}>
-
-                    <div className={sticky? `${style.tabs} ${style['sticky-tabs']}` : style.tabs}>
-                        <span onClick={backtome}        className={tab === 'me'?        `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>ME</span>
-                        <span onClick={toFollowing}  className={tab === 'following'? `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>FOLLOWING</span>
-                        <span onClick={toDiscover}   className={tab === 'discover'?  `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>EXPLORE</span>    
-                    </div> 
-
-                    <div className={sticky === false? style.grid : `${style.grid} ${style['sticky-grid']}`}>
-                        <Routes>
-                            <Route  path="/" element={renderPosts(myPosts)} />
-                            <Route  path="/following" element={renderPosts(follPosts)} />
-                            <Route  path="/discover" element={renderPosts(disPosts)} />
-                        </Routes>
+                <div  className={!toFront? style.content : `${style.content} ${style.toFront}`}>
+                    <div className={style['left-side']}>
+                        <ProfilePanel mood={mood} setMood={setMood} sticky={sticky} setPopUp={setPopUp} popUp={popUp} posts={myPosts} />
+                    </div>
+                    <div  className={style['right-side']}>
+                        <div className={sticky? `${style.tabs} ${style['sticky-tabs']}` : style.tabs}>
+                            <span onClick={backtome}        className={tab === 'me'?        `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>ME</span>
+                            <span onClick={toFollowing}  className={tab === 'following'? `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>FOLLOWING</span>
+                            <span onClick={toDiscover}   className={tab === 'discover'?  `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>EXPLORE</span>
+                        </div>
+                        <div className={sticky === false? style.grid : `${style.grid} ${style['sticky-grid']}`}>
+                            <Routes>
+                                <Route  path="/" element={renderPosts(myPosts)} />
+                                <Route  path="/following" element={renderPosts(follPosts)} />
+                                <Route  path="/discover" element={renderPosts(disPosts)} />
+                            </Routes>
+                        </div>
                     </div>
                 </div>
             </div>
-
+            <div className={!isAtTop ? 'logo bottom-logo-on p' : 'bottom-logo-off p'} onClick={scrollToTop}>Zahir.</div>
         </div>
     )
 }

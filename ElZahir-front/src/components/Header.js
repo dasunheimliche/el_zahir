@@ -14,27 +14,16 @@ const SEARCH_URL = `${baseURL}/api/users`;
 const LARGE_WIDTH = 1600;
 const MEDIUM_WIDTH = 1366;
 
-const Header = ({sticky, setSticky})=> {
+const Header = ({sticky, setSticky, toFront})=> {
     let [isMenuOpen, setIsMenuOpen] = useState(false)
     let [searchQuery, setSearchQuery] = useState('')
     let [searchResults, setSearchResults] = useState([])
-
-
 
     let user = useSelector(state => state.user.value)
     let dispatch = useDispatch()
     let searchRef = useRef()
 
     const searchUsers = async (query) => {
-
-        // const loggedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
-        // const token = `Bearer ${loggedUser.token}`;
-
-        // let config = {
-        //     headers: {
-        //         Authorization: token
-        //     }
-        // }
 
         try {
             const { data : users } = await axios.get(SEARCH_URL, getConfig());
@@ -113,7 +102,7 @@ const Header = ({sticky, setSticky})=> {
 
     return (
 
-        <div className={sticky? `${style.bar} ${style['sticky-bar']}`: style.bar}>
+        <div className={sticky? `${style.bar} ${style['sticky-bar']}`: style.bar} style={toFront? {display: `none`} : {}}>
 
             <div className={style['left-side']}>
 
