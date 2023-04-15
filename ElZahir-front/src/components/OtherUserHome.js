@@ -102,7 +102,7 @@ const OtherUserHome = ({setUser})=> {
                     </div>
                 </div>
             </div>
-            <div className={!isAtTop ? 'logo bottom-logo-on p' : 'bottom-logo-off p'} onClick={scrollToTop}>Zahir.</div>
+            <div style={toFront? {display: 'none'} : {}} className={!isAtTop ? 'logo bottom-logo-on p' : 'bottom-logo-off p'} onClick={scrollToTop}>Zahir.</div>
         </div>
     )
 }
