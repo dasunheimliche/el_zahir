@@ -87,8 +87,8 @@ const OtherUserHome = ({setUser})=> {
                 <div ref={ref}></div>
                 <div className={popUp.type === 'none'? `${style.popups} ${style.hidden}` : popUp.post? style.popups : `${style.popups} ${style.open}`} >
                     {popUp.type === 'comments'      && <Comments      setPopUp={setPopUp} post={popUp.post} />}
-                    {popUp.type === 'seeFollowers'  && <Followers     setPopUp={setPopUp} />}
-                    {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} />}
+                    {popUp.type === 'seeFollowers'  && <Followers     setPopUp={setPopUp} user={otherUser}/>}
+                    {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} user={otherUser}/>}
                 </div>
                 <Header popUp={popUp} user={user} setUser={setUser} sticky={sticky} setSticky={setSticky} />
                 <div className={!toFront? style.content : `${style.content} ${style.toFront}`}>

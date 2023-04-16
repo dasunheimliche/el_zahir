@@ -23,13 +23,13 @@ const Delete = ({post, setPopUp})=> {
             };
       
             await axios.delete(`${baseURL}/api/post/${id}`, config);
-            setPopUp({type:'none', post:null})
             const loguedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
             const updatedPostList = loguedUser.posts.filter((singlePost) => singlePost !== id);
       
             window.localStorage.setItem('loggedUser', JSON.stringify({ ...loguedUser, posts: updatedPostList }));
 
             dispatch(userSlice.actions.update({ ...loguedUser, posts: updatedPostList }));
+            setPopUp({type:'none', post:null})
         } catch (error) {
             console.error(error);
         } finally {

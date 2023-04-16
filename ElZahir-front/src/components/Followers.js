@@ -11,24 +11,27 @@ import { useParams } from 'react-router-dom'
 import style from '../styles/popups.module.css'
 
 
-const Following = ({setPopUp})=> {
+const Following = ({setPopUp, user})=> {
     
     let [users, setUsers] = useState([])
-    let user = useSelector(state => state.user.value)
-    let params = useParams()
+    let [loading, setLoading] = useState(true)
+    // let user = useSelector(state => state.user.value)
+    // let params = useParams()
 
     useEffect(()=> {
         axios.get(baseURL.concat('/api/users'), getConfig())
         .then(users => {
             
-            if (params["*"]) {
-                const user = users.data.find(person => person.id === params["*"])
+            if (user.followers) {
+                // const user = users.data.find(person => person.id === params["*"])
                 let followers = users.data.filter(person => user.followers.includes(person.id))
                 setUsers(followers)
             } else {
                 let followers = users.data.filter(person => user.followers.includes(person.id))
                 setUsers(followers)
             }
+
+            setLoading(false)
 
         })
     }, []) // eslint-disable-line
@@ -55,7 +58,8 @@ const Following = ({setPopUp})=> {
             </div>
             <div className={style.counter}>
                 <span>Followers: </span>
-                <span>{users.length}</span>
+                {loading && <div className={ `${style.loading} ${style['little-loading']}` } >{" "}</div>}
+                {!loading && <span>{users.length}</span>}
             </div>
             <div className={style['list-container']}>
                 {loadUserList(users)}

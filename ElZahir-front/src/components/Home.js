@@ -170,8 +170,8 @@ const Home = ()=> {
                 
                     {popUp.type === 'comments'      && <Comments      setPopUp={setPopUp} post={popUp.post} />}
                     {popUp.type === 'delete'        && <Delete        setPopUp={setPopUp} post={popUp.post}/>}
-                    {popUp.type === 'seeFollowers'  && <Followers     setPopUp={setPopUp} />}
-                    {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} />}
+                    {popUp.type === 'seeFollowers'  && <Followers     setPopUp={setPopUp} user={user}/>}
+                    {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} user={user}/>}
                 </div>
                 
                 <Header popUp={popUp} sticky={sticky} setSticky={setSticky} toFront={toFront} />

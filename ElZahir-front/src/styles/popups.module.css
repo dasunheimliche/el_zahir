@@ -151,6 +151,12 @@
     height: 25px;
     margin-right: auto;
     margin-left: 3px;
+    display:inline-block;
+}
+
+.little-loading {
+    width: 15px;
+    height: 15px;
 }
 
 .button { /* HACER PATRON */
@@ -204,6 +210,9 @@
 .counter {
     padding-bottom: 10px;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 7px;
 }
 
 .list-container {
