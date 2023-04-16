@@ -164,6 +164,8 @@ userRouter.put('/profile-image/:id', async (request, response)=> {
     const body = request.body
     const id = request.params.id
 
+    const user = await User.findById(id)
+
     if (request.files) {
         let imageFile = request.files.image
         let uploadPath = __dirname + '\\uploads\\' + imageFile.name
@@ -178,12 +180,12 @@ userRouter.put('/profile-image/:id', async (request, response)=> {
             let promesa = await imagekit.upload({
                 file: fileup,
                 fileName: `profile_img_${id}`,
-                useUniqueFileName: false
+                folder: `/zahir/users/${user._id.toString()}/profile_image`
             })
 
             fs.unlink(uploadPath)
 
-            const user = await User.findById(id)
+            // const user = await User.findById(id)
 
             user.profileImg = promesa.url
             await user.save()
@@ -196,10 +198,10 @@ userRouter.put('/profile-image/:id', async (request, response)=> {
         let promesa = await imagekit.upload({
             file: body.profileImg,
             fileName: `profile_img_${id}`,
-            folder: `/users/${user._id.toString()}/profile_image`
+            folder: `/zahir/users/${user._id.toString()}/profile_image`
         })
 
-        const user = await User.findById(id)
+        // const user = await User.findById(id)
         user.profileImg = `${promesa.url}?${uniqueParam}`
         await user.save()
 
@@ -221,6 +223,9 @@ userRouter.put('/profile-panel-image/:id', async (request, response)=> {
 
     const body = request.body
     const id = request.params.id
+
+    const user = await User.findById(id)
+
     if (request.files) {
         let imageFile = request.files.image
         let uploadPath = __dirname + '\\uploads\\' + imageFile.name
@@ -235,12 +240,11 @@ userRouter.put('/profile-panel-image/:id', async (request, response)=> {
             let promesa = await imagekit.upload({
                 file: fileup,
                 fileName: `profile_panel_img_${id}`,
-                useUniqueFileName: false
+                folder: `/zahir/users/${user._id.toString()}/profile_panel_image`
             })
 
             fs.unlink(uploadPath)
 
-            const user = await User.findById(id)
             user.mainPanelImg = promesa.url
     
             await user.save()
@@ -252,10 +256,9 @@ userRouter.put('/profile-panel-image/:id', async (request, response)=> {
         let promesa = await imagekit.upload({
             file: body.mainPanelImg,
             fileName: `profile_panel_img_${id}`,
-            useUniqueFileName: false
+            folder: `/zahir/users/${user._id.toString()}/profile_panel_image`
         })
 
-        const user = await User.findById(id)
         user.mainPanelImg = promesa.url
         await user.save()
 

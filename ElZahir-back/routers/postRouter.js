@@ -103,7 +103,8 @@ postRouter.post('/image-file', async (request, response)=> {
         
         let promesa = await imagekit.upload({
             file: fileup,
-            fileName: sampleFile.name
+            fileName: sampleFile.name,
+            folder: `/zahir/users/${user._id.toString()}/posts`
         })
 
         fs.unlink(uploadPath)
@@ -145,7 +146,8 @@ postRouter.post('/image-url', async (request, response)=> {
 
     let promesa = await imagekit.upload({
         file: body.imagePost,
-        fileName: "randomname"
+        fileName: "randomname",
+        folder: `/zahir/users/${user._id.toString()}/posts`
     })
 
     const post = new Post ({
@@ -194,7 +196,8 @@ postRouter.post('/video-file', async (request, response)=> {
             
             let promesa = await imagekit.upload({
                 file: fileup,
-                fileName: sampleFile.name
+                fileName: sampleFile.name,
+                folder: `/zahir/users/${user._id.toString()}/posts`
             })
 
             fs.unlink(uploadPath)
