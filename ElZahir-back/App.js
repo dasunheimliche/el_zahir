@@ -35,7 +35,12 @@ mongoose.connect(config.MONGODB_URI)
 // creo la aplicacion express con express()
 const app = express()
 // aplico el middleware q me permite conectarme al server desde el exterior
-app.use(cors())
+
+// app.use(cors())
+app.use(cors({
+    exposedHeaders: "Content-Type, multipart/form-data"
+}));
+
 // esto accede a los los datos de la solicitud q esten en formato json y los devuelve como un objeto
 app.use(express.json())
 
