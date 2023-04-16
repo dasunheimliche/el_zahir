@@ -135,7 +135,7 @@ const ChangePI = ({setPopUp})=> {
     };
 
     return (
-        <form className={style.popup} onSubmit={error? doNothing: loading? doNothing : postear}>
+        <form className={style.popup} onSubmit={error? doNothing: loading? doNothing : postear} encType="multipart/form-data">
             <div className={style.main}>
                 <div className={ style['post-ui-header'] }>
                     <span>Change profile image</span>
