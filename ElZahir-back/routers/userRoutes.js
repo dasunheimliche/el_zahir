@@ -14,6 +14,8 @@ const imagekit = new Imagekit({
     urlEndpoint: "https://ik.imagekit.io/vo7gdb6tl"
 })
 
+const uniqueParam = Math.floor(Math.random() * 1000000);
+
 const getToken = (request)=> {
     
     const auth = request.headers.authorization
@@ -194,11 +196,11 @@ userRouter.put('/profile-image/:id', async (request, response)=> {
         let promesa = await imagekit.upload({
             file: body.profileImg,
             fileName: `profile_img_${id}`,
-            useUniqueFileName: false
+            folder: `/users/${user._id.toString()}/profile_image`
         })
 
         const user = await User.findById(id)
-        user.profileImg = promesa.url
+        user.profileImg = `${promesa.url}?${uniqueParam}`
         await user.save()
 
         await Post.updateMany({user : user._id}, {profileImg: promesa.url})

@@ -71,7 +71,7 @@ const ProfilePanel = ({setOtherUser, otherUser, posts, sticky, setPopUp, mode})=
     return (
         <div className={sticky === false? style.userCard : `${style.userCard} ${style['sticky-userCard']}`}>
 
-            <div className={style.top} style={{"backgroundImage":`url(${mode === 'user'? otherUser.mainPanelImg: user.mainPanelImg})`}} >
+            <div className={style.top} style={{"backgroundImage":`url(${mode === 'user'? otherUser.mainPanelImg : user.mainPanelImg})`}} >
 
                 <div className={style.options}>
 
@@ -85,7 +85,7 @@ const ProfilePanel = ({setOtherUser, otherUser, posts, sticky, setPopUp, mode})=
 
             <div className={style.bottom}>
 
-                <div style={{"backgroundImage":`url(${mode === 'user'? otherUser.profileImg:  user.profileImg})`}} className={mode === 'user'? style.profile  : `${style.profile} p`} onClick={mode === 'user'? null : ()=>setPopUp({type: 'changePI', post: null})}>
+                <div style={{"backgroundImage":`url(${mode === 'user'? otherUser.profileImg :  user.profileImg})`}} className={mode === 'user'? style.profile  : `${style.profile} p`} onClick={mode === 'user'? null : ()=>setPopUp({type: 'changePI', post: null})}>
                     <div className={style.username}>@{mode === 'user'? otherUser.username   : user.username}</div>
                 </div>
 
