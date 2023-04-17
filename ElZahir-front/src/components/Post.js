@@ -29,21 +29,27 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     let dispatch = useDispatch()
 
     // IMAGE POST
-    let [size] = useState({width: post.width, height: post.height})
+    let [size] = useState({width: post.mediaWidth, height: post.mediaHeight})
     let [ancho, setAncho] = useState((size.width/size.height)*window.innerHeight)
+
+    console.log("SIZE", size)
+    console.log("ANCHO", ancho)
 
     const handleResize = () => {
         setAncho((size.width / size.height) * (window.innerHeight - 200));
     };
 
+    console.log("INNER HEIGTH ",window.innerHeight)
+
     useEffect(() => {
+        handleResize()
         window.addEventListener('resize', handleResize);
         window.addEventListener('load', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('load', handleResize);
         };
-    }, [size.width, size.height]); //eslint-disable-line
+    }, []); //eslint-disable-line
 
     // VIDEO POST
 
@@ -124,7 +130,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     if (post.type === "image") {
         return (
             <div className={visibility? {} : style.container}>
-                <div id={!visibility && style['mobile-container']} style={(size.height > (window.innerHeight - 150) && !visibility)? {width: `${ancho}px`, maxWidth: '90vw'} : {}}>
+                <div id={!visibility && style['mobile-image-container']} style={(size.height > (window.innerHeight - 150) && !visibility)? {width: `${ancho}px`, maxWidth: '90vw'} : {}}>
                     {!visibility && <div className="logo post-logo">Zahir.</div>}
                     <ImagePost
                         post={post} mode={mode} setPopUp={setPopUp}

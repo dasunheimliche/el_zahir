@@ -517,7 +517,7 @@
     
 }
 
-@media (max-width: 490px) and (orientation: portrait) {
+@media (max-width: 500px) and (orientation: portrait) {
 
     .bar {
         margin: 0px;
