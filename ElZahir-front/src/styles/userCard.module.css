@@ -68,6 +68,8 @@
 
 .bottom {
     background-color: white;
+    /* background-image: url("https://app.airtm.com/static/media/home-background-mobile564db683c7ed1eca7c74.jpg"); */
+    /* background-size: cover; */
     position: relative;
     display: flex;
     flex-direction: column;

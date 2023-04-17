@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useRef, useState } from "react"
-import baseURL from '../services/baseURL'
+// import baseURL from '../services/baseURL'
+import { renderApi as baseURL } from "../services/baseURL"
 
 import { useDispatch } from "react-redux"
 import { userSlice } from "../reducers/userSlice"

@@ -68,7 +68,7 @@
     background-color: white;
     overflow: hidden;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-    animation: fadeIn 1s ease-in-out;
+    animation: fadeIn 0.7s ease-in-out;
 }
 
 .shadow { 
@@ -193,6 +193,8 @@
     position: relative;
     height: 0;
     object-fit: contain;
+
+    animation: fadeIn 0.8s ease-in-out;
 }
   
 .video-container iframe {
