@@ -645,7 +645,11 @@
     }
 
     .top {
-        min-height: 45vh;
+        min-height: 90vw;
+    }
+
+    .bottom {
+        min-height: calc(100vw/2.5);
     }
 
     .userCard {
