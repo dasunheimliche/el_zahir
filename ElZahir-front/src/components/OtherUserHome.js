@@ -90,7 +90,7 @@ const OtherUserHome = ({setUser})=> {
                     {popUp.type === 'seeFollowers'  && <Followers     setPopUp={setPopUp} user={otherUser}/>}
                     {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} user={otherUser}/>}
                 </div>
-                <Header popUp={popUp} user={user} setUser={setUser} sticky={sticky} setSticky={setSticky} />
+                <Header sticky={sticky} setSticky={setSticky} toFront={toFront}/>
                 <div className={!toFront? style.content : `${style.content} ${style.toFront}`}>
                     <div className={style['left-side']}>
                         <ProfilePanel setUser={setUser} user={user} setOtherUser={setOtherUser} otherUser={otherUser} sticky={sticky} setPopUp={setPopUp} popUp={popUp} mode={'user'}/>

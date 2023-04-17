@@ -174,7 +174,7 @@ const Home = ()=> {
                     {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} user={user}/>}
                 </div>
                 
-                <Header popUp={popUp} sticky={sticky} setSticky={setSticky} toFront={toFront} />
+                <Header sticky={sticky} setSticky={setSticky} toFront={toFront} />
 
                 <div  className={!toFront? style.content : `${style.content} ${style.toFront}`}>
                     <div className={style['left-side']}>
