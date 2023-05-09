@@ -519,7 +519,7 @@
 
 @media (max-width: 500px) and (orientation: portrait) {
 
-    .bar {
+    /* .bar {
         margin: 0px;
         position: absolute;
         top: 0.5%;
@@ -527,6 +527,16 @@
         left: 0;
         right: 0;
         margin: auto;
+    } */
+
+    .bar {
+        margin: 0px;
+        position: static;
+        /* top: 0.5%; */
+        width: 100%;
+        /* left: 0;
+        right: 0; */
+        /* margin: auto; */
     }
 
     .left-side {
@@ -545,11 +555,11 @@
         width: 95%;
         position: static;
         margin: 0px;
-        top: 0.5%;
+        /* top: 0.5%;
 
         left: 0;
-        right: 0;
-        margin: auto;
+        right: 0; */
+        /* margin: auto; */
     }
 
 }

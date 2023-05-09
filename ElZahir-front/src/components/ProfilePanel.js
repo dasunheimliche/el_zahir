@@ -5,6 +5,8 @@ import { useEffect, useState } from "react"
 import { useSelector, useDispatch} from 'react-redux'
 import { userSlice} from '../reducers/userSlice'
 
+import Header from './Header'
+
 // BSE URL
 import baseURL from '../services/baseURL'
 
@@ -72,6 +74,10 @@ const ProfilePanel = ({setOtherUser, otherUser, posts, sticky, setPopUp, mode})=
         <div className={sticky === false? style.userCard : `${style.userCard} ${style['sticky-userCard']}`}>
 
             <div className={style.top} style={{"backgroundImage":`url(${mode === 'user'? otherUser.mainPanelImg : user.mainPanelImg})`}} >
+
+                <div className={style['mobile-bar']}>
+                    <Header sticky={sticky}  />
+                </div>
 
                 <div className={style.options}>
 

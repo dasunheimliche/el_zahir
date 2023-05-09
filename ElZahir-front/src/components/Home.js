@@ -26,6 +26,7 @@ import Following from './Following'
 // CUSTOM HOOKS
 
 import useElementAtTopOfPage from '../hooks/useElementAtTopOfPage'
+import useInnerHeight from '../hooks/userInnerHeight';
 
 // BASE URL
 import baseURL from '../services/baseURL'
@@ -60,6 +61,8 @@ const Home = ()=> {
     const parentRef = useRef(null)
     let user = useSelector(state => state.user.value)
     const isAtTop = useElementAtTopOfPage(ref, parentRef)
+    const innerHeight = useInnerHeight()
+    console.log("IINER HEIGHT LOGO", innerHeight)
     let navigate = useNavigate()
     let { "*" : params} = useParams()
 
@@ -153,11 +156,16 @@ const Home = ()=> {
             top: 0,
             behavior: "smooth"
         });
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
     };
 
     // RENDER
     return (
-        <div className={style.main}>            
+        <div className={style.main}>     
             <div ref={parentRef} className={style['mobile-main']}>
                 <div ref={ref}></div>
                 <div className={popUp.type === 'none'? `${style.popups} ${style.hidden}` : popUp.post? style.popups : `${style.popups} ${style.open}`} >
@@ -173,8 +181,10 @@ const Home = ()=> {
                     {popUp.type === 'seeFollowers'  && <Followers     setPopUp={setPopUp} user={user}/>}
                     {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} user={user}/>}
                 </div>
-                
-                <Header sticky={sticky} setSticky={setSticky} toFront={toFront} />
+                 
+                <div className={style['desktop-bar']}>
+                    <Header sticky={sticky} setSticky={setSticky} toFront={toFront} />
+                </div>
 
                 <div  className={!toFront? style.content : `${style.content} ${style.toFront}`}>
                     <div className={style['left-side']}>
@@ -196,8 +206,8 @@ const Home = ()=> {
                     </div>
                 </div>
             </div>
-            <div style={toFront? {display: 'none'} : {}} className={!isAtTop ? 'logo bottom-logo-on p' : 'bottom-logo-off p'} onClick={scrollToTop}>Zahir.</div>
-        </div>
+            <div style={toFront? {display: 'none'} : {top: `${innerHeight - 30}px`}} className={!isAtTop ? 'logo bottom-logo-on p' : 'bottom-logo-off p'} onClick={scrollToTop}>Zahir.</div>
+        </div> 
     )
 }
 

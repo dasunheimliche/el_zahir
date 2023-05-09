@@ -42,6 +42,10 @@
     min-height: 330px;
 }
 
+.mobile-bar {
+    display: none;
+}
+
 .options {
     background: linear-gradient(to top, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0));
     width: 100%;
@@ -646,6 +650,24 @@
 
     .top {
         min-height: 90vw;
+    }
+
+    .mobile-bar {
+        display:block;
+        margin: 0 2%;
+    }
+
+    .options {
+        /* outline: 10px solid blue; */
+        outline-offset: -10px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0));
+        width: 100%;
+        height: calc(100% - 39px);
+        display: flex;
+        position: absolute;
+        margin-top: 39px;
+    
+        /* top: 0px; */
     }
 
     .bottom {

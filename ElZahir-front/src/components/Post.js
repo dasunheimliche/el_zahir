@@ -32,14 +32,9 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     let [size] = useState({width: post.mediaWidth, height: post.mediaHeight})
     let [ancho, setAncho] = useState((size.width/size.height)*window.innerHeight)
 
-    console.log("SIZE", size)
-    console.log("ANCHO", ancho)
-
     const handleResize = () => {
         setAncho((size.width / size.height) * (window.innerHeight - 200));
     };
-
-    console.log("INNER HEIGTH ",window.innerHeight)
 
     useEffect(() => {
         handleResize()
