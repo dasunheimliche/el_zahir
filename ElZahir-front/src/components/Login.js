@@ -1,7 +1,7 @@
 // DEPENDENCIES
 
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
@@ -22,6 +22,13 @@ const Login = ()=> {
     let [ok, setOk] = useState(true)
 
     let dispatch = useDispatch()
+
+    useEffect(()=> {
+        axios.get('https://zahir-api.onrender.com/api/register')
+            .then(()=> {
+                console.log("waking up zahir onrender server")
+            })
+	}, []);
 
     let login = async (e) => {
         e.preventDefault();
