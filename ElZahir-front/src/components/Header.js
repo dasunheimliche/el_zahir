@@ -112,7 +112,7 @@ const Header = ({sticky, setSticky, toFront})=> {
                         
                 <div className={style.search}>
                     <img className={style['search-img']} alt='searchicon' src={logo} />
-                    <input ref={searchRef} className={style['search-input']} type={'text'} placeholder={'buscar'} onChange={(e)=> setSearchQuery(e.target.value)}/>
+                    <input ref={searchRef} className={style['search-input']} type={'text'} placeholder={'@user'} onChange={(e)=> setSearchQuery(e.target.value)}/>
                     <div className={searchResults.length > 0? style['user-list'] : `${style[`user-list`]} invisible`}>
                         {showSearchResult()}
                     </div>    

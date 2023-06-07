@@ -38,32 +38,31 @@ import style from  '../styles/home.module.css'
 const Home = ()=> {
 
     // STATES
-    let [sticky,     setSticky]     = useState(false)
-    let [popUp,      setPopUp]      = useState({type: 'none', post: null})
+    let [sticky,     setSticky       ] = useState(false)
+    let [popUp,      setPopUp        ] = useState({type: 'none', post: null})
 
-    let [toFront,    setToFront]    = useState(false) 
+    let [toFront,    setToFront      ] = useState(false) 
 
-    let [myPosts,    setMyPosts]    = useState([])
-    let [tab,        setTab]        = useState("me")
+    let [myPosts,    setMyPosts      ] = useState([])
+    let [tab,        setTab          ] = useState("me")
 
 
-    let [disPosts, setDiscoverPosts] = useState([])
-    let [follPosts, setFollPosts] = useState([])
+    let [disPosts,   setDiscoverPosts] = useState([])
+    let [follPosts,  setFollPosts    ] = useState([])
 
 
     // próxima impmenentación
-    let [mood,       setMood]       = useState(0)
+    let [mood,       setMood         ] = useState(0)
     
     // -------------------------
 
     // HOOKS
-    const ref = useRef(null)
-    const parentRef = useRef(null)
-    let user = useSelector(state => state.user.value)
-    const isAtTop = useElementAtTopOfPage(ref, parentRef)
-    const innerHeight = useInnerHeight()
-    console.log("IINER HEIGHT LOGO", innerHeight)
-    let navigate = useNavigate()
+    const ref           = useRef(null)
+    const parentRef     = useRef(null)
+    let user            = useSelector(state => state.user.value)
+    const isAtTop       = useElementAtTopOfPage(ref, parentRef)
+    const innerHeight   = useInnerHeight()
+    let navigate        = useNavigate()
     let { "*" : params} = useParams()
 
     const myImage = new Image();
@@ -97,6 +96,13 @@ const Home = ()=> {
             navigate('/home/discover')
         }
     }, []) // eslint-disable-line
+
+    useEffect(()=> {
+        axios.get('https://zahir-api.onrender.com/api/register')
+            .then(()=> {
+                console.log("waking up zahir onrender server")
+            })
+	}, []);
 
 
     // ESTO DEBERIA IR EN UN COMPONENTE
@@ -173,6 +179,7 @@ const Home = ()=> {
                     {popUp.type === 'text'          && <PostTextUi    setPopUp={setPopUp} />}
                     {popUp.type === 'cita'          && <PostCitaUi    setPopUp={setPopUp} />}
                     {popUp.type === 'video'         && <PostVideoUi   setPopUp={setPopUp} />}
+                    
                     {popUp.type === 'changePI'      && <ChangePI      setPopUp={setPopUp} />}
                     {popUp.type === 'changePanImg'  && <ChangePanImg  setPopUp={setPopUp} />}
                 
@@ -192,15 +199,15 @@ const Home = ()=> {
                     </div>
                     <div  className={style['right-side']}>
                         <div className={sticky? `${style.tabs} ${style['sticky-tabs']}` : style.tabs}>
-                            <span onClick={backtome}        className={tab === 'me'?        `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>ME</span>
+                            <span onClick={backtome}     className={tab === 'me'?        `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>ME</span>
                             <span onClick={toFollowing}  className={tab === 'following'? `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>FOLLOWING</span>
                             <span onClick={toDiscover}   className={tab === 'discover'?  `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>EXPLORE</span>
                         </div>
                         <div className={sticky === false? style.grid : `${style.grid} ${style['sticky-grid']}`}>
                             <Routes>
-                                <Route  path="/" element={renderPosts(myPosts)} />
+                                <Route  path="/"          element={renderPosts(myPosts)} />
                                 <Route  path="/following" element={renderPosts(follPosts)} />
-                                <Route  path="/discover" element={renderPosts(disPosts)} />
+                                <Route  path="/discover"  element={renderPosts(disPosts)} />
                             </Routes>
                         </div>
                     </div>
