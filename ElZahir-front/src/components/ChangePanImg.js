@@ -11,7 +11,6 @@ import { userSlice }                   from "../reducers/userSlice"
 import style from '../styles/popups.module.css'
 
 // BASE URL
-// import baseURL from '../services/baseURL'
 import { renderApi as baseURL } from "../services/baseURL"
 
 const updateLocalStorage = (url) => {

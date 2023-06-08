@@ -18,11 +18,11 @@ import { userSlice} from '../reducers/userSlice'
 
 const Post = ({post, mode, setPopUp, setToFront})=> {
 
-    let postURL = `${baseURL}}/#/post/${post.id}`
+    let postURL = `${"https://zahir-pink.vercel.app"}}/#/post/${post.id}`
 
 
-    let [liked, setLiked] = useState(false)
-    let [loading, setLoading] = useState(false)
+    let [liked,      setLiked     ] = useState(false)
+    let [loading,    setLoading   ] = useState(false)
     let [visibility, setVisibility] = useState(true)
 
     let user = useSelector(state => state.user.value)

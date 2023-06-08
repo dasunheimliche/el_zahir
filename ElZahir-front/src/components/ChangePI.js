@@ -40,10 +40,10 @@ const postWithFile = async (user, formData, token) => {
 
 const ChangePI = ({setPopUp})=> {
 
-    let [mode, setMode] = useState('idle')
-    let [url, setUrl] = useState('')
-    let [error, setError] = useState(false)
-    let [file, setFile] = useState(false)
+    let [mode,    setMode   ] = useState('idle')
+    let [url,     setUrl    ] = useState('')
+    let [error,   setError  ] = useState(false)
+    let [file,    setFile   ] = useState(false)
     let [loading, setLoading] = useState(false)
 
     let dispatch = useDispatch()
