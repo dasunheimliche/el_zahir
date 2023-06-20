@@ -1,18 +1,18 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import baseURL from '../services/baseURL'
-import Comment from '../components/Comment'
+import baseURL from '../../services/baseURL'
+import Comment from '../Comment'
 import { useSelector} from 'react-redux'
 
-import style from '../styles/comments.module.css'
+import style from '../../styles/comments.module.css'
 
 const Comments = ({post, setPopUp})=> {
-    let [reload, setReload] = useState(false)
-    let [comments, setComments] = useState('')
-    let [value, setValue] = useState('')
+    let [reload,      setReload     ] = useState(false)
+    let [comments,    setComments   ] = useState('')
+    let [value,       setValue      ] = useState('')
     let [placeholder, setPlaceholder] = useState('')
-    let [commentID, setCommentID] = useState('')
-    let [loading, setLoading] = useState(false)
+    let [commentID,   setCommentID  ] = useState('')
+    let [loading,     setLoading    ] = useState(false)
 
     let user = useSelector(state => state.user.value)
 

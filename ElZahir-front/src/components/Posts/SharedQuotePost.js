@@ -1,6 +1,6 @@
 
-import style from '../styles/post.module.css'
-import quotes from '../images/quotes.png'
+import style from '../../styles/post.module.css'
+import quotes from '../../images/quotes.png'
 
 const SharedQuotePost = ({post, p})=> {
 

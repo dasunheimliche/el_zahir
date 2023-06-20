@@ -1,9 +1,9 @@
-import style from '../styles/popups.module.css'
+import style from '../../styles/popups.module.css'
 import { useState } from 'react';
 import axios from 'axios'
-import baseURL from '../services/baseURL'
-import { useSelector, useDispatch} from 'react-redux'
-import { userSlice} from '../reducers/userSlice'
+import baseURL from '../../services/baseURL'
+import { useDispatch} from 'react-redux'
+import { userSlice} from '../../reducers/userSlice'
 
 
 const Delete = ({post, setPopUp})=> {

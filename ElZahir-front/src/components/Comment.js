@@ -9,7 +9,7 @@ import style from '../styles/comments.module.css'
 const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload, setValue})=> {
 
     let [subComments, setSubComments] = useState('')
-    let [loading, setLoading] = useState(false)
+    let [loading,     setLoading]     = useState(false)
 
     let user = useSelector(state => state.user.value)
 

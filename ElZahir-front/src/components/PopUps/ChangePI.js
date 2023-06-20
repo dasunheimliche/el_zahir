@@ -1,13 +1,13 @@
 import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 // import baseURL from '../services/baseURL'
-import { renderApi as baseURL } from "../services/baseURL"
+import { renderApi as baseURL } from "../../services/baseURL"
 
 import { useDispatch } from "react-redux"
-import { userSlice } from "../reducers/userSlice"
+import { userSlice } from "../../reducers/userSlice"
 
 // CSS
-import style from '../styles/popups.module.css'
+import style from '../../styles/popups.module.css'
 
 const updateLocalStorage = (url) => {
     const user = JSON.parse(window.localStorage.getItem('loggedUser'))

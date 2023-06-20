@@ -1,7 +1,7 @@
 
 
 
-import style from '../styles/post.module.css'
+import style from '../../styles/post.module.css'
 
 const SharedImagePost = ({post, p})=> {
 

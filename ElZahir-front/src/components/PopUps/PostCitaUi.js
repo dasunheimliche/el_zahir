@@ -1,14 +1,14 @@
 import axios from "axios"
 import { useState } from "react"
-import baseURL from '../services/baseURL'
+import baseURL from '../../services/baseURL'
 
-import { userSlice} from '../reducers/userSlice'
+import { userSlice} from '../../reducers/userSlice'
 import { useDispatch} from 'react-redux'
 
-import citaButton from '../icons/citaButton.png'
+import citaButton from '../../icons/citaButton.png'
 
 // CSS
-import style from '../styles/popups.module.css'
+import style from '../../styles/popups.module.css'
 
 const postQuote = async(author, work, quote, token) => {
     try {
@@ -33,8 +33,8 @@ const updateLocalStorage = (postId) => {
 
 const PostCitaUI = ({setPopUp})=> {
     let [author, setAuthor] = useState('')
-    let [work, setWork] = useState('')
-    let [quote, setQuote] = useState('')
+    let [work,   setWork  ] = useState('')
+    let [quote,  setQuote ] = useState('')
 
     let [loading, setLoading] = useState(false)
 

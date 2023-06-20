@@ -15,11 +15,12 @@ const LARGE_WIDTH = 1600;
 const MEDIUM_WIDTH = 1366;
 
 const Header = ({sticky, setSticky, toFront})=> {
-    let [isMenuOpen, setIsMenuOpen] = useState(false)
-    let [searchQuery, setSearchQuery] = useState('')
+    let [isMenuOpen,    setIsMenuOpen   ] = useState(false)
+    let [searchQuery,   setSearchQuery  ] = useState('')
     let [searchResults, setSearchResults] = useState([])
 
     let user = useSelector(state => state.user.value)
+    
     let dispatch = useDispatch()
     let searchRef = useRef()
 
@@ -37,16 +38,6 @@ const Header = ({sticky, setSticky, toFront})=> {
             console.error(error);
         }
     };
-
-    // const handleScroll = () => {
-    //     if (window.innerWidth > 1600) {
-    //         return (window.scrollY >= 62 && !sticky) ? setSticky(true) : setSticky(false)
-    //     } else if (window.innerWidth <= 1366) {
-    //         return (window.scrollY >= 42 && !sticky) ? setSticky(true) : setSticky(false)
-    //     } else if (window.innerWidth <= 1600 && window.innerWidth > 1366) {
-    //         return (window.scrollY >= 50 && !sticky) ? setSticky(true) : setSticky(false)
-    //     }
-    // }
 
     const handleScroll = () => {
         const stickyValue =

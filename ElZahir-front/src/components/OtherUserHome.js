@@ -5,7 +5,7 @@ import Header from './Header'
 import ProfilePanel from './ProfilePanel'
 import Post from './Post'
 
-import Comments from './Comments'
+import Comments from './PopUps/Comments'
 
 import { useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom';
@@ -15,8 +15,8 @@ import useElementAtTopOfPage from '../hooks/useElementAtTopOfPage'
 
 import baseURL from '../services/baseURL'
 
-import Followers from './Followers'
-import Following from './Following'
+import Followers from './PopUps/Followers'
+import Following from './PopUps/Following'
 
 import style from  '../styles/home.module.css'
 import getConfig from '../services/getConfig'
@@ -90,7 +90,11 @@ const OtherUserHome = ({setUser})=> {
                     {popUp.type === 'seeFollowers'  && <Followers     setPopUp={setPopUp} user={otherUser}/>}
                     {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} user={otherUser}/>}
                 </div>
-                <Header sticky={sticky} setSticky={setSticky} toFront={toFront}/>
+
+                <div className={style['desktop-bar']}>
+                    <Header sticky={sticky} setSticky={setSticky} toFront={toFront} />
+                </div>
+
                 <div className={!toFront? style.content : `${style.content} ${style.toFront}`}>
                     <div className={style['left-side']}>
                         <ProfilePanel setUser={setUser} user={user} setOtherUser={setOtherUser} otherUser={otherUser} sticky={sticky} setPopUp={setPopUp} popUp={popUp} mode={'user'}/>

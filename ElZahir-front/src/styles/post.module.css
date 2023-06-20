@@ -224,17 +224,22 @@ video {
     font-size: 17px;
     background-color: rgb(255, 255, 255);
     padding: 10px;
+    padding-top: 0px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
-    border-top: 1px solid rgb(245, 245, 245);
+    /* border-top: 1px solid rgb(245, 245, 245); */
 
 }
 
-.footer-header {
+.post-title {
+    /* outline: 1px solid red; */
     display: inline;
-    margin-left: 5px;
+    font-family: Circular-light;
+    font-size: 17px;
+    padding-top: 10px;
+    padding-left: 15px;
 }
 
 .footer-middle {
@@ -441,7 +446,7 @@ video {
         padding: 10px;
     }
 
-    .footer-header {
+    .post-title {
         margin-left: 5px;
     }
 
@@ -567,8 +572,10 @@ video {
         padding: 8px;
     }
 
-    .footer-header {
-        margin-left: 4px;
+    .post-title {
+        font-size: 14px;
+        padding-top: 8px;
+        padding-left: 12px;
     }
 
     .footer-middle {
@@ -696,8 +703,10 @@ video {
         padding: 7px;
     }
     
-    .footer-header {
-        margin-left: 4px;
+    .post-title {
+        font-size: 15px;
+        padding-top: 7px;
+        padding-left: 11px;
     }
     
     .footer-middle {

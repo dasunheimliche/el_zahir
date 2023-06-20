@@ -1,14 +1,14 @@
 import axios from "axios"
 import { useState } from "react"
-import baseURL from '../services/baseURL'
+import baseURL from '../../services/baseURL'
 
-import { userSlice} from '../reducers/userSlice'
+import { userSlice} from '../../reducers/userSlice'
 import { useDispatch} from 'react-redux'
 
-import textButton from '../icons/textButton.png'
+import textButton from '../../icons/textButton.png'
 
 // CSS
-import style from '../styles/popups.module.css'
+import style from '../../styles/popups.module.css'
 
 const postText = async (title, text, token) => {
     try {

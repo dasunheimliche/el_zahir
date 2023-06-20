@@ -1,9 +1,9 @@
 
-import TextPost from '../components/TextPost'
-import QuotePost from './QuotePost'
-import ImagePost from '../components/ImagePost'
-import VideoPost from '../components/VideoPost'
-import VideoFilePost from '../components/VideoFilePost'
+import TextPost from './Posts/TextPost'
+import QuotePost from './Posts/QuotePost'
+import ImagePost from './Posts/ImagePost'
+import VideoPost from './Posts/VideoPost'
+import VideoFilePost from './Posts/VideoFilePost'
 
 import getConfig from '../services/getConfig'
 

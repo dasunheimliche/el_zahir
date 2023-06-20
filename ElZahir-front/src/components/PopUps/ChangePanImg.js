@@ -5,13 +5,13 @@ import { useEffect, useRef, useState } from "react"
 import { useDispatch }                 from "react-redux"
 
 // REDUCERS
-import { userSlice }                   from "../reducers/userSlice"
+import { userSlice }                   from "../../reducers/userSlice"
 
 // CSS
-import style from '../styles/popups.module.css'
+import style from '../../styles/popups.module.css'
 
 // BASE URL
-import { renderApi as baseURL } from "../services/baseURL"
+import { renderApi as baseURL } from "../../services/baseURL"
 
 const updateLocalStorage = (url) => {
     const user = JSON.parse(window.localStorage.getItem('loggedUser'))

@@ -1,18 +1,17 @@
 
+
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import baseURL from '../services/baseURL'
-import getConfig from '../services/getConfig'
+import baseURL from '../../services/baseURL'
+import getConfig from '../../services/getConfig'
 
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { useParams } from 'react-router-dom'
 
-import style from '../styles/popups.module.css'
+import style from '../../styles/popups.module.css'
 
 
-const Following = ({setPopUp, user})=> {
-    
+const Followers = ({setPopUp, user})=> {
+
     let [users, setUsers] = useState([])
     let [loading, setLoading] = useState(true)
     // let user = useSelector(state => state.user.value)
@@ -22,12 +21,12 @@ const Following = ({setPopUp, user})=> {
         axios.get(baseURL.concat('/api/users'), getConfig())
         .then(users => {
             
-            if (user.followers) {
+            if (user.following) {
                 // const user = users.data.find(person => person.id === params["*"])
-                let followers = users.data.filter(person => user.followers.includes(person.id))
+                let followers = users.data.filter(person => user.following.includes(person.id))
                 setUsers(followers)
             } else {
-                let followers = users.data.filter(person => user.followers.includes(person.id))
+                let followers = users.data.filter(person => user.following.includes(person.id))
                 setUsers(followers)
             }
 
@@ -47,7 +46,6 @@ const Following = ({setPopUp, user})=> {
                     </div>
                 </Link>
             )
-                
         })
     }
 
@@ -57,7 +55,7 @@ const Following = ({setPopUp, user})=> {
                 <div className={style.close} onClick={()=>setPopUp({type:'none', post:null})}></div>
             </div>
             <div className={style.counter}>
-                <span>Followers: </span>
+                <span className='followers-header-title'>Followers: </span>
                 {loading && <div className={ `${style.loading} ${style['little-loading']}` } >{" "}</div>}
                 {!loading && <span>{users.length}</span>}
             </div>
@@ -69,4 +67,5 @@ const Following = ({setPopUp, user})=> {
     )
 }
 
-export default Following
+
+export default Followers

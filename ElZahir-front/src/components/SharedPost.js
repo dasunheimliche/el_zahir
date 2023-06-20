@@ -1,10 +1,10 @@
 
 
-import SharedTextPost from './SharedTextPost'
-import SharedQuotePost from './SharedQuotePost'
-import SharedImagePost from './SharedImagePost'
-import SharedVideoPost from './SharedVideoPost'
-import SharedVideoFilePost from './SharedVideoFilePost'
+import SharedTextPost from './Posts/SharedTextPost'
+import SharedQuotePost from './Posts/SharedQuotePost'
+import SharedImagePost from './Posts/SharedImagePost'
+import SharedVideoPost from './Posts/SharedVideoPost'
+import SharedVideoFilePost from './Posts/SharedVideoFilePost'
 
 import {useState, useEffect} from 'react'
 import axios from 'axios'

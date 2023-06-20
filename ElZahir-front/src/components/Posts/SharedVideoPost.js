@@ -1,5 +1,5 @@
 
-import style from '../styles/post.module.css'
+import style from '../../styles/post.module.css'
 
 const SharedVideoPost = ({post, p})=> {
 
