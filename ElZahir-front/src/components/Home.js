@@ -149,17 +149,19 @@ const Home = ()=> {
         <div className={style.main}>     
             <div ref={parentRef} className={style['mobile-main']}>
                 <div ref={ref}></div>
-
+                {/* POPUPS */}
                 <PopUps popUp={popUp} setPopUp={setPopUp} user={user} />
-                 
-                <div className={style['desktop-bar']}>
-                    <Header sticky={sticky} setSticky={setSticky} toFront={toFront} />
-                </div>
+                {/* HEADER */}
 
+                <Header sticky={sticky} setSticky={setSticky} toFront={toFront} mode={"desktop"}/>
+
+                {/* CONTENT */}
                 <div  className={!toFront? style.content : `${style.content} ${style.toFront}`}>
+                    {/* CONTENT - LEFT */}
                     <div className={style['left-side']}>
                         <ProfilePanel mood={mood} setMood={setMood} sticky={sticky} setPopUp={setPopUp} popUp={popUp} posts={myPosts} />
                     </div>
+                    {/* CONTENT - RIGHT */}
                     <div  className={style['right-side']}>
                         <Tabs sticky={sticky} tab={tab} setTab={setTab} />
                         <Posts sticky={sticky} >

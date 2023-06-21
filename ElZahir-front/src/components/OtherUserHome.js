@@ -11,12 +11,13 @@ import { useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom';
 
 import useElementAtTopOfPage from '../hooks/useElementAtTopOfPage'
-
+import useInnerHeight from '../hooks/userInnerHeight';
 
 import baseURL from '../services/baseURL'
 
 import Followers from './PopUps/Followers'
 import Following from './PopUps/Following'
+import BottomLogo from './BottomLogo'
 
 import style from  '../styles/home.module.css'
 import getConfig from '../services/getConfig'
@@ -35,6 +36,7 @@ const OtherUserHome = ({setUser})=> {
     const ref = useRef(null)
     const parentRef = useRef(null)
     const isAtTop = useElementAtTopOfPage(ref, parentRef)
+    const innerHeight   = useInnerHeight()
 
     const navigate = useNavigate()
     const { "*": userID } = useParams()
@@ -91,9 +93,9 @@ const OtherUserHome = ({setUser})=> {
                     {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} user={otherUser}/>}
                 </div>
 
-                <div className={style['desktop-bar']}>
-                    <Header sticky={sticky} setSticky={setSticky} toFront={toFront} />
-                </div>
+
+                <Header sticky={sticky} setSticky={setSticky} toFront={toFront} mode={"desktop"}/>
+  
 
                 <div className={!toFront? style.content : `${style.content} ${style.toFront}`}>
                     <div className={style['left-side']}>
@@ -106,7 +108,7 @@ const OtherUserHome = ({setUser})=> {
                     </div>
                 </div>
             </div>
-            <div style={toFront? {display: 'none'} : {}} className={!isAtTop ? 'logo bottom-logo-on p' : 'bottom-logo-off p'} onClick={scrollToTop}>Zahir.</div>
+            <BottomLogo toFront={toFront} innerHeight={innerHeight} isAtTop={isAtTop} scrollToTop={scrollToTop} />
         </div>
     )
 }

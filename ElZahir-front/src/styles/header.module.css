@@ -1,4 +1,6 @@
 
+
+
 .bar {
     display: flex;
     justify-content: space-between;
@@ -10,6 +12,10 @@
     top: -55px;
     margin-top: 62px;
     margin-bottom: 40px;
+}
+
+.mobile-bar {
+    display: none;
 }
 
 .sticky-bar {
@@ -519,24 +525,19 @@
 
 @media (max-width: 500px) and (orientation: portrait) {
 
-    /* .bar {
-        margin: 0px;
-        position: absolute;
-        top: 0.5%;
-        width: 95%;
-        left: 0;
-        right: 0;
-        margin: auto;
-    } */
+    .desktop-bar {
+        display: none;
+    }
+
+    .mobile-bar {
+        display: block;
+        margin: 0 2%;
+    }
 
     .bar {
         margin: 0px;
         position: static;
-        /* top: 0.5%; */
         width: 100%;
-        /* left: 0;
-        right: 0; */
-        /* margin: auto; */
     }
 
     .left-side {
@@ -555,11 +556,6 @@
         width: 95%;
         position: static;
         margin: 0px;
-        /* top: 0.5%;
-
-        left: 0;
-        right: 0; */
-        /* margin: auto; */
     }
 
 }

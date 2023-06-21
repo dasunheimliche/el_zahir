@@ -42,9 +42,9 @@
     min-height: 330px;
 }
 
-.mobile-bar {
+/* .mobile-bar {
     display: none;
-}
+} */
 
 .options {
     background: linear-gradient(to top, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0));
@@ -652,10 +652,10 @@
         min-height: 90vw;
     }
 
-    .mobile-bar {
-        display:block;
+    /* .mobile-bar {
+        display: block;
         margin: 0 2%;
-    }
+    } */
 
     .options {
         /* outline: 10px solid blue; */

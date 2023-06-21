@@ -354,9 +354,9 @@
         overflow: hidden;
     }
 
-    .desktop-bar {
+    /* .desktop-bar {
         display: none;
-    }
+    } */
 
     .left-side {
         padding-right: 0px;

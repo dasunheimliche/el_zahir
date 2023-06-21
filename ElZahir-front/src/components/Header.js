@@ -14,7 +14,7 @@ const SEARCH_URL = `${baseURL}/api/users`;
 const LARGE_WIDTH = 1600;
 const MEDIUM_WIDTH = 1366;
 
-const Header = ({sticky, setSticky, toFront})=> {
+const Header = ({sticky, setSticky, toFront, mode})=> {
     let [isMenuOpen,    setIsMenuOpen   ] = useState(false)
     let [searchQuery,   setSearchQuery  ] = useState('')
     let [searchResults, setSearchResults] = useState([])
@@ -90,35 +90,35 @@ const Header = ({sticky, setSticky, toFront})=> {
         window.localStorage.clear()
         dispatch(userSlice.actions.update({...user, loggued:false}))
     }
-
+    console.log("MODE", mode)
     return (
 
-        <div className={sticky? `${style.bar} ${style['sticky-bar']}`: style.bar} style={toFront? {display: `none`} : {}}>
-
-            <div className={style['left-side']}>
-
-                <Link className='linknostyle' to={`/home`}>
-                    <div className='logo'>Zahir.</div>
-                </Link>
-                        
-                <div className={style.search}>
-                    <img className={style['search-img']} alt='searchicon' src={logo} />
-                    <input ref={searchRef} className={style['search-input']} type={'text'} placeholder={'@user'} onChange={(e)=> setSearchQuery(e.target.value)}/>
-                    <div className={searchResults.length > 0? style['user-list'] : `${style[`user-list`]} invisible`}>
-                        {showSearchResult()}
-                    </div>    
-                </div>
-                
-            </div>
-                    
-            <div className={`${style['right-side']}`}>
-                <div className={!isMenuOpen? style['user-container'] : `${style['user-container']} ${style['expanded-user-menu']}`} onClick={toggleUserMenu}>
-                    <div className={style.user}>
-                        <div style={{'backgroundImage':`url(${user.profileImg})`}} className={style['user-logo']}></div>
-                        <div className={style.username}>{user.username}</div>
+        <div className={(mode === "desktop")? style['desktop-bar'] : style['mobile-bar']}>
+            <div className={sticky? `${style.bar} ${style['sticky-bar']}`: style.bar} style={toFront? {display: `none`} : {}}>
+                <div className={style['left-side']}>
+                    <Link className='linknostyle' to={`/home`}>
+                        <div className='logo'>Zahir.</div>
+                    </Link>
+            
+                    <div className={style.search}>
+                        <img className={style['search-img']} alt='searchicon' src={logo} />
+                        <input ref={searchRef} className={style['search-input']} type={'text'} placeholder={'@user'} onChange={(e)=> setSearchQuery(e.target.value)}/>
+                        <div className={searchResults.length > 0? style['user-list'] : `${style[`user-list`]} invisible`}>
+                            {showSearchResult()}
+                        </div>
                     </div>
-                    <div className={isMenuOpen? style['user-menu'] : `${style['user-menu']} invisible`}>
-                        <span className={style.signOff} onClick={handlerSignOff}>Log Off</span>
+            
+                </div>
+            
+                <div className={`${style['right-side']}`}>
+                    <div className={!isMenuOpen? style['user-container'] : `${style['user-container']} ${style['expanded-user-menu']}`} onClick={toggleUserMenu}>
+                        <div className={style.user}>
+                            <div style={{'backgroundImage':`url(${user.profileImg})`}} className={style['user-logo']}></div>
+                            <div className={style.username}>{user.username}</div>
+                        </div>
+                        <div className={isMenuOpen? style['user-menu'] : `${style['user-menu']} invisible`}>
+                            <span className={style.signOff} onClick={handlerSignOff}>Log Off</span>
+                        </div>
                     </div>
                 </div>
             </div>
