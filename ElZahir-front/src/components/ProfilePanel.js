@@ -75,9 +75,7 @@ const ProfilePanel = ({setOtherUser, otherUser, posts, sticky, setPopUp, mode})=
 
             <div className={style.top} style={{"backgroundImage":`url(${mode === 'user'? otherUser.mainPanelImg : user.mainPanelImg})`}} >
 
-                {/* <div className={style['mobile-bar']}> */}
-                    <Header sticky={sticky} mode={"mobile"} />
-                {/* </div> */}
+                <Header sticky={sticky} mode={"mobile"} />
 
                 <div className={style.options}>
 

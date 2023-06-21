@@ -4,12 +4,12 @@ import QuotePost from './Posts/QuotePost'
 import ImagePost from './Posts/ImagePost'
 import VideoPost from './Posts/VideoPost'
 import VideoFilePost from './Posts/VideoFilePost'
+import PostWrapper from './PostWrapper'
 
 import getConfig from '../services/getConfig'
 
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-import style from '../styles/post.module.css'
 import baseURL from '../services/baseURL'
 
 import { useSelector, useDispatch} from 'react-redux'
@@ -123,75 +123,60 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
 
     
     if (post.type === "image") {
-        return (
-            <div className={visibility? {} : style.container}>
-                <div id={!visibility && style['mobile-image-container']} style={(size.height > (window.innerHeight - 150) && !visibility)? {width: `${ancho}px`, maxWidth: '90vw'} : {}}>
-                    {!visibility && <div className="logo post-logo">Zahir.</div>}
-                    <ImagePost
-                        post={post} mode={mode} setPopUp={setPopUp}
-                        loading={loading} liked={liked} setToFront={setToFront}
-                        p={p} setVisibility={setVisibility} visibility={visibility}
-                    />
-                </div>
-            </div>
-
+        return(
+            <PostWrapper post={post} ar={ar} size={size} ancho={ancho} visibility={visibility}>
+                <ImagePost
+                    post={post} mode={mode} setPopUp={setPopUp}
+                    loading={loading} liked={liked} setToFront={setToFront}
+                    p={p} setVisibility={setVisibility} visibility={visibility}
+                />
+            </PostWrapper>
         )
     }
 
     if (post.type === "text") {
         return (
-            <div className={visibility? {} : style.container}>
-                <div id={!visibility && style['mobile-container']} style={!visibility? {width: "30%"} : {}}>
-                    {!visibility && <div className="logo post-logo">Zahir.</div>}
-                    <TextPost
-                        post={post} mode={mode} setPopUp={setPopUp}
-                        loading={loading} liked={liked} setToFront={setToFront}
-                        p={p} visibility={visibility} setVisibility={setVisibility}
-                    />
-                </div>
-            </div>
+            <PostWrapper post={post} ar={ar} size={size} ancho={ancho} visibility={visibility}>
+                <TextPost
+                    post={post} mode={mode} setPopUp={setPopUp}
+                    loading={loading} liked={liked} setToFront={setToFront}
+                    p={p} visibility={visibility} setVisibility={setVisibility}
+                />
+            </PostWrapper>
+
         )
     }
     if (post.type === "cita") {
         return(
-            <div className={visibility? {} : style.container}>
-                <div id={!visibility && style['mobile-container']} style={!visibility? {width: "30%"} : {}}>
-                    {!visibility && <div className="logo post-logo">Zahir.</div>}
-                    <QuotePost
-                        post={post} mode={mode} setPopUp={setPopUp}
-                        loading={loading} liked={liked} setToFront={setToFront}
-                        p={p} visibility={visibility} setVisibility={setVisibility}
-                    />
-                </div>
-            </div>
+            <PostWrapper post={post} ar={ar} size={size} ancho={ancho} visibility={visibility}>
+                <QuotePost
+                    post={post} mode={mode} setPopUp={setPopUp}
+                    loading={loading} liked={liked} setToFront={setToFront}
+                    p={p} visibility={visibility} setVisibility={setVisibility}
+                />
+            </PostWrapper>
         )
     }
     if (post.type === "video") {
         return(
-            <div className={visibility? {} : style.container}>
-                <div id={!visibility && style['mobile-container']} style={!visibility?  ar >= 100?  (ar >= 170? {width:"23%"}: {width: "32%"}) : {width: "50%"} : {}}>
-                    {!visibility && <div className="logo post-logo">Zahir.</div>}
-                    <VideoPost 
-                        post={post} mode={mode} setPopUp={setPopUp} 
-                        loading={loading} liked={liked} setToFront={setToFront}
-                        p={p} visibility={visibility} setVisibility={setVisibility}
-                    />
-                </div>
-            </div>
+            <PostWrapper post={post} ar={ar} size={size} ancho={ancho} visibility={visibility}>
+                <VideoPost 
+                    post={post} mode={mode} setPopUp={setPopUp} 
+                    loading={loading} liked={liked} setToFront={setToFront}
+                    p={p} visibility={visibility} setVisibility={setVisibility}
+                />
+            </PostWrapper>
         )
     }
     if (post.type === "video-file") {
         return (
-            <div className={visibility? {} : style.container}>
-                <div id={!visibility && style['mobile-container']} style={!visibility? {maxWidth: '50vw', maxHeight: '90vh'} : {}}>
-                    {!visibility && <div className="logo post-logo">Zahir.</div>}
-                    <VideoFilePost
-                        post={post} mode={mode} setPopUp={setPopUp}
-                        loading={loading} liked={liked} setToFront={setToFront}
-                        p={p} setVisibility={setVisibility} visibility={visibility}
-                    />
-                </div>
-            </div>
+            <PostWrapper post={post} ar={ar} size={size} ancho={ancho} visibility={visibility}>
+                <VideoFilePost
+                    post={post} mode={mode} setPopUp={setPopUp}
+                    loading={loading} liked={liked} setToFront={setToFront}
+                    p={p} setVisibility={setVisibility} visibility={visibility}
+                />
+            </PostWrapper>
 
         )
     }
