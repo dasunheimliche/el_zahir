@@ -15,7 +15,6 @@ import style from '../styles/auth.module.css'
 import baseURL from '../services/baseURL'
 
 
-
 const Login = ()=> {
     let [username, setUsername] = useState('')
     let [password, setPassword] = useState('')
@@ -23,12 +22,14 @@ const Login = ()=> {
 
     let dispatch = useDispatch()
 
+    // ! usar react query en lugar del useEffect
+
     useEffect(()=> {
         axios.get('https://zahir-api.onrender.com/api/register')
             .then(()=> {
                 console.log("waking up zahir onrender server")
             })
-	}, []);
+	}, []); 
 
     let login = async (e) => {
         e.preventDefault();

@@ -27,8 +27,8 @@ const OtherUserHome = ({setUser})=> {
     let user = useSelector(state => state.user.value)
 
     // USESTATES
-    let [sticky,  setSticky]  = useState(false)
-    let [popUp,   setPopUp]   = useState({type: 'none', post: null})
+    let [sticky,  setSticky ] = useState(false)
+    let [popUp,   setPopUp  ] = useState({type: 'none', post: null})
     let [toFront, setToFront] = useState(false)
 
     let [otherUser, setOtherUser] = useState({id:null, posts:[], followers: [], following: []})

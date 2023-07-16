@@ -13,6 +13,8 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
 
     let user = useSelector(state => state.user.value)
 
+    // ! use react query en lugar de esto
+
     useEffect(()=> {
         axios.get(baseURL.concat('/api/comment'), { params: { commentId: comment.id } })
         .then(({data: comments}) => {

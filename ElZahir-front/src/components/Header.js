@@ -46,7 +46,9 @@ const Header = ({sticky, setSticky, toFront, mode})=> {
             50;
       
         setSticky(window.scrollY >= stickyValue && !sticky);
-      };
+    };
+
+    // ! usar react query
 
     useEffect(() => {
         searchUsers(searchQuery)

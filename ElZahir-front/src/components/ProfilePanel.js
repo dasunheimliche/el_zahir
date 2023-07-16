@@ -68,7 +68,7 @@ const ProfilePanel = ({setOtherUser, otherUser, posts, sticky, setPopUp, mode})=
         } finally {
             setLoadingState(false);
         }
-      };
+    };
 
     return (
         <div className={sticky === false? style.userCard : `${style.userCard} ${style['sticky-userCard']}`}>

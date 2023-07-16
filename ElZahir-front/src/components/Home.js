@@ -33,10 +33,9 @@ const Home = ()=> {
 
     let [toFront,    setToFront      ] = useState(false) 
 
-    let [myPosts,    setMyPosts      ] = useState([])
     let [tab,        setTab          ] = useState("me")
 
-
+    let [myPosts,    setMyPosts      ] = useState([])
     let [disPosts,   setDiscoverPosts] = useState([])
     let [follPosts,  setFollPosts    ] = useState([])
 
@@ -59,21 +58,15 @@ const Home = ()=> {
     myImage.src = '../images/trippy-back3.gif';
 
     // USE EFFECTS
-    const fetchUserPosts = async () => {
-        try {
-          const { data:allposts } = await axios.get(baseURL.concat('/api/post/my-posts'), getConfig());
-          setMyPosts(allposts.reverse());
-        } catch (error) {
-          console.error(error)
-        }
-    };
-
+    // ! hacer el fetch en un componente separado
     useEffect(()=> {
         fetchUserPosts()
         fetchFollowingPosts()
         fecthDiscoverPosts()
     }, [user]) // eslint-disable-line
 
+
+    // ! eliminar este useEffect
     useEffect(()=> {
         if (params === "me") {
             setTab("me")
@@ -87,6 +80,7 @@ const Home = ()=> {
         }
     }, []) // eslint-disable-line
 
+    // ! reemplazar con react query
     useEffect(()=> {
         axios.get('https://zahir-api.onrender.com/api/register')
             .then(()=> {
@@ -94,9 +88,7 @@ const Home = ()=> {
             })
 	}, []);
 
-
-    // ESTO DEBERIA IR EN UN COMPONENTE
-
+    // ! separar en un componente
     const renderPosts = (posts) => {
         return posts.map((post) => (
           <Post
@@ -111,6 +103,16 @@ const Home = ()=> {
 
 
     // EVENT HANDLERS
+
+    const fetchUserPosts = async () => {
+        try {
+            const { data:allposts } = await axios.get(baseURL.concat('/api/post/my-posts'), getConfig());
+            setMyPosts(allposts.reverse());
+        } catch (error) {
+            
+        }
+    };
+
     const fetchFollowingPosts = async()=> {
         try {
             const { data: allposts } = await axios.get(baseURL.concat('/api/post/following-posts'), getConfig())

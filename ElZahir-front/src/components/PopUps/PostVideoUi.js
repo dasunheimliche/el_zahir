@@ -152,9 +152,9 @@ const PostVideoUI = ({setPopUp})=> {
                 <img id={style['header-img']} className={style['header-img']} src={videoButton} alt="text-button"></img>
             </div>
             <div className={style.main}>
-                <input className={`${style.input} ${style.title}`}  placeholder="Title"                             onChange={(e)=> setTitle(e.target.value)}        value={title}       autoComplete='off' required/>
-                <input className={`${style.input} ${style.subtitle}`}    placeholder="Description"                       onChange={(e)=> setSubtitle(e.target.value)}     value={subtitle}    autoComplete='off'/>
-                <input className={`${style.input} ${style.subtitle}`}     placeholder="Optional: Aspect ratio (Ej.: 16:9)" onChange={(e)=> setAspectRatio(e.target.value)}  value={aspectRatio} autoComplete='off' disabled={mode !== "url"? true : false} />
+                <input className={`${style.input} ${style.title}`}    placeholder="Title"                              onChange={(e)=> setTitle(e.target.value)}        value={title}       autoComplete='off' required/>
+                <input className={`${style.input} ${style.subtitle}`} placeholder="Description"                        onChange={(e)=> setSubtitle(e.target.value)}     value={subtitle}    autoComplete='off'/>
+                <input className={`${style.input} ${style.subtitle}`} placeholder="Optional: Aspect ratio (Ej.: 16:9)" onChange={(e)=> setAspectRatio(e.target.value)}  value={aspectRatio} autoComplete='off' disabled={mode !== "url"? true : false} />
                 
                 <div className={style.uploader}>
                     <textarea className={`${style.input} ${style['file-textarea']}`} style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off' disabled />
