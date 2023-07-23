@@ -1,7 +1,7 @@
 // IMPORTS
 import { useState, useRef }       from "react"
 import { useQuery }               from '@tanstack/react-query'
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import Header       from './Header'
 import ProfilePanel from './ProfilePanel'
