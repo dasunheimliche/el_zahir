@@ -1,17 +1,20 @@
-require('dotenv').config()
-const bcrypt = require('bcrypt')
-const Post = require('../models/Post')
-const userRouter = require('express').Router() 
-const User = require('../models/User')
-const jwt = require('jsonwebtoken')
 
+const bcrypt   = require('bcrypt')
+const jwt      = require('jsonwebtoken')
 const Imagekit = require('imagekit')
-const fs = require('fs/promises')
+const fs       = require('fs/promises')
+
+const Post = require('../models/Post')
+const User = require('../models/User')
+
+const userRouter = require('express').Router() 
+
+const config = require('../utils/config')
 
 const imagekit = new Imagekit({
-    publicKey: "public_6DnujADgzOoT69JIc0gb33SS7C4=",
-    privateKey: "private_ss2dmZXrdv1OBjRHEEtg6wH09GQ=",
-    urlEndpoint: "https://ik.imagekit.io/vo7gdb6tl"
+    publicKey: config.IMGKIT_PUBLIC_KEY,
+    privateKey: config.IMGKIT_PRIVATE_KEY,
+    urlEndpoint: config.IMGKIT_URL_ENDPOINT
 })
 
 const uniqueParam = Math.floor(Math.random() * 1000000);
@@ -25,6 +28,23 @@ const getToken = (request)=> {
     }
     return null
 }
+
+userRouter.post('/me', async(req, res) => {
+    const token = getToken(req)
+
+    if (!token) return
+  
+    const decodedToken = await jwt.verify(token, config.SECRET)
+    if (!token || !decodedToken.id) {
+        res.status(401).json({error: 'token missing or invalid'})
+    }
+    const user = await User.findById(decodedToken.id)
+    if (user) {
+        res.json(user)
+    } else {
+        res.status(404).json({ error: 'User not found' })
+    }
+})
 
 userRouter.post('/', async (req, res) => {
 
@@ -51,7 +71,7 @@ userRouter.get('/', async (req, res) => {
 
     const token = getToken(req)
 
-    const decodedToken = jwt.verify(token, process.env.SECRET)
+    const decodedToken = jwt.verify(token, config.SECRET)
 
     if (!token || !decodedToken.id) {
         response.status(401).json({error: 'token missing or invalid'})
@@ -62,15 +82,12 @@ userRouter.get('/', async (req, res) => {
 
 })
 
-// get toma dos argumentos, la dirección de la petición que se va a responder, y una función que toma como argumentos...
-// ... la petición, que contiene los datos enviados por el usuario, que en principio solo es la dirección de la solicitus misma...
-// ... o puede contener un objeto. El segundo argumento es una función predefinida que permite enviar la respuesta.
 
 userRouter.get('/:id', async (request, response) => {
 
     const token = getToken(request)
 
-    const decodedToken = jwt.verify(token, process.env.SECRET)
+    const decodedToken = jwt.verify(token, config.SECRET)
 
     if (!token || !decodedToken.id) {
         response.status(401).json({error: 'token missing or invalid'})
@@ -91,7 +108,7 @@ userRouter.put('/follow/:id', async (request, response)=> {
 
     const token = getToken(request)
 
-    const decodedToken = jwt.verify(token, process.env.SECRET)
+    const decodedToken = jwt.verify(token, config.SECRET)
 
     if (!token || !decodedToken.id) {
         response.status(401).json({error: 'token missing or invalid'})
@@ -123,7 +140,7 @@ userRouter.put('/unfollow/:id', async (request, response)=> {
 
     const token = getToken(request)
 
-    const decodedToken = jwt.verify(token, process.env.SECRET)
+    const decodedToken = jwt.verify(token, config.SECRET)
 
     if (!token || !decodedToken.id) {
         response.status(401).json({error: 'token missing or invalid'})
@@ -155,7 +172,7 @@ userRouter.put('/profile-image/:id', async (request, response)=> {
 
     const token = getToken(request)
 
-    const decodedToken = jwt.verify(token, process.env.SECRET)
+    const decodedToken = jwt.verify(token, config.SECRET)
 
     if (!token || !decodedToken.id) {
         response.status(401).json({error: 'token missing or invalid'})
@@ -185,8 +202,6 @@ userRouter.put('/profile-image/:id', async (request, response)=> {
 
             fs.unlink(uploadPath)
 
-            // const user = await User.findById(id)
-
             user.profileImg = promesa.url
             await user.save()
 
@@ -201,7 +216,6 @@ userRouter.put('/profile-image/:id', async (request, response)=> {
             folder: `/zahir/users/${user._id.toString()}/profile_image`
         })
 
-        // const user = await User.findById(id)
         user.profileImg = `${promesa.url}?${uniqueParam}`
         await user.save()
 
@@ -215,7 +229,7 @@ userRouter.put('/profile-panel-image/:id', async (request, response)=> {
 
     const token = getToken(request)
 
-    const decodedToken = jwt.verify(token, process.env.SECRET)
+    const decodedToken = jwt.verify(token, config.SECRET)
 
     if (!token || !decodedToken.id) {
         response.status(401).json({error: 'token missing or invalid'})

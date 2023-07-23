@@ -22,11 +22,12 @@ const PopUps = ({popUp, setPopUp, user})=> {
             {popUp.type === 'cita'          && <PostCitaUi    setPopUp={setPopUp} />}
             {popUp.type === 'video'         && <PostVideoUi   setPopUp={setPopUp} />}
                     
-            {popUp.type === 'changePI'      && <ChangePI      setPopUp={setPopUp} />}
-            {popUp.type === 'changePanImg'  && <ChangePanImg  setPopUp={setPopUp} />}
+            {popUp.type === 'changePI'      && <ChangePI      setPopUp={setPopUp} user={user} />}
+            {popUp.type === 'changePanImg'  && <ChangePanImg  setPopUp={setPopUp} user={user}/>}
                 
             {popUp.type === 'comments'      && <Comments      setPopUp={setPopUp} post={popUp.post} />}
             {popUp.type === 'delete'        && <Delete        setPopUp={setPopUp} post={popUp.post}/>}
+            
             {popUp.type === 'seeFollowers'  && <Followers     setPopUp={setPopUp} user={user}/>}
             {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} user={user}/>}
         </div>

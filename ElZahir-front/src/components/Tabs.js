@@ -12,7 +12,7 @@ const Tabs = ({sticky, tab, setTab})=> {
         navigate('/home/following')
     }
 
-    const backtome = async()=> {
+    const toHome = ()=> {
         setTab("me")
         navigate('/home')
     }
@@ -24,7 +24,7 @@ const Tabs = ({sticky, tab, setTab})=> {
 
     return(
         <div className={sticky? `${style.tabs} ${style['sticky-tabs']}` : style.tabs}>
-            <span onClick={backtome}     className={tab === 'me'?        `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>ME</span>
+            <span onClick={toHome}       className={tab === 'me'?        `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>ME</span>
             <span onClick={toFollowing}  className={tab === 'following'? `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>FOLLOWING</span>
             <span onClick={toDiscover}   className={tab === 'discover'?  `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>EXPLORE</span>
         </div>

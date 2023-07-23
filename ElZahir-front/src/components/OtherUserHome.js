@@ -1,114 +1,81 @@
 // IMPORTS
-import axios from 'axios'
-import { useState, useEffect, useRef } from "react"
-import Header from './Header'
-import ProfilePanel from './ProfilePanel'
-import Post from './Post'
-
-import Comments from './PopUps/Comments'
-
-import { useSelector } from 'react-redux'
+import { useState, useRef }       from "react"
+import { useQuery }               from '@tanstack/react-query'
 import { useParams, useNavigate } from 'react-router-dom';
 
+import Header       from './Header'
+import ProfilePanel from './ProfilePanel'
+import Post         from './Post'
+import Comments     from './PopUps/Comments'
+import Followers    from './PopUps/Followers'
+import Following    from './PopUps/Following'
+import BottomLogo   from './BottomLogo'
+
 import useElementAtTopOfPage from '../hooks/useElementAtTopOfPage'
-import useInnerHeight from '../hooks/userInnerHeight';
+import useInnerHeight        from '../hooks/userInnerHeight';
 
-import baseURL from '../services/baseURL'
-
-import Followers from './PopUps/Followers'
-import Following from './PopUps/Following'
-import BottomLogo from './BottomLogo'
+import { getUser }        from '../services/userServices'
+import { fetchUserPosts } from '../services/postServices'
+import { scrollToTop }    from "../services/helpers";
 
 import style from  '../styles/home.module.css'
-import getConfig from '../services/getConfig'
 
-const OtherUserHome = ({setUser})=> {
+const OtherUserHome = ({setUser, me})=> {
 
-    let user = useSelector(state => state.user.value)
+    const [sticky,  setSticky  ] = useState(false)
+    const [popUp,   setPopUp   ] = useState({type: 'none', post: null})
+    const [toFront, setToFront ] = useState(false)
 
-    // USESTATES
-    let [sticky,  setSticky ] = useState(false)
-    let [popUp,   setPopUp  ] = useState({type: 'none', post: null})
-    let [toFront, setToFront] = useState(false)
-
-    let [otherUser, setOtherUser] = useState({id:null, posts:[], followers: [], following: []})
-
-    const ref = useRef(null)
-    const parentRef = useRef(null)
-    const isAtTop = useElementAtTopOfPage(ref, parentRef)
-    const innerHeight   = useInnerHeight()
-
-    const navigate = useNavigate()
     const { "*": userID } = useParams()
+    const childRef        = useRef(null)
+    const parentRef       = useRef(null)
+    const isAtTop         = useElementAtTopOfPage(childRef, parentRef)
+    const innerHeight     = useInnerHeight()
 
-    const fetchUser = async () => {
-        const loggedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
-        const token = `Bearer ${loggedUser.token}`;
+    const {data: {data: otherUser} = {}}  = useQuery({
+        queryKey: ["USER", userID],
+        queryFn: ()=>getUser(userID)
+    })
 
-        const config = {
-            headers: {
-                Authorization: token
-            },
-            params: {userID}
-        }
+    const {data: {data: allposts} = {}} = useQuery({
+        queryKey: ["USER_POSTS", userID],
+        queryFn: ()=>fetchUserPosts(userID)
+    })
 
-        try {
-            const { data:user } = await axios.get(baseURL.concat(`/api/users/${userID}`), getConfig())
-            const { data:allposts} = await axios.get(baseURL.concat('/api/post/user-posts'), config)
-            const updatedUser = {...user, posts:allposts.reverse()}
-            setOtherUser(updatedUser)
-        } catch (error) {
-            navigate(`/`)
-        }
-    }
-
-    useEffect(() => {
-        if (userID !== '' && userID.length === 24) {
-            fetchUser()
-        } else {
-            navigate(`/`)
-        }
-    }, [userID]) //eslint-disable-line
-    
     const cargarPosts = (posts)=> {
-        return posts.map(post => <Post key={post.id} toFront={toFront} setToFront={setToFront} setPopUp={setPopUp} mainUser={user} user={user} setUser={setUser} post={post} type={post.type} />)
+        return posts.map(post => <Post key={post.id} toFront={toFront} setToFront={setToFront} setPopUp={setPopUp} mainUser={me} user={me} setUser={setUser} post={post} type={post.type} />)
     }
 
-    const scrollToTop = () => {
-        parentRef.current.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    };
-
-
-    // RENDER
     return (
         <div className={style.main}>
             <div ref={parentRef} className={style['mobile-main']}>
-                <div ref={ref}></div>
+                <div ref={childRef}></div>
                 <div className={popUp.type === 'none'? `${style.popups} ${style.hidden}` : popUp.post? style.popups : `${style.popups} ${style.open}`} >
                     {popUp.type === 'comments'      && <Comments      setPopUp={setPopUp} post={popUp.post} />}
                     {popUp.type === 'seeFollowers'  && <Followers     setPopUp={setPopUp} user={otherUser}/>}
                     {popUp.type === 'seeFollowings' && <Following     setPopUp={setPopUp} user={otherUser}/>}
                 </div>
 
-
                 <Header sticky={sticky} setSticky={setSticky} toFront={toFront} mode={"desktop"}/>
   
-
                 <div className={!toFront? style.content : `${style.content} ${style.toFront}`}>
-                    <div className={style['left-side']}>
-                        <ProfilePanel setUser={setUser} user={user} setOtherUser={setOtherUser} otherUser={otherUser} sticky={sticky} setPopUp={setPopUp} popUp={popUp} mode={'user'}/>
-                    </div>
+                    {otherUser && <div className={style['left-side']}>
+                        <ProfilePanel 
+                            key={userID}
+                            user={me} 
+                            otherUser={otherUser} 
+                            sticky={sticky} 
+                            setPopUp={setPopUp} 
+                            mode={'user'}/>
+                    </div>}
                     <div className={style['right-side']}>
                         <div className={sticky === false? `${style.grid} ${style.noTab}` : `${style.grid} ${style['sticky-grid']} ${style['other-user-sticky-grid']}`}>
-                            {cargarPosts(otherUser.posts? otherUser.posts : [])}
+                            {cargarPosts(allposts? allposts : [])}
                         </div>
                     </div>
                 </div>
             </div>
-            <BottomLogo toFront={toFront} innerHeight={innerHeight} isAtTop={isAtTop} scrollToTop={scrollToTop} />
+            <BottomLogo reference={parentRef} toFront={toFront} innerHeight={innerHeight} isAtTop={isAtTop} scrollToTop={scrollToTop} />
         </div>
     )
 }

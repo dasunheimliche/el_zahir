@@ -1,40 +1,50 @@
+import {useState, useEffect} from 'react'
+import { useParams }         from 'react-router-dom'
+import { useQuery }          from '@tanstack/react-query'
 
-
-import SharedTextPost from './Posts/SharedTextPost'
-import SharedQuotePost from './Posts/SharedQuotePost'
-import SharedImagePost from './Posts/SharedImagePost'
-import SharedVideoPost from './Posts/SharedVideoPost'
+import SharedTextPost      from './Posts/SharedTextPost'
+import SharedQuotePost     from './Posts/SharedQuotePost'
+import SharedImagePost     from './Posts/SharedImagePost'
+import SharedVideoPost     from './Posts/SharedVideoPost'
 import SharedVideoFilePost from './Posts/SharedVideoFilePost'
 
-import {useState, useEffect} from 'react'
-import axios from 'axios'
-import style from '../styles/post.module.css'
-import baseURL from '../services/baseURL'
+import { doNothing }                       from '../services/helpers'
+import { fetchPost }                       from '../services/postServices'
+import { LOCAL_URL_POST, VERCEL_URL_POST } from '../services/constants'
 
-import { useNavigate, useParams } from 'react-router-dom'
+import style from '../styles/post.module.css'
+
+const postURL = LOCAL_URL_POST || VERCEL_URL_POST
 
 const SharedPost = ()=> {
 
-    let [post, setPost] = useState('')
-
-    // let postURL = `http://zahir.onrender.com/#/post/${post.id}`
-    let postURL = `http://localhost:3000/#/post/${post.id}`
-
-    const navigate = useNavigate() // eslint-disable-line
     const { "*": postID } = useParams()
 
-    useEffect(()=> {
-        axios.get(baseURL.concat(`/api/post/${postID}`))
-        .then(post => setPost(post.data))
-    }, []) // eslint-disable-line
+    const {data: {data: post} = {}} = useQuery({
+        queryKey: ["POST", postID],
+        queryFn: ()=>fetchPost(postID)
+    })
 
-    // IMAGE POST
-    let [size, setSize] = useState({width: 0, height: 0})
-    let [ancho, setAncho] = useState((size.width/size.height)*window.innerHeight)
+    const URL = `http://${postURL}/${post?.id}`
+
+    const size = {width: post?.mediaWidth, height: post?.mediaHeight}
+    const [ancho, setAncho] = useState((size.width/size.height)*window.innerHeight)
 
     const handleResize = () => {
         setAncho((size.width / size.height) * (window.innerHeight - 200));
     };
+
+    const aspectRatioString = post?.type === "video" && post?.videoAr.split(':')
+    const aspectRatioNumber = post?.type === "video" && (Number(aspectRatioString[1])/Number(aspectRatioString[0])) * 100
+
+    const sharePost = ()=> {
+        navigator.clipboard.writeText(URL)
+    }
+
+    const p = {
+        share: sharePost,
+        doNothing,
+    }
 
     useEffect(() => {
         window.addEventListener('resize', handleResize);
@@ -45,108 +55,56 @@ const SharedPost = ()=> {
         };
     }, [size.width, size.height]); //eslint-disable-line
 
-    useEffect(() => {
-        const img = new Image();
-        img.addEventListener('load', function () {
-          setSize({ width: this.naturalWidth, height: this.naturalHeight });
-        });
-        img.src = post.imagePost;
-      }, [post.imagePost]);
-
-    // VIDEO POST
-
-    let aspectr
-    let width
-    let height
-    let ar
-
-    if (post.type === "video") {
-        aspectr = post.videoAr.split(':')
-        width = Number(aspectr[1])
-        height = Number(aspectr[0])
-        ar = (width/height) * 100
-    }
-
-    const doNothing = (e)=> {
-        e.preventDefault()
-    }
-
-    const clipboard = ()=> {
-        navigator.clipboard.writeText(postURL)
-    }
-
-    const p = {
-        share: clipboard,
-        doNothing,
-    }
-
-    
-    if (post.type === "image") {
+ 
+    if (post?.type === "image") {
         return (
             <div className={style.container}>
-                <div id={style['mobile-container']} style={{width: `${ancho}px`, maxWidth: '90vw'}}>
+                <div id={style['mobile-image-container']} style={(size.height > (window.innerHeight - 150))? {width: `${ancho}px`, maxWidth: '90vw'} : {}}>
                     <div className="logo post-logo">Zahir.</div>
-                    <SharedImagePost
-                        post={post}  
-                        p={p}
-                    />
+                    <SharedImagePost post={post}  p={p}/>
                 </div>
             </div>
-
         )
     }
 
-    if (post.type === "text") {
+    if (post?.type === "text") {
         return (
             <div className={style.container}>
                 <div id={style['mobile-container']} style={{width: "30%"}}>
                     <div className="logo post-logo">Zahir.</div>
-                    <SharedTextPost
-                        post={post}
-                        p={p}
-                    />
+                    <SharedTextPost post={post} p={p}/>
                 </div>
             </div>
         )
     }
-    if (post.type === "cita") {
+    if (post?.type === "cita") {
         return(
             <div className={style.container}>
                 <div id={style['mobile-container']} style={{width: "30%"}}>
                     <div className="logo post-logo">Zahir.</div>
-                    <SharedQuotePost
-                        post={post}
-                        p={p}
-                    />
+                    <SharedQuotePost post={post} p={p}/>
                 </div>
             </div>
         )
     }
-    if (post.type === "video") {
+    if (post?.type === "video") {
         return(
             <div className={style.container}>
-                <div id={style['mobile-container']} style={ar >= 100?  (ar >= 170? {width:"23%"}: {width: "32%"}) : {width: "50%"} }>
+                <div id={style['mobile-container']} style={aspectRatioNumber >= 100?  (aspectRatioNumber >= 170? {width:"23%"}: {width: "32%"}) : {width: "50%"} }>
                     <div className="logo post-logo">Zahir.</div>
-                    <SharedVideoPost 
-                        post={post}  
-                        p={p}
-                    />
+                    <SharedVideoPost post={post} p={p}/>
                 </div>
             </div>
         )
     }
-    if (post.type === "video-file") {
+    if (post?.type === "video-file") {
         return (
             <div className={style.container}>
                 <div id={style['mobile-container']} style={{maxWidth: '50vw', maxHeight: '90vh'} }>
                     <div className="logo post-logo">Zahir.</div>
-                    <SharedVideoFilePost
-                        post={post}
-                        p={p}
-                    />
+                    <SharedVideoFilePost post={post} p={p}/>
                 </div>
             </div>
-
         )
     }
 }

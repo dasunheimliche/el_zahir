@@ -1,31 +1,44 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
-import baseURL from '../services/baseURL'
+import { useState } from "react"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
-import { useSelector} from 'react-redux'
+import { getCurrentUser }   from "../services/userServices"
+import { fetchSubComments, deleteComment } from "../services/commentServices"
 
-import style from '../styles/comments.module.css'
+import { useQueryClient } from "@tanstack/react-query"
 
-const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload, setValue})=> {
+import style   from '../styles/comments.module.css'
 
-    let [subComments, setSubComments] = useState('')
-    let [loading,     setLoading]     = useState(false)
+const Comment = ({post, comment, setPlaceholder, setCommentID, commentID,  setValue})=> {
 
-    let user = useSelector(state => state.user.value)
+    let [loading, setLoading] = useState(false)
 
-    // ! use react query en lugar de esto
+    const {data: {data: user} = {}} = useQuery({ queryKey: ['ME'], queryFn: getCurrentUser})
+    const {data: {data: subComments} = {}} = useQuery({queryKey: ["GET_SUBCOMMENTS", comment.id], queryFn: ()=>fetchSubComments(comment)})
 
-    useEffect(()=> {
-        axios.get(baseURL.concat('/api/comment'), { params: { commentId: comment.id } })
-        .then(({data: comments}) => {
-            let resultados = comments.filter(comment0 => comment0.commentID === comment.id)
-            setSubComments(resultados)
-        })
-        .catch(error => {
-            console.error(error);
-        });
-    }, [reload]) //eslint-disable-line
+    const client = useQueryClient()
 
+    const { mutate: handleDeleteComment } = useMutation({
+        mutationFn: deleteComment,
+        onMutate: ()=> setLoading(true),
+        onSuccess: (_, variables)=>{
+            
+            if (variables.comment.commentID) {
+                client.setQueryData(["GET_SUBCOMMENTS", comment.id], (old)=> {
+                    const copy = {...old}
+                    copy.data = copy.data.filter(c=>c.id !== variables.comment.id)
+                    return copy
+                })
+            } else {
+                client.setQueryData(["GET_COMMENTS", post.id], (old)=> {
+                    const copy = {...old}
+                    copy.data = copy.data.filter(c=>c.id !== variables.comment.id)
+                    return copy
+                })
+            }
+
+            setLoading(false)
+        }
+    })
 
     const sets = (commentID, user)=> {
 
@@ -34,30 +47,9 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
         setValue('')
     }
 
-    const deleteComment = async (id) => {
-        setLoading(true)
-        const user = JSON.parse(window.localStorage.getItem('loggedUser'))
-        const token = `Bearer ${user.token}`
-        const config = {
-            headers: {
-                Authorization: token
-            },
-            params: { 
-                postUserId: post.user,
-                commentUserId: comment.userID
-            }
-        }
-        try {
-            await axios.delete(baseURL.concat(`/api/comment/${id}`), config);
-            setReload((prev) => !prev);
-            setLoading(false)
-        } catch (error) {
-            console.error(error);
-            setLoading(false)
-        }
-      };
 
     const cargarComments = ()=> {
+        if (!subComments) return
         return subComments.map((comment0, i) => {
             return (
                 <div key={i} className={style['sub-comment']}>
@@ -65,7 +57,7 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
                     <div className={style['sub-content']}>{comment0.comment}</div>
                     <div className={style['comment-socials']}>
                         <div className="p" onClick={()=> sets(comment.id, comment0.username)}>Answer</div>
-                        {comment0.username === user.username || post.username === user.username? <div className="p" onClick={loading? undefined : ()=>deleteComment(comment0.id)}>Delete</div> : console.log}
+                        {comment0.username === user.username || post.username === user.username? <div className="p" onClick={loading? undefined : ()=>handleDeleteComment({post, comment: comment0})}>Delete</div> : console.log}
                     </div>
                 </div>
             )
@@ -78,7 +70,7 @@ const Comment = ({post, comment, setReload, setPlaceholder, setCommentID, reload
             <div className={style['comment-content']}>{comment.comment}</div>
             <div className={style['comment-socials']}>
                 <div className="p" onClick={()=> sets(comment.id, comment.username)}>Answer</div>
-                {comment.username === user.username || post.username === user.username? <div className="p" onClick={loading? undefined : ()=>deleteComment(comment.id)}>Delete</div> : console.log}
+                {comment.username === user.username || post.username === user.username? <div className="p" onClick={loading? undefined : ()=>handleDeleteComment({post, comment})}>Delete</div> : console.log}
             </div>
             {subComments !== ''? cargarComments() : console.log()}
         </div>

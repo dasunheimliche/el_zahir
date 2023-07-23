@@ -1,40 +1,23 @@
 
-import { useEffect, useState } from 'react'
-import baseURL from '../../services/baseURL'
-import getConfig from '../../services/getConfig'
-
-import axios from 'axios'
 import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+
+import { getUserList } from '../../services/userServices'
 
 import style from '../../styles/popups.module.css'
 
-
 const Following = ({setPopUp, user})=> {
-    
-    let [users, setUsers] = useState([])
-    let [loading, setLoading] = useState(true)
-    // let user = useSelector(state => state.user.value)
-    // let params = useParams()
 
-    useEffect(()=> {
-        axios.get(baseURL.concat('/api/users'), getConfig())
-        .then(users => {
-            
-            if (user.followers) {
-                // const user = users.data.find(person => person.id === params["*"])
-                let followers = users.data.filter(person => user.followers.includes(person.id))
-                setUsers(followers)
-            } else {
-                let followers = users.data.filter(person => user.followers.includes(person.id))
-                setUsers(followers)
-            }
+    const {data: {data: users} = {}, isLoading} = useQuery({
+        queryKey: ["GET_USER_LIST"], 
+        queryFn: async ()=> await getUserList()
+    })
 
-            setLoading(false)
-
-        })
-    }, []) // eslint-disable-line
+    const followers = users?.filter(person => user.followers.includes(person.id))
 
     const loadUserList = (list)=> {
+
+        if (!list) return
 
         return list.map((person, i) => {
             return (
@@ -56,11 +39,11 @@ const Following = ({setPopUp, user})=> {
             </div>
             <div className={style.counter}>
                 <span>Followers: </span>
-                {loading && <div className={ `${style.loading} ${style['little-loading']}` } >{" "}</div>}
-                {!loading && <span>{users.length}</span>}
+                {isLoading && <div className={ `${style.loading} ${style['little-loading']}` } >{" "}</div>}
+                {!isLoading && <span>{followers.length}</span>}
             </div>
             <div className={style['list-container']}>
-                {loadUserList(users)}
+                {loadUserList(followers)}
             </div>
             
         </div>

@@ -1,74 +1,59 @@
 
-// DEPENDENCIES
-import axios from 'axios'
-import { useEffect, useState } from "react"
-import { useSelector, useDispatch} from 'react-redux'
-import { userSlice} from '../reducers/userSlice'
+import { useState }              from "react"
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+
+import { followUser, unfollowUser, getCurrentUser } from '../services/userServices'
 
 import Header from './Header'
 
-// BSE URL
-import baseURL from '../services/baseURL'
-
-// CSS
 import style from '../styles/userCard.module.css'
-import getConfig from '../services/getConfig'
 
+const ProfilePanel = ({otherUser, posts, sticky, setPopUp, mode})=> {
 
-const ProfilePanel = ({setOtherUser, otherUser, posts, sticky, setPopUp, mode})=> {
+    const {data: {data: user} = {}} = useQuery({queryKey: ['ME'], queryFn: getCurrentUser,})
 
-    // STATES
-    let user = useSelector(state => state.user.value)
-    let dispatch = useDispatch()
+    const [toggleShowButtons, setToggleShowButtons ] = useState(false)
+    const [loadingState,      setLoadingState      ] = useState(false)
 
-    let [following, setFollowing] = useState(otherUser? user.following.includes(otherUser.id) : false)
-    let [toggleShowButtons, setToggleShowButtons] = useState(false)
-    let [loadingState, setLoadingState] = useState(false)
+    const client = useQueryClient()
 
-    // USE EFFECTS
-    useEffect(()=> {
+    const isUserFollowed = otherUser && user.following.includes(otherUser.id)
 
-        if (!user || !otherUser) {
-            return
+    const { mutate: followUserHandler} = useMutation({
+        mutationFn: ()=>followUser(user, otherUser),
+        onMutate: ()=>setLoadingState(true),
+        onSuccess: ()=>{
+            client.setQueryData(["ME"], (old)=>{
+                const copy = {...old}
+                copy.data.following = copy.data.following.concat(otherUser.id)
+                return copy
+            })
+            setLoadingState(false)
         }
-        if (mode === 'user') {
-            if (user.following.includes(otherUser.id)) {
-                setFollowing(true)
-            }
+        
+    })
+
+    const { mutate: unfollowUserHandler} = useMutation({
+        mutationFn: ()=>unfollowUser(user, otherUser),
+        onMutate: ()=>setLoadingState(true),
+        onSuccess: ()=>{
+            client.setQueryData(["ME"], (old)=>{
+                const copy = {...old}
+                copy.data.following = copy.data.following.filter(id=> id !== otherUser.id)
+                return copy
+            })
+            setLoadingState(false)
         }
-    },[otherUser]) //eslint-disable-line
+        
+    })
 
-    // EVENT HANDLERS
-
-    const toggleFollow = async () => {
-        
-        setLoadingState(true);
-        try {
-            let userData
-
-            if (following) {
-                userData = await axios.put(`${baseURL}/api/users/unfollow/${otherUser.id}`, { id: user.userId }, getConfig());
-                userData = userData.data
-            } else {
-                userData = await axios.put(`${baseURL}/api/users/follow/${otherUser.id}`, { id: user.userId }, getConfig());
-                userData = userData.data
-            }
-        
-            const loggedUser = { ...user, following: userData.me.following };
-            window.localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
-            dispatch(userSlice.actions.update(loggedUser));
-        
-            const currentSuser = { ...otherUser, followers: userData.user.followers };
-            window.localStorage.setItem('currentSuser', JSON.stringify(currentSuser));
-            setOtherUser(currentSuser);
-        
-            setFollowing((prevState) => !prevState);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoadingState(false);
+    function toggleFollow () {
+        if (isUserFollowed) {
+            unfollowUserHandler()
+        } else {
+            followUserHandler()
         }
-    };
+    }
 
     return (
         <div className={sticky === false? style.userCard : `${style.userCard} ${style['sticky-userCard']}`}>
@@ -94,7 +79,7 @@ const ProfilePanel = ({setOtherUser, otherUser, posts, sticky, setPopUp, mode})=
                 </div>
 
                 <div className={mode === 'user'? `${style.separator} ${style['mobile-separator']}` :style.separator}>
-                    {mode === 'user'&& <div className={following === true? `${style.follow} ${style.unfollow} p`  : `${style.follow} p` } onClick={!loadingState && toggleFollow}>{following? 'Followed': 'Follow'}</div>}
+                    {mode === 'user'&& <div className={isUserFollowed? `${style.follow} ${style.unfollow} p`  : `${style.follow} p` } onClick={!loadingState && toggleFollow}>{isUserFollowed? 'Followed': 'Follow'}</div>}
                 </div>
 
                 <div className={style.stats}>

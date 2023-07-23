@@ -1,5 +1,4 @@
 
-// lo siguiente son los modelos a los que accede el router
 require('dotenv').config()
 const Post = require('../models/Post')
 const Comment = require('../models/Comment')
@@ -17,33 +16,25 @@ const getToken = (request)=> {
     return null
 }
 
-
-// para crear un router, debo usar "require('express').Router()"
-// este router ma dará acceso de los métodos get, post, delete, etc.
 const commentRouter = require('express').Router() 
 
-// estos métodos aceptan un primer argumento que es un string q describe la ruta relativa...
-// un ultimo argumento que consiste en la función controla la solicitud...
-// esta función posee dos argumentos, request con la informacion de la solicitud enviada desde el cliente...
-// y respuesta, que posee metodos para responder
 commentRouter.get('/', async (request, response)=> {
-    // el método .find() accede a un modelo y resibe como argumento un objeto, con la consulta.
-    // si el objeto está vació, devuelve todos los documentos de ese modelo.
-    // recordar que devuelve una promesa.
+
     const postId = request.query.postId
     const commentId = request.query.commentId
 
-    // con .json(devuelvo la respuesta del modelo como json, ya que la respuesta no es un objeto de javascript comun)
-    let comments
-    if (postId) {
-        comments = await Comment.find({postID: new mongoose.Types.ObjectId(postId)});
-    } else if (commentId)  {
-        comments = await Comment.find({commentID: new mongoose.Types.ObjectId(commentId)});
-    } else {
-        response.status(400).send('Missing query parameter.');
-    }
+    try {
+        let comments
+        if (postId) {
+            comments = await Comment.find({postID: new mongoose.Types.ObjectId(postId)});
+        } else if (commentId)  {
+            comments = await Comment.find({commentID: new mongoose.Types.ObjectId(commentId)});
+        }
 
-    response.json(comments);
+        response.json(comments)
+    } catch(error) {
+        response.status(400).send('Missing query parameter.')
+    }
 
 })
 
@@ -100,7 +91,7 @@ commentRouter.post('/', async (req, res) => {
         username,
         comment,
         date: new Date(),
-        postID: post._id,
+        postID: commentID? null : post._id,
         commentID: commentID || null,
         userID: userID
     });

@@ -1,72 +1,40 @@
-// DEPENDENCIES
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-// CSS
 import style from '../styles/auth.module.css'
 
-// BASE URL
-import baseURL from '../services/baseURL'
-
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { fetchInvalidUsernames, signUp } from '../services/authServices'
 
 const Register = ()=> {
 
-    // STATES
-    let [inputs, setInputs] = useState({ name: null, lastname: null, username: null, email: null, password: '', password2: '' })
-    let [validUsers, setValidUsers] = useState([])
+    const [ inputs, setInputs   ] = useState({ name: null, lastname: null, username: null, email: null, password: '', password2: '' })
+    const [ loading, setLoading ] = useState(false)
 
-    let [isPassOk, setIsPassOk] = useState(false)
-    let [isUsernameOk, setIsUserameOk] = useState(false) 
-
-    // HOOKS
     const navegar = useNavigate()
 
-    // USE EFFECTS
-    useEffect(()=> {
-        axios.get(baseURL.concat('/api/register'))
-            .then( ({data: usernames}) => {
-                setValidUsers(usernames)
-            })
-            .catch(error => {
-                console.error(error)
-            })
-    }, [])
+    const {data: {data: invalidUsernames} = {}} = useQuery({
+        queryKey: ["INVALID_USERNAMES"],
+        queryFn: ()=>fetchInvalidUsernames()
+    })
 
-    useEffect(()=> {
-        if (inputs.password !== inputs.password2 || inputs.password.length < 1) {
-            setIsPassOk(false)
-        } else {
-            setIsPassOk(true)
-        }
-    }, [inputs.password, inputs.password2])
+    const isUsernameOk = !(invalidUsernames?.includes(inputs.username))
+    const isPasswordOk = (inputs.password === inputs.password2 || inputs.password.length > 0)
 
-    useEffect(()=> {
-        if (!validUsers) return
+    const {mutate: signUpMutation} = useMutation({
+        mutationFn: ()=>signUp(inputs),
+        onMutate: ()=>setLoading(true),
+        onSuccess: ()=>{
+            setLoading(false)
+            navegar('/login');
+        },
+        onError: ()=>setLoading(false)
+    }) 
 
-        if (validUsers.includes(inputs.username)) {
-            setIsUserameOk(false)
-        } else {
-            setIsUserameOk(true)
-        }
-
-    }, [inputs.username, validUsers])
-
-    // EVENT HANDLERS
-    let signin = async (e) => {
-        e.preventDefault();
-      
-        const { name, lastname, username, email, password, password2 } = inputs;
-      
-        if (password === password2 && password.length >= 5) {
-            try {
-                await axios.post(`${baseURL}/api/register`, { name, lastname, username, email, password });
-                navegar('/login');
-            } catch (error) {
-                console.error('ERROR REGISTERING:', error);
-            }
-        }
-    };
+    function signUpHandler (e) {
+        e.preventDefault()
+        signUpMutation()
+    }
 
     return (
         <div className={style.main}>
@@ -77,16 +45,17 @@ const Register = ()=> {
 
                     <div>Bienvenido a Zahir</div>
                     <div>Por favor ingrese sus datos</div>
-                    <form onSubmit={isPassOk && isUsernameOk? signin : undefined}>
+                    <form onSubmit={isPasswordOk && isUsernameOk && !loading? signUpHandler : undefined}>
 
                         <input required  type='text' onChange={(e)=> setInputs({...inputs, name: e.target.value})}     placeholder={'name'} />
                         <input required  type='text' onChange={(e)=> setInputs({...inputs, lastname: e.target.value})} placeholder={'lastname'} />
                         <input required  type='text' onChange={(e)=> setInputs({...inputs, username: e.target.value})} placeholder={'username'} />
-                        <div className={validUsers.includes(inputs.username) && style.invalidUser}></div>
+                        <div className={!isUsernameOk && style.invalidUser}></div>
 
                         <input required  type='email'    onChange={(e)=> setInputs({...inputs, email: e.target.value})}     placeholder={'e-mail'} />
                         <input required  type='password' onChange={(e)=> setInputs({...inputs, password: e.target.value})}  placeholder={'password'} />
                         <input required  type='password' onChange={(e)=> setInputs({...inputs, password2: e.target.value})} placeholder={'repeat password'} />
+
                         <div className={inputs.password? (inputs.password !== inputs.password2? style.notPass: (inputs.password.length < 5? style.tooShort : '')) : ''}></div>
 
                         <button type='submit' className="p">Sign in</button>

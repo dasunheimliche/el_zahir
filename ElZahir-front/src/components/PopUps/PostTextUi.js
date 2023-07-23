@@ -1,82 +1,64 @@
-import axios from "axios"
-import { useState } from "react"
-import baseURL from '../../services/baseURL'
 
-import { userSlice} from '../../reducers/userSlice'
-import { useDispatch} from 'react-redux'
+import { useState }                    from "react"
+import { useQueryClient, useMutation } from "@tanstack/react-query"
 
+import { postText }  from "../../services/postServices"
+import { doNothing } from "../../services/helpers"
+
+import style      from '../../styles/popups.module.css'
 import textButton from '../../icons/textButton.png'
 
-// CSS
-import style from '../../styles/popups.module.css'
-
-const postText = async (title, text, token) => {
-    try {
-      const config = {
-        headers: {
-          Authorization: token
-        }
-      }
-      const response = await axios.post(baseURL.concat("/api/post"), {title, textPost: text, type: 'text'}, config)
-      return response.data
-    } catch (error) {
-      console.error(error)
-    }
-  }
-  
-  const updateLocalStorage = (postId) => {
-    const user = JSON.parse(window.localStorage.getItem('loggedUser'))
-    const updatedUser = {...user, posts: user.posts.concat(postId)}
-    window.localStorage.setItem('loggedUser', JSON.stringify(updatedUser))
-    return updatedUser
-  }
-
 const PostTextUI = ({setPopUp})=> {
-    let [title, setTitle] = useState('')
-    let [text, setText] = useState('')
+  const [title,   setTitle   ] = useState('')
+  const [text,    setText    ] = useState('')
+  const [loading, setLoading ] = useState(false)
 
-    let [loading, setLoading] = useState(false)
+  const client   = useQueryClient()
 
-    let dispatch = useDispatch()
-
-    const postear = async (e, title, text, dispatch) => {
-        e.preventDefault()
-        setLoading(true)
-        try {
-            const user = JSON.parse(window.localStorage.getItem('loggedUser'))
-            const token = `Bearer ${user.token}`
-            const savedPost = await postText(title, text, token)
-            setText('')
-            setTitle('')
-            setLoading(false)
-            const updatedUser = updateLocalStorage(savedPost.id)
-            dispatch(userSlice.actions.update(updatedUser))
-        } catch (error) {
-            setLoading(false)
-            console.error(error)
-        }
+  const {mutate: postMutation} = useMutation({
+    mutationFn: async()=> await postText(title, text),
+    onMutate: ()=>setLoading(true),
+    onSuccess: (res)=>{
+      client.setQueryData(["userPosts"], (old)=> {
+          const copy = {...old}
+          copy.data = [res.data, ...copy.data]
+          return copy
+      })
+      close()
+    },
+    onError: ()=>{
+      setLoading(false)
     }
+  })
 
-    const doNothing = (e)=> {
-        e.preventDefault()
-    }
+  function submitTextPostHandler(e){
+    e.preventDefault()
+    postMutation()
+  }
 
-    return (
-        <form className={style.popup} onSubmit={loading? doNothing : e=>postear(e, title, text, dispatch)}>
-            <div className={style['post-ui-header']}>
-                <img className={style['header-img']} src={textButton} alt="text-button"></img>
-            </div>
-            <div className={style.main}>
-                <input  className={`${style.input} ${style.title}`} placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off' required/>
-                <textarea  className={`${style.input} ${style['url-textarea']}`} placeholder="Text" onChange={(e)=> setText(e.target.value)} value={text} autoComplete='off' required/>
-            </div>
-            <div className={style.footer}>
-                <div className={style.loading} style={loading? {display: "block"} : {display: "none"}}></div>
-                <button className={`${style.button} p`} type="button" onClick={()=>setPopUp({type: 'none', post: null})} >CLOSE</button>
-                <button className={`${style.button} p`} type="submit" >POST</button>
-            </div>
-        </form>
-    )
+  function close () {
+    setText("")
+    setTitle("")
+    setLoading("")
+    setPopUp({type: 'none', post: null})
+  }
+
+  return (
+    <form className={style.popup} onSubmit={loading? doNothing : submitTextPostHandler}>
+      <div className={style['post-ui-header']}>
+          <img className={style['header-img']} src={textButton} alt="text-button"></img>
+      </div>
+      <div className={style.main}>
+          <input  className={`${style.input} ${style.title}`} placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off' required/>
+          <textarea  className={`${style.input} ${style['url-textarea']}`} placeholder="Text" onChange={(e)=> setText(e.target.value)} value={text} autoComplete='off' required/>
+      </div>
+      <div className={style.footer}>
+          <div className={style.loading} style={loading? {display: "block"} : {display: "none"}}></div>
+          <button className={`${style.button} p`} type="button" onClick={()=>setPopUp({type: 'none', post: null})} >CLOSE</button>
+          <button className={`${style.button} p`} type="submit" >POST</button>
+      </div>
+    </form>
+  )
 }
 
 export default PostTextUI

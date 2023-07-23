@@ -1,70 +1,53 @@
-import axios from "axios"
-import { useState } from "react"
-import baseURL from '../../services/baseURL'
 
-import { userSlice} from '../../reducers/userSlice'
-import { useDispatch} from 'react-redux'
+import { useState }                    from "react"
+import { useQueryClient, useMutation } from "@tanstack/react-query"
+
+import { postQuote } from "../../services/postServices"
+import { doNothing } from "../../services/helpers"
 
 import citaButton from '../../icons/citaButton.png'
+import style      from '../../styles/popups.module.css'
 
-// CSS
-import style from '../../styles/popups.module.css'
-
-const postQuote = async(author, work, quote, token) => {
-    try {
-        const config = {
-          headers: {
-            Authorization: token
-          }
-        }
-        const response = await axios.post(baseURL.concat("/api/post"), {title: author, subtitle: work, textPost: quote, type: 'cita'}, config)
-        return response.data
-    } catch (error) {
-        console.error(error)
-    }
-}
-
-const updateLocalStorage = (postId) => {
-    const user = JSON.parse(window.localStorage.getItem('loggedUser'))
-    const updatedUser = {...user, posts: user.posts.concat(postId)}
-    window.localStorage.setItem('loggedUser', JSON.stringify(updatedUser))
-    return updatedUser
-}
 
 const PostCitaUI = ({setPopUp})=> {
-    let [author, setAuthor] = useState('')
-    let [work,   setWork  ] = useState('')
-    let [quote,  setQuote ] = useState('')
+    const [author, setAuthor] = useState('')
+    const [work,   setWork  ] = useState('')
+    const [quote,  setQuote ] = useState('')
+    const [loading, setLoading] = useState(false)
 
-    let [loading, setLoading] = useState(false)
+    const client   = useQueryClient()
 
-    let dispatch = useDispatch()
-
-    const postear = async (e, author, work, quote, dispatch) => {
-        e.preventDefault()
-        setLoading(true)
-        try {
-            const user = JSON.parse(window.localStorage.getItem('loggedUser'))
-            const token = `Bearer ${user.token}`
-            const savedPost = await postQuote(author, work, quote, token)
-            setAuthor('')
-            setWork('')
-            setQuote('')
-            setLoading(false)
-            const updatedUser = updateLocalStorage(savedPost.id)
-            dispatch(userSlice.actions.update(updatedUser))
-        } catch (error) {
-            setLoading(false)
-            console.error(error)
+    const {mutate: postMutation} = useMutation({
+        mutationFn: async()=> await postQuote(author, work, quote),
+        onMutate: ()=>setLoading(true),
+        onSuccess: (res)=>{
+            client.setQueryData(["userPosts"], (old)=> {
+                const copy = {...old}
+                copy.data = [res.data, ...copy.data]
+                return copy
+            })
+            close()
+        },
+        onError: ()=>{
+          setLoading(false)
         }
+    })
+
+    function submitQuotePostHandler(e){
+        e.preventDefault()
+        postMutation()
     }
 
-    const doNothing = (e)=> {
-        e.preventDefault()
+    function close() {
+        setAuthor('')
+        setWork('')
+        setQuote('')
+        setLoading(false)
+        setPopUp({type: 'none', post: null})
     }
 
     return (
-        <form className={style.popup} onSubmit={loading? doNothing : e=>postear(e, author, work, quote, dispatch)}>
+        <form className={style.popup} onSubmit={loading? doNothing : submitQuotePostHandler}>
             <div className={style['post-ui-header']}>
                 <img className={style['header-img']} src={citaButton} alt="text-button"></img>
             </div>

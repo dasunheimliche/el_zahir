@@ -1,111 +1,59 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useParams }                             from 'react-router-dom'
+import {useState}                                from 'react'
 
-import TextPost from './Posts/TextPost'
-import QuotePost from './Posts/QuotePost'
-import ImagePost from './Posts/ImagePost'
-import VideoPost from './Posts/VideoPost'
+import TextPost      from './Posts/TextPost'
+import QuotePost     from './Posts/QuotePost'
+import ImagePost     from './Posts/ImagePost'
+import VideoPost     from './Posts/VideoPost'
 import VideoFilePost from './Posts/VideoFilePost'
-import PostWrapper from './PostWrapper'
+import PostWrapper   from './PostWrapper'
 
-import getConfig from '../services/getConfig'
-
-import {useState, useEffect} from 'react'
-import axios from 'axios'
-import baseURL from '../services/baseURL'
-
-import { useSelector, useDispatch} from 'react-redux'
-import { userSlice} from '../reducers/userSlice'
-
+import { copyToClipboard } from '../services/helpers'
+import { getCurrentUser }  from '../services/userServices'
+import { toggleLike }      from '../services/postServices'
 
 const Post = ({post, mode, setPopUp, setToFront})=> {
 
-    let postURL = `${"https://zahir-pink.vercel.app"}}/#/post/${post.id}`
+    const postURL = `${"http://localhost:3000"}/#/post/${post.id}`
 
+    const [loading,    setLoading   ] = useState(false)
+    const [visibility, setVisibility] = useState(true)
 
-    let [liked,      setLiked     ] = useState(false)
-    let [loading,    setLoading   ] = useState(false)
-    let [visibility, setVisibility] = useState(true)
+    const {data: {data: user} = {}} = useQuery({queryKey: ['ME'], queryFn: getCurrentUser})
 
-    let user = useSelector(state => state.user.value)
-    let dispatch = useDispatch()
+    const client = useQueryClient()
+    const {"*": param} = useParams()
 
-    // IMAGE POST
-    let [size] = useState({width: post.mediaWidth, height: post.mediaHeight})
-    let [ancho, setAncho] = useState((size.width/size.height)*window.innerHeight)
+    const [liked, setLiked] = useState(post.likes.some(id => id === user.id))
 
-    const handleResize = () => {
-        setAncho((size.width / size.height) * (window.innerHeight - 200));
-    };
-
-    useEffect(() => {
-        handleResize()
-        window.addEventListener('resize', handleResize);
-        window.addEventListener('load', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            window.removeEventListener('load', handleResize);
-        };
-    }, []); //eslint-disable-line
-
-    // VIDEO POST
-
-    let aspectr
-    let width
-    let height
-    let ar
-
-    if (post.type === "video") {
-        aspectr = post.videoAr.split(':')
-        width = Number(aspectr[1])
-        height = Number(aspectr[0])
-        ar = (width/height) * 100
-    }
-        
-    useEffect(()=> {
-        if (user.likedPosts && user.likedPosts.includes(post.id)) { // test
-            setLiked(true)
-        } else {
-            setLiked(false)
+    const {mutate: toggleLikeHandler} = useMutation({
+        mutationFn: toggleLike,
+        onMutate: ()=> {
+            setLoading(true)
+            if (liked) setLiked(false)
+            if (!liked) setLiked(true)
+        },
+        onSuccess: ()=> {
+            setLoading(false)
+            if (param === "") {
+                client.invalidateQueries({queryKey: ["userPosts"]})
+            }
+            if (param === "following") {
+                client.invalidateQueries({queryKey: ["followedPosts"]})
+            }
+            if (param === "discover") {
+                client.invalidateQueries({queryKey: ["discoverPosts"]})
+            }
+        },
+        onError: ()=> {
+            setLiked((prev)=>!prev)
         }
-    }, []) //eslint-disable-line
+    })
 
     const deletePost = async () => {
         setPopUp({type: 'delete', post: post})
     };
-
-    const toggleLike = async(mode) => {
-        const newLikedState = mode === 'like' ? true : false;
-        setLiked(newLikedState);
-        setLoading(true);
-
-        try {
-            await axios.put(baseURL.concat(`/api/post/like/${post.id}`), { meId: user.userId, mode }, getConfig())
-
-            if (mode === "like") {
-                dispatch(userSlice.actions.update({ ...user, likedPosts: [...user.likedPosts, post.id] })); // test
-                const loguedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
-                window.localStorage.setItem('loggedUser', JSON.stringify({ ...loguedUser, likedPosts: [...user.likedPosts, post.id] }));
-            } else {
-                const updatedLikedPosts = user.likedPosts.filter((postId) => postId !== post.id);
-                dispatch(userSlice.actions.update({ ...user, likedPosts: updatedLikedPosts })); // test
-                const loguedUser = JSON.parse(window.localStorage.getItem('loggedUser'));
-                window.localStorage.setItem('loggedUser', JSON.stringify({ ...loguedUser, likedPosts: updatedLikedPosts }));
-            }
-
-            setLoading(false)
-        } catch(error) {
-            console.error(error)
-            setLoading(false)
-        }
-
-    };
-
-    const doNothing = (e)=> {
-        e.preventDefault()
-    }
-
-    const clipboard = ()=> {
-        navigator.clipboard.writeText(postURL)
-    }
 
     const openComments = ()=> {
         setPopUp({type: 'comments', post: post})
@@ -113,18 +61,16 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     }
 
     const p = {
-        like: ()=>toggleLike('like'),
-        dislike: ()=>toggleLike('unlike'),
-        comments: openComments,
-        share: clipboard,
-        del: deletePost,
-        doNothing,
+        toggleLike: ()=>toggleLikeHandler({post, user}),
+        openComments,
+        sharePostURL: ()=>copyToClipboard(postURL),
+        deletePost
     }
 
     
     if (post.type === "image") {
         return(
-            <PostWrapper post={post} ar={ar} size={size} ancho={ancho} visibility={visibility}>
+            <PostWrapper post={post} visibility={visibility}>
                 <ImagePost
                     post={post} mode={mode} setPopUp={setPopUp}
                     loading={loading} liked={liked} setToFront={setToFront}
@@ -136,7 +82,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
 
     if (post.type === "text") {
         return (
-            <PostWrapper post={post} ar={ar} size={size} ancho={ancho} visibility={visibility}>
+            <PostWrapper post={post} visibility={visibility}>
                 <TextPost
                     post={post} mode={mode} setPopUp={setPopUp}
                     loading={loading} liked={liked} setToFront={setToFront}
@@ -148,7 +94,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     }
     if (post.type === "cita") {
         return(
-            <PostWrapper post={post} ar={ar} size={size} ancho={ancho} visibility={visibility}>
+            <PostWrapper post={post} visibility={visibility}>
                 <QuotePost
                     post={post} mode={mode} setPopUp={setPopUp}
                     loading={loading} liked={liked} setToFront={setToFront}
@@ -159,7 +105,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     }
     if (post.type === "video") {
         return(
-            <PostWrapper post={post} ar={ar} size={size} ancho={ancho} visibility={visibility}>
+            <PostWrapper post={post} visibility={visibility}>
                 <VideoPost 
                     post={post} mode={mode} setPopUp={setPopUp} 
                     loading={loading} liked={liked} setToFront={setToFront}
@@ -170,14 +116,13 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
     }
     if (post.type === "video-file") {
         return (
-            <PostWrapper post={post} ar={ar} size={size} ancho={ancho} visibility={visibility}>
+            <PostWrapper post={post} visibility={visibility}>
                 <VideoFilePost
                     post={post} mode={mode} setPopUp={setPopUp}
                     loading={loading} liked={liked} setToFront={setToFront}
                     p={p} setVisibility={setVisibility} visibility={visibility}
                 />
             </PostWrapper>
-
         )
     }
 }

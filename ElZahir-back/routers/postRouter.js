@@ -1,50 +1,42 @@
-// me permite acceder al archivo .env
+
 require('dotenv').config()
-// me permite convertir un string en un object id
+
 const { ObjectId } = require('mongodb')
-// jwt me permite crear un token a partir de un objeto
+
 const jwt = require('jsonwebtoken')
-// estos son los modelos que voy a usar
+
 const User = require('../models/User')
 const Post = require('../models/Post')
 const Comment = require('../models/Comment')
-// creo el router con require('express').Router()
+
 const postRouter = require('express').Router()
-// import imagekit
 const Imagekit = require('imagekit')
-// import fs q me permite manipular archivos locales, en un modo que me genere promesas
 const fs = require('fs/promises')
 const { default: mongoose } = require('mongoose')
 const { response } = require('../App')
 
-// creo un objeto imagekit con el constructor "new Imagekit()"
-// este constructor toma 3 argumentos, que son claves que obtengo en la pagina 
 const imagekit = new Imagekit({
     publicKey: "public_6DnujADgzOoT69JIc0gb33SS7C4=",
     privateKey: "private_ss2dmZXrdv1OBjRHEEtg6wH09GQ=",
     urlEndpoint: "https://ik.imagekit.io/vo7gdb6tl"
 })
 
-// preparo esta función que me permite obtener el token que el usuario envio con la solicitud (request)
 const getToken = (request)=> {
     
-    // el token está en request.headers.authorization
     const auth = request.headers.authorization
 
-    // con lo siguiente verifico el token sea valido
-    // primero verifico que existe, y luego que esté en el formato correcto
     if (auth && auth.toLowerCase().startsWith('bearer')) {
-        // devuelvo el token sin el "bearer"
         return auth.substring(7)
     }
-    // si el token no existe, o no es valido, devuelvo null
     return null
 }
 
 postRouter.put('/like/:id', async(request, response)=> {
-
+    console.log("START LIKE ROUTE")
     const token = getToken(request)
+    console.log("LIKE TOKEN")
     const decodedToken = jwt.verify(token, process.env.SECRET)
+    console.log("DECODED LIKE TOKEN", decodedToken)
     if (!token || !decodedToken.id) {
         response.status(401).json({error: 'token missing or invalid'})
     }
@@ -64,6 +56,8 @@ postRouter.put('/like/:id', async(request, response)=> {
         await post.save();
         await user.save();
 
+        console.log("POST LIKED", post)
+
       response.status(200).json({ success: true, message: 'Post liked', post });
     } else if (body.mode === 'unlike') {
 
@@ -72,6 +66,8 @@ postRouter.put('/like/:id', async(request, response)=> {
 
         await post.save();
         await user.save()
+
+        console.log("POST DISLIKED", post)
 
         response.status(200).json({ success: true, message: 'Post unliked', post });
     } else {
@@ -227,6 +223,43 @@ postRouter.post('/video-file', async (request, response)=> {
         })
 })
 
+postRouter.post('/video-url', async (request, response)=> {
+    const body = request.body
+  
+    const token = getToken(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+        response.status(401).json({error: 'token missing or invalid'})
+    }
+
+    const user = await User.findById(decodedToken.id)
+
+    function isYoutubeUrl(link) {
+        const regExp = /^(?:https?:\/\/)?(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w-]{10,12})(?:$|&)/;
+        return regExp.test(link);
+    }
+
+    const post = new Post ({
+        type: isYoutubeUrl(body.videoPost)? "video" : "video-file",
+        title: body.title,
+        subtitle: body.subtitle,
+        textPost: body.textPost,
+        imagePost: body.imagePost,
+        videoPost: body.videoPost,
+        videoAr: body.videoAr,
+        date: new Date(),
+        user: user._id,
+        username: user.username,
+        profileImg: user.profileImg,
+    })
+
+    const savedPost = await post.save()
+    user.posts = user.posts.concat(savedPost._id)
+    await user.save()
+
+    response.json(savedPost)
+})
+
 postRouter.post('/', async (request, response)=> {
     const body = request.body
   
@@ -269,7 +302,7 @@ postRouter.get('/my-posts', async (request, response)=> {
 
     let posts = await Post.find({user: decodedToken.id})
 
-    response.json(posts)
+    response.json(posts.reverse())
 })
 
 postRouter.get('/following-posts', async (request, response)=> {
@@ -282,7 +315,7 @@ postRouter.get('/following-posts', async (request, response)=> {
     const following = user.following
     const posts = await Post.find({user: {$in: following}})
 
-    response.json(posts)
+    response.json(posts.reverse())
 })
 
 postRouter.get('/discover-posts', async (request, response)=> {
@@ -296,10 +329,11 @@ postRouter.get('/discover-posts', async (request, response)=> {
     const following = user.following
     const posts = await Post.find({user: {$nin: [...following, new mongoose.Types.ObjectId(decodedToken.id)]}})
 
-    response.json(posts)
+    response.json(posts.reverse())
 })
 
 postRouter.get('/user-posts', async (request, response) => {
+    console.log("LOCAL FETCH")
     const token = getToken(request)
     const decodedToken = jwt.verify(token, process.env.SECRET)
     if (!token || !decodedToken.id) {

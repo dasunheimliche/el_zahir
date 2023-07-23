@@ -1,50 +1,44 @@
-// IMPORTS
-import { useEffect } from 'react';
-import { Routes, Route,  Navigate } from 'react-router-dom'
-import { useSelector, useDispatch} from 'react-redux'
-import { userSlice} from './reducers/userSlice'
+import { 
+  Routes, 
+  Route,  
+  Navigate, 
+  useNavigate 
+} from 'react-router-dom'
 
-// COMPONENTES
-import Login from './components/Login';
-import Home from './components/Home'
+import { useQuery }  from '@tanstack/react-query';
+
+import Login         from './components/Login';
+import Home          from './components/Home'
 import OtherUserHome from './components/OtherUserHome';
-import RegisterMain from './components/RegisterMain'
-import SharedPost from './components/SharedPost';
+import RegisterMain  from './components/RegisterMain'
+import SharedPost    from './components/SharedPost';
 
-// APP
+import { getConfig }      from './services/helpers';
+import { getCurrentUser } from './services/userServices';
 
 function App() {
-  // STATE ---------------------------------------------------------------
-  
-  let user = useSelector(state => state.user.value)
-  let dispatch =  useDispatch()
 
+  const navigate = useNavigate()
 
-  // USEFFECTS ----------------------------------------------------------------
+  const tokenExists = !!getConfig()
 
-  useEffect(()=> {
-    let loggedUser =  window.localStorage.getItem('loggedUser')
-    
-    if (loggedUser) {
-      const userFromLocalStorate = JSON.parse(loggedUser)
-      dispatch(userSlice.actions.update(userFromLocalStorate))
-    } 
-  }, [dispatch])
+  const {data: {data: me} = {}, isFetching} = useQuery({
+    queryKey: ['ME'],
+    queryFn: getCurrentUser,
+    enabled: tokenExists
+  })
 
-  // RENDER ------------------------------------------------------------------
-
+  if (isFetching && !me) return <div>LOADING</div>
 
   return (
     <div className="App">
       <div className='background'></div>
       <Routes>
-        <Route path="/"          element={user.loggued === false? <Navigate replace to='/login'/>:<Navigate replace to={`/home`}/>} />
-
-        <Route path="/login"     element={user.loggued === false? <Login/> : <Navigate replace to={`/home`}/>}/>
+        <Route path="/"          element={!tokenExists? <Navigate replace to='/login'/>:<Navigate replace to={`/home`}/>} />
+        <Route path="/login"     element={!tokenExists? <Login navigate={navigate}/> : <Navigate replace to={`/home`}/>}/>
         <Route path='/register'  element={<RegisterMain />} />
- 
-        <Route path={`/home/*`}  element={user.loggued === false? <Navigate replace to='/login'/>:<Home />} /> 
-        <Route path={'/user/*'}  element={user.loggued === false? <Navigate replace to='/login'/> : <OtherUserHome />}/>
+        <Route path={`/home/*`}  element={!tokenExists? <Navigate replace to='/login'/>:<Home />} />
+        <Route path={'/user/*'}  element={!tokenExists? <Navigate replace to='/login'/> : <OtherUserHome me={me}/>}/>
         <Route path={`/post/*`}  element={<SharedPost />} />
       </Routes>
     </div>

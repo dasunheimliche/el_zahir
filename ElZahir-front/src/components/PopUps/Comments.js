@@ -1,69 +1,73 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
-import baseURL from '../../services/baseURL'
-import Comment from '../Comment'
-import { useSelector} from 'react-redux'
+import { useState }              from "react"
+import Comment                   from '../Comment'
+import { useMutation, useQuery } from "@tanstack/react-query"
+
+import { getCurrentUser }             from "../../services/userServices"
+import { fetchComments, sendComment } from "../../services/commentServices"
+
+import { useQueryClient } from "@tanstack/react-query"
 
 import style from '../../styles/comments.module.css'
 
 const Comments = ({post, setPopUp})=> {
-    let [reload,      setReload     ] = useState(false)
-    let [comments,    setComments   ] = useState('')
     let [value,       setValue      ] = useState('')
     let [placeholder, setPlaceholder] = useState('')
     let [commentID,   setCommentID  ] = useState('')
     let [loading,     setLoading    ] = useState(false)
 
-    let user = useSelector(state => state.user.value)
+    const client = useQueryClient()
 
-    useEffect(() => {
-        axios.get(baseURL.concat('/api/comment'), { params: { postId: post.id } })
-            .then( ({ data: comments }) => {
-                const resultados = comments.filter(comment => (comment.postID === post.id && !comment.commentID));
-                setComments(resultados);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }, [reload]); //eslint-disable-line
+    const {data: {data: user} = {}} = useQuery({ queryKey: ['ME'], queryFn: getCurrentUser})
+    const {data: {data: comments} = {}} = useQuery({ queryKey: ["GET_COMMENTS", post.id], queryFn: ()=>fetchComments(post)})
 
-    const handleSubmit = async (e)=> {
-        e.preventDefault();
-        setLoading(true)
-        const person = `@${placeholder.split('@')[1]}`;
-        const commentText = placeholder ? `${person} ${value}` : value;
-        const comment = {
-            username: user.username,
-            comment: commentText,
-            postID: post.id,
-            commentID: commentID,
-            userID: post.user
-        };
+    const {mutate: sendCommentMutation} = useMutation({
+        mutationFn: ()=>sendComment(post, user, value, placeholder, commentID),
+        onMutate: ()=>setLoading(true),
+        onSuccess: (data)=> {
 
-        try {
-            await axios.post(baseURL.concat('/api/comment'), comment);
-            setPlaceholder('');
-            setCommentID('');
-            setReload((prev) => !prev);
-            setValue('');
-            setLoading(false)
-        } catch (error) {
-            console.error(error);
-            setLoading(false)
+            if (commentID) {
+                client.setQueryData(["GET_SUBCOMMENTS", commentID], (old)=>{
+                    let copy = {...old}
+                    copy.data = copy.data.concat(data.data)
+                    return copy
+                })
+            } else {
+                client.setQueryData(["GET_COMMENTS", post.id], (old)=>{
+                    let copy = {...old}
+                    copy.data = copy.data.concat(data.data)
+                    return copy
+                })
+            }
+            
+            clearInput()
         }
+    })
+
+    const handleSubmitComment = (e)=> {
+        e.preventDefault()
+        sendCommentMutation()
     }
 
-    const sets = ()=> {
-
+    function clearInput () {
+        setPlaceholder('')
         setCommentID('')
-        setPlaceholder(``)
         setValue('')
+        setLoading(false)
     }
 
-    const cargarComments = ()=> {
+    const loadComments = ()=> {
+        if (!comments) return
         
         return comments.map((comment, i) => {
-            return <Comment key={i} post={post} setReload={setReload} setValue={setValue} comment={comment} user={user}  setPlaceholder={setPlaceholder} placeholder={placeholder} reload={reload} setCommentID={setCommentID}/>
+            return <Comment 
+                key={i} 
+                post={post}  
+                setValue={setValue} 
+                comment={comment} 
+                setPlaceholder={setPlaceholder} 
+                placeholder={placeholder}  
+                commentID={commentID}
+                setCommentID={setCommentID}/>
         })
     }
 
@@ -75,18 +79,18 @@ const Comments = ({post, setPopUp})=> {
                 </div>
                 <div className={style.counter}>
                     <span className={style.title}>Comments  </span>
-                    <span className={style.count}>{comments.length}</span>
+                    <span className={style.count}>{comments?.length}</span>
                 </div>
-                <form className={style['input-container']} onSubmit={loading? undefined :  handleSubmit}>
+                <form className={style['input-container']} onSubmit={loading? undefined :  handleSubmitComment}>
                     <div className={style.testear} >
-                        {(placeholder || value !== '') && <div className={placeholder || value !== '' ? style.cancel : `${style.cancel} ${style['cancel-off']}` } onClick={sets}></div> }
+                        {(placeholder || value !== '') && <div className={placeholder || value !== '' ? style.cancel : `${style.cancel} ${style['cancel-off']}` } onClick={clearInput}></div> }
 
                         <input className={placeholder || value !== ''? style.input : `${style.input} ${style['input-off']}` } value={value} type={'text'} placeholder={placeholder === ''? 'comenta algo...' : placeholder} onChange={(e)=>setValue(e.target.value)} />
                     </div>
                     <button className={style.send}>SEND</button>
                 </form>
                 <div className={style.comments}>
-                    {comments !== '' ? cargarComments(): ""}
+                    {comments !== '' ? loadComments(): ""}
                 </div>
             </div>
         </div>
