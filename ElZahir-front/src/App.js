@@ -12,6 +12,7 @@ import Home          from './components/Home'
 import OtherUserHome from './components/OtherUserHome';
 import RegisterMain  from './components/RegisterMain'
 import SharedPost    from './components/SharedPost';
+import Loading       from './components/Loading'
 
 import { getConfig }      from './services/helpers';
 import { getCurrentUser } from './services/userServices';
@@ -28,7 +29,7 @@ function App() {
     enabled: tokenExists
   })
 
-  if (isFetching && !me) return <div>LOADING</div>
+  if (isFetching && !me) return <Loading />
 
   return (
     <div className="App">

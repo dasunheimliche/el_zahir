@@ -343,7 +343,7 @@ postRouter.get('/user-posts', async (request, response) => {
     const id = request.query.userID
     const posts = await Post.find({user: new mongoose.Types.ObjectId(id)})
 
-    response.json(posts)
+    response.json(posts.reverse())
 })
 
 postRouter.get('/:id', async (request, response)=> {

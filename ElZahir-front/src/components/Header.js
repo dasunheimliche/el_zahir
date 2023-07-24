@@ -54,7 +54,7 @@ const Header = ({sticky, setSticky, toFront, mode})=> {
         setIsMenuOpen(!isMenuOpen)
     }
 
-    const handlerSignOff = async()=> {
+    const signOffHandler = async()=> {
         window.localStorage.clear()
         queryClient.removeQueries()
         navigate("/")
@@ -102,7 +102,7 @@ const Header = ({sticky, setSticky, toFront, mode})=> {
                             <div className={style.username}>{me.username}</div>
                         </div>
                         <div className={isMenuOpen? style['user-menu'] : `${style['user-menu']} invisible`}>
-                            <span className={style.signOff} onClick={handlerSignOff}>Log Off</span>
+                            <span className={style.signOff} onClick={signOffHandler}>Log Off</span>
                         </div>
                     </div>
                 </div>

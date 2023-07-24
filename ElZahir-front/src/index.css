@@ -34,6 +34,29 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.loading {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: rgb(12, 12, 12);
+}
+
+.loading::after {
+  content: "";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  background-image: url("./icons/svg-loaders/rings.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 71px;
+}
+
 input{ 
   touch-action: none; 
 }

@@ -25,7 +25,6 @@ const Home = ()=> {
     let [ sticky,  setSticky  ] = useState(false)
     let [ popUp,   setPopUp   ] = useState({type: 'none', post: null})
     let [ toFront, setToFront ] = useState(false) 
-    let [ tab,     setTab     ] = useState("me")
 
     const childRef    = useRef(null)
     const parentRef   = useRef(null)
@@ -45,7 +44,6 @@ const Home = ()=> {
             setPopUp={setPopUp}
             key={post.id}
             post={post}
-            mode={tab !== "me" ? 'user' : undefined}
           />
         ));
     };
@@ -65,11 +63,11 @@ const Home = ()=> {
                         <ProfilePanel sticky={sticky} setPopUp={setPopUp} posts={myPosts} />
                     </div>
                     <div  className={style['right-side']}>
-                        <Tabs sticky={sticky} tab={tab} setTab={setTab} />
+                        <Tabs sticky={sticky}  />
                         <Posts sticky={sticky} >
-                            <Route  path="/"          element={renderPosts(myPosts)} />
-                            <Route  path="/following" element={renderPosts(followingPosts)} />
-                            <Route  path="/discover"  element={renderPosts(discoverPosts)} />
+                            <Route path="/"          element={renderPosts(myPosts)} />
+                            <Route path="/following" element={renderPosts(followingPosts)} />
+                            <Route path="/discover"  element={renderPosts(discoverPosts)} />
                         </Posts>
                     </div>
                 </div>
