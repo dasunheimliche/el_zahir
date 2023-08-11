@@ -35,12 +35,12 @@ const VidePost = ({
   const width = Number(aspectr[1])
   const height = Number(aspectr[0])
   const ar = (width/height) * 100
-  const defaultAr = (9/16) * 100
+
 
   return (
     <div className={!visibility? `${style.post} ${style.figure} ${style.shadows} ${style['mobile-post']}` : `${style.post} ${style.figure}`}>
       <PostHeader post={post} mode={mode} />
-      <PostContent post={post} ar={ar} defaultAr={defaultAr} urlVideo={urlVideo} />
+      <PostContent post={post} ar={ar} urlVideo={urlVideo} />
       <PostTitle post={post} />
       <PostFooter loading={loading} p={p} liked={liked} user={user} post={post} mode={mode} visibility={visibility} setVisibility={setVisibility} setToFront={setToFront}/>
     </div>

@@ -67,7 +67,6 @@ const PostWrapper = ({children, post, visibility})=>{
                     {children}
                 </div>
             </div>
-
         )
     }
 }

@@ -3,7 +3,8 @@ import { useState }                    from "react"
 import { useQueryClient, useMutation } from "@tanstack/react-query"
 
 import { postText }  from "../../services/postServices"
-import { doNothing } from "../../services/helpers"
+
+import { PostUIHeader, MainInput, TextArea, PostUiFooter } from "./PostUiModule"
 
 import style      from '../../styles/popups.module.css'
 import textButton from '../../icons/textButton.png'
@@ -24,7 +25,7 @@ const PostTextUI = ({setPopUp})=> {
           copy.data = [res.data, ...copy.data]
           return copy
       })
-      close()
+      handleClose()
     },
     onError: ()=>{
       setLoading(false)
@@ -36,27 +37,21 @@ const PostTextUI = ({setPopUp})=> {
     postMutation()
   }
 
-  function close () {
-    setText("")
-    setTitle("")
-    setLoading("")
+  function handleClose() {
     setPopUp({type: 'none', post: null})
   }
 
+
   return (
-    <form className={style.popup} onSubmit={loading? doNothing : submitTextPostHandler}>
-      <div className={style['post-ui-header']}>
-          <img className={style['header-img']} src={textButton} alt="text-button"></img>
-      </div>
+    <form className={style.popup} onSubmit={submitTextPostHandler}>
+      <PostUIHeader imageSource={textButton} />
+
       <div className={style.main}>
-          <input  className={`${style.input} ${style.title}`} placeholder="Title" onChange={(e)=> setTitle(e.target.value)} value={title} autoComplete='off' required/>
-          <textarea  className={`${style.input} ${style['url-textarea']}`} placeholder="Text" onChange={(e)=> setText(e.target.value)} value={text} autoComplete='off' required/>
+        <MainInput value={title} onChange={e=> setTitle(e.target.value)} placeholder={"Title"}/>
+        <TextArea value={text} onChange={e=> setText(e.target.value)} placeholder={"Text"}/>
       </div>
-      <div className={style.footer}>
-          <div className={style.loading} style={loading? {display: "block"} : {display: "none"}}></div>
-          <button className={`${style.button} p`} type="button" onClick={()=>setPopUp({type: 'none', post: null})} >CLOSE</button>
-          <button className={`${style.button} p`} type="submit" >POST</button>
-      </div>
+
+      <PostUiFooter onCancel={handleClose} isPostLoading={loading}/>
     </form>
   )
 }

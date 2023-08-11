@@ -10,9 +10,11 @@ import { login } from '../services/authServices'
 
 const Login = ({navigate})=> {
 
-    let [username, setUsername] = useState('')
-    let [password, setPassword] = useState('')
-    let [error, setError] = useState(false)
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [error,    setError   ] = useState(false)
+
+    const isInputValid = (username.length > 0 && password.length > 0)
 
     const mutation = useMutation({
         mutationFn: login,
@@ -24,15 +26,24 @@ const Login = ({navigate})=> {
         onError: ()=>setError(true)
     })
 
-
     const handleLogin = (e)=> {
         e.preventDefault()
         mutation.mutate({username, password})
     }
 
-    const handleDemoLogging = (e)=> {
+    const handleDemoLogin = (e)=> {
         e.preventDefault()
         mutation.mutate({username: "horrorshow", password: "87651234"})
+    }
+
+    const handleUsernameChange = (e)=> {
+        setError(false)
+        setUsername(e.target.value)
+    }
+
+    const handlePasswordChange = (e)=> {
+        setError(false)
+        setPassword(e.target.value)
     }
 
     useEffect(()=> {
@@ -42,16 +53,20 @@ const Login = ({navigate})=> {
 
     return (
         <div className={style.main}>
-            <div className={style['left-side']}>
-                <div className={style.card}>
+            <div className={style.leftSide}>
+                <div className={style.authCard}>
                     <div>Bienvenido/a</div>
-                    <div>Por favor ingrese sus datos</div>
+                    <div>Por favor ingrese sus datos:</div>
                     <form >
-                        <input type='text'     onChange={(e)=> setUsername(e.target.value)} placeholder={'username'} required/>
-                        <input type='password' onChange={(e)=> setPassword(e.target.value)} placeholder={'password'} required/>
+                        <input type='text'     onChange={handleUsernameChange} placeholder={'username'} required/>
+                        <input type='password' onChange={handlePasswordChange} placeholder={'password'} required/>
+
                         {error && <div className={style.failedLogin}></div>}
-                        <button type='submit' className="p" onClick={handleLogin}>Log in</button>
-                        <button type='submit' className="p" onClick={handleDemoLogging}>Demo</button>
+
+                        <div className={style.buttons}>
+                            <button type='submit' className="p" onClick={handleDemoLogin}>Demo</button>
+                            <button type='submit' className="p" onClick={handleLogin} disabled={!isInputValid}>Log in</button>
+                        </div>
                     </form>
                     <div className={style.toRegister}>
                         <p >¿No tienes una cuenta?</p>
@@ -59,7 +74,7 @@ const Login = ({navigate})=> {
                     </div>
                 </div>
             </div>
-            <div className={style['right-side']}>
+            <div className={style.rightSide}>
             </div>
         </div>
     )

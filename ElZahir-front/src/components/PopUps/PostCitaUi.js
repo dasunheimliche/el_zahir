@@ -3,10 +3,11 @@ import { useState }                    from "react"
 import { useQueryClient, useMutation } from "@tanstack/react-query"
 
 import { postQuote } from "../../services/postServices"
-import { doNothing } from "../../services/helpers"
 
 import citaButton from '../../icons/citaButton.png'
 import style      from '../../styles/popups.module.css'
+
+import { PostUIHeader, MainInput, SubInput, TextArea, PostUiFooter } from "./PostUiModule"
 
 
 const PostCitaUI = ({setPopUp})=> {
@@ -26,43 +27,33 @@ const PostCitaUI = ({setPopUp})=> {
                 copy.data = [res.data, ...copy.data]
                 return copy
             })
-            close()
+            handleClose()
         },
         onError: ()=>{
           setLoading(false)
         }
     })
 
-    function submitQuotePostHandler(e){
+    function handlePostSubmit(e){
         e.preventDefault()
         postMutation()
     }
 
-    function close() {
-        setAuthor('')
-        setWork('')
-        setQuote('')
-        setLoading(false)
+    function handleClose() {
         setPopUp({type: 'none', post: null})
     }
 
     return (
-        <form className={style.popup} onSubmit={loading? doNothing : submitQuotePostHandler}>
-            <div className={style['post-ui-header']}>
-                <img className={style['header-img']} src={citaButton} alt="text-button"></img>
-            </div>
+        <form className={style.popup} onSubmit={handlePostSubmit}>
+            <PostUIHeader imageSource={citaButton} />
 
             <div className={style.main}>
-                <input className={`${style.input} ${style.title}`} placeholder="Author" onChange={(e)=> setAuthor(e.target.value)} value={author} autoComplete='off' required/>
-                <input className={`${style.input} ${style.subtitle}`} placeholder="Work" onChange={(e)=> setWork(e.target.value)} value={work} autoComplete='off' required/>
-                <textarea className={`${style.input} ${style['url-textarea']}`} placeholder="Quote" onChange={(e)=> setQuote(e.target.value)} value={quote} autoComplete='off' required/>
+                <MainInput value={author} onChange={(e)=> setAuthor(e.target.value)} placeholder={"Author"}/>
+                <SubInput  value={work}   onChange={(e)=> setWork(e.target.value)}   placeholder={"Work"}/>
+                <TextArea  value={quote}  onChange={(e)=> setQuote(e.target.value)}  placeholder={"Quote"}/> 
             </div>
 
-            <div className={style.footer}>
-                <div className={style.loading} style={loading? {display: "block"} : {display: "none"}}></div>
-                <button className={`${style.button} p`} type="button" onClick={()=>setPopUp({type: 'none', post:null})} >CLOSE</button>
-                <button className={`${style.button} p`} type="submit"  >POST</button>
-            </div>
+            <PostUiFooter onCancel={handleClose} isPostLoading={loading}/>
         </form>
     )
 }

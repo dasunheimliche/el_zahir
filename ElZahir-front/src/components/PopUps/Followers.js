@@ -1,8 +1,10 @@
 
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
 import { getUserList } from '../../services/userServices'
+
+import { UserTile } from './ConnectionsUiModule'
 
 import style from '../../styles/popups.module.css'
 
@@ -20,15 +22,8 @@ const Following = ({setPopUp, user})=> {
         if (!list) return
 
         return list.map((person, i) => {
-            return (
-                <Link className='linknostyle' onClick={()=>setPopUp({type:'none', post:null})} to={user.userId === person.id? '/home'  :`/user/${person.id}`}>
-                    <div className={style.user} key={i}>
-                        <img  className={style['profile-img']} src={person.profileImg} alt='profile-pic' />
-                        <span className={style.username}>{`@${person.username}`}</span>
-                    </div>
-                </Link>
-            )
-                
+            return <UserTile key={i} onClick={()=>setPopUp({type:'none', post:null})} user={user} person={person}/>
+            
         })
     }
 
@@ -45,7 +40,6 @@ const Following = ({setPopUp, user})=> {
             <div className={style['list-container']}>
                 {loadUserList(followers)}
             </div>
-            
         </div>
     )
 }

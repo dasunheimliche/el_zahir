@@ -247,16 +247,27 @@ video {
 }
 
 .footer-icons {
-    /* outline: 1px solid red; */
     display: flex;
     justify-content: space-between;
+}
+
+.footer-icons button {
+    outline: none;
+    border: none;
+}
+
+.footer-icons button:hover {
+    background-color: transparent;
+}
+
+.footer-icons button:disabled {
+    background-color: transparent;
 }
 
 /* BUTTONS */
 
 .open {
     cursor: pointer;
-    /* outline: 1px solid green; */
     background-image: url('../icons/abrir2.png');
     background-size: cover;
     width: 25px;
@@ -374,129 +385,6 @@ video {
     background-size: cover;
     opacity: 50%;
 }
-
-   /* .figure {
-        margin-bottom: 12px;
-    }
-
-    .post {
-        border-radius: 10px;
-    }
-
-
-    .user {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        gap: 5px;
-    }
-
-    .user-profile {
-        margin-left: 10px;
-    }
-
-    .profile-image {
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
-    }
-
-    .text-post {
-        padding: 25px;
-        max-width: 500px; 
-    }
-
-    .text-title {
-        font-size: 23px;
-        margin-bottom: 10px;
-    }
-
-    .text-content {
-        font-size: 18px;
-    }
-
-    .quote-post {
-        padding-left: 50px;
-        padding-right: 50px;
-
-        padding-top: 30px;
-        padding-bottom: 10px;
-    }
-
-    .left-comilla {
-        width: 25px;
-    }
-
-
-    .quote {
-        font-size: 23px;
-        padding-top: 20px;
-        padding-bottom: 20px;
-    }
-
-    .right-comilla {
-        width: 25px;
-    }
-
-    .quote-detail {
-        padding-left: 70px;
-    }
-
-    .footer {
-        font-size: 17px;
-        padding: 10px;
-    }
-
-    .post-title {
-        margin-left: 5px;
-    }
-
-    .footer-middle {
-        min-height: 30px;
-    }
-
-    .open {
-        width: 25px;
-        height: 25px;
-        margin-left: 10px;
-        border-radius: 15px;
-        border: 3px solid rgba(221, 221, 221, 0);
-    }
-
-    .open:hover {
-        border: 3px solid rgb(221, 221, 221);
-    }
-
-    .social-icons {
-        gap: 15px;
-        margin-right: 12px;
-        margin-bottom: 5px;
-    }
-
-    .icon {
-        height: 20px;
-        width: 20px;
-    }
-
-    .share {
-        width: 21px;
-    }
-
-    .share::after {
-        font-size: 13px;
-        top: -35px;
-        left: -25px;
-        width: 70px;
-
-        padding: 5px;
-        padding-left: 7px;
-        padding-right: 7px;
-        border-radius: 15px;
-    }
-
-    .delete {
-        height: 20px;
-        width: 21px;
-    } */
 
 
 @media (max-width: 1650px) {

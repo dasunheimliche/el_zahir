@@ -22,9 +22,9 @@ import style from  '../styles/home.module.css'
 
 const Home = ()=> {
 
-    let [ sticky,  setSticky  ] = useState(false)
-    let [ popUp,   setPopUp   ] = useState({type: 'none', post: null})
-    let [ toFront, setToFront ] = useState(false) 
+    const [ sticky,  setSticky  ] = useState(false)
+    const [ popUp,   setPopUp   ] = useState({type: 'none', post: null})
+    const [ toFront, setToFront ] = useState(false) 
 
     const childRef    = useRef(null)
     const parentRef   = useRef(null)

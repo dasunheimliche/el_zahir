@@ -20,14 +20,13 @@ export async function scrollToTop (ref) {
 };
 
 export function getConfig() {
-    if (window.localStorage.getItem('token') === null) {
-        return 
-    }
+
+    if (window.localStorage.getItem('token') === null) return 
+    
     const tokenString = window.localStorage.getItem('token');
 
-    if (!tokenString) {
-        return 
-    }
+    if (!tokenString) return 
+    
     const token = `Bearer ${tokenString}`;
 
     return {

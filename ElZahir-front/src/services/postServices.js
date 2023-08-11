@@ -5,9 +5,6 @@ import { LOCAL_API, VERCEL_API, RENDER_API } from "./constants";
 const vercelAPI = LOCAL_API || VERCEL_API
 const renderAPI = LOCAL_API || RENDER_API
 
-console.log("VERCEL API", vercelAPI)
-console.log("RENDER API", renderAPI)
-
 export async function fetchPost(postID) {
     try {
         return await axios.get(vercelAPI.concat(`/api/post/${postID}`))

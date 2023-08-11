@@ -2,40 +2,52 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams }                             from 'react-router-dom'
 import {useState}                                from 'react'
 
-import TextPost      from './Posts/TextPost'
-import QuotePost     from './Posts/QuotePost'
-import ImagePost     from './Posts/ImagePost'
-import VideoPost     from './Posts/VideoPost'
-import VideoFilePost from './Posts/VideoFilePost'
-import PostWrapper   from './PostWrapper'
+import PostHeader  from '../components/Post/PostHeader'
+import PostContent from './Post/PostContent'
+import PostFooter  from './Post/PostFooter'
+import PostTitle   from './Post/PostTitle'
 
 import { copyToClipboard } from '../services/helpers'
 import { getCurrentUser }  from '../services/userServices'
 import { toggleLike }      from '../services/postServices'
+import { ImagePostWrapper, QuotePostWrapper, TextPostWrapper, VideoFilePostWrapper, VideoPostWrapper } from './PostWrappers'
 
 const Post = ({post, mode, setPopUp, setToFront})=> {
 
-    const postURL = `${"http://localhost:3000"}/#/post/${post.id}`
-
-    const [loading,    setLoading   ] = useState(false)
-    const [visibility, setVisibility] = useState(true)
-
     const {data: {data: user} = {}} = useQuery({queryKey: ['ME'], queryFn: getCurrentUser})
+
+    const [isMutating, setIsMutating ] = useState(false)
+    const [visibility, setVisibility ] = useState(true)
+    const [liked,      setLiked      ] = useState(post.likes.some(id => id === user.id))
+    
 
     const client = useQueryClient()
     const {"*": param} = useParams()
 
-    const [liked, setLiked] = useState(post.likes.some(id => id === user.id))
+    const isPostMine = (mode !== 'user' && user? user.id === post.user: "" === post.user)
+    const postURL = `${"http://localhost:3000"}/#/post/${post.id}`
 
-    const {mutate: toggleLikeHandler} = useMutation({
+    const handleToggleFullscreenMode = ()=> {
+        if (visibility) {
+            setVisibility(false)
+            setToFront(true)
+            return
+        }
+        setVisibility(true)
+        setToFront(false)
+    }
+
+
+
+    const {mutate: handleToggleLike} = useMutation({
         mutationFn: toggleLike,
         onMutate: ()=> {
-            setLoading(true)
+            setIsMutating(true)
             if (liked) setLiked(false)
             if (!liked) setLiked(true)
         },
         onSuccess: ()=> {
-            setLoading(false)
+            setIsMutating(false)
             if (param === "") {
                 client.invalidateQueries({queryKey: ["userPosts"]})
             }
@@ -51,78 +63,127 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
         }
     })
 
-    const deletePost = async () => {
-        setPopUp({type: 'delete', post: post})
-    };
-
-    const openComments = ()=> {
+    const handleOpenComments = ()=> {
         setPopUp({type: 'comments', post: post})
 
     }
 
-    const p = {
-        toggleLike: ()=>toggleLikeHandler({post, user}),
-        openComments,
-        sharePostURL: ()=>copyToClipboard(postURL),
-        deletePost
-    }
+    const handleDeletePost = async () => {
+        setPopUp({type: 'delete', post: post})
+    };
 
-    
-    if (post.type === "image") {
-        return(
-            <PostWrapper post={post} visibility={visibility}>
-                <ImagePost
-                    post={post} mode={mode} setPopUp={setPopUp}
-                    loading={loading} liked={liked} setToFront={setToFront}
-                    p={p} setVisibility={setVisibility} visibility={visibility}
-                />
-            </PostWrapper>
-        )
-    }
 
     if (post.type === "text") {
-        return (
-            <PostWrapper post={post} visibility={visibility}>
-                <TextPost
-                    post={post} mode={mode} setPopUp={setPopUp}
-                    loading={loading} liked={liked} setToFront={setToFront}
-                    p={p} visibility={visibility} setVisibility={setVisibility}
+        return(
+            <TextPostWrapper visibility={visibility}>
+                <PostHeader post={post} mode={mode} />
+                <PostContent post={post} />
+                <PostFooter 
+                    isMutating={isMutating} 
+                    isPostLiked={liked} 
+                    isPostMine={isPostMine}
+                    onToggleFullscrenMode={handleToggleFullscreenMode}
+                    onToggleLike={()=>handleToggleLike({post, user})}
+                    onOpenComments={handleOpenComments}
+                    onSharingPost={()=>copyToClipboard(postURL)}
+                    onDeletePost={handleDeletePost}
                 />
-            </PostWrapper>
-
+            </TextPostWrapper>
         )
-    }
+    } 
+
     if (post.type === "cita") {
         return(
-            <PostWrapper post={post} visibility={visibility}>
-                <QuotePost
-                    post={post} mode={mode} setPopUp={setPopUp}
-                    loading={loading} liked={liked} setToFront={setToFront}
-                    p={p} visibility={visibility} setVisibility={setVisibility}
+            <QuotePostWrapper visibility={visibility}>
+                <PostHeader post={post} mode={mode} />
+                <PostContent post={post}/>
+                <PostFooter 
+                    isMutating={isMutating} 
+                    isPostLiked={liked} 
+                    isPostMine={isPostMine}
+                    onToggleFullscrenMode={handleToggleFullscreenMode}
+                    onToggleLike={()=>handleToggleLike({post, user})}
+                    onOpenComments={handleOpenComments}
+                    onSharingPost={()=>copyToClipboard(postURL)}
+                    onDeletePost={handleDeletePost}
                 />
-            </PostWrapper>
+            </QuotePostWrapper>
         )
     }
-    if (post.type === "video") {
+
+    if (post.type === "image") {
         return(
-            <PostWrapper post={post} visibility={visibility}>
-                <VideoPost 
-                    post={post} mode={mode} setPopUp={setPopUp} 
-                    loading={loading} liked={liked} setToFront={setToFront}
-                    p={p} visibility={visibility} setVisibility={setVisibility}
+            <ImagePostWrapper visibility={visibility} post={post}>
+                <PostHeader post={post} mode={mode} />
+                <PostContent post={post} />
+                <PostTitle post={post} />
+                <PostFooter 
+                    isMutating={isMutating} 
+                    isPostLiked={liked} 
+                    isPostMine={isPostMine}
+                    onToggleFullscrenMode={handleToggleFullscreenMode}
+                    onToggleLike={()=>handleToggleLike({post, user})}
+                    onOpenComments={handleOpenComments}
+                    onSharingPost={()=>copyToClipboard(postURL)}
+                    onDeletePost={handleDeletePost}
                 />
-            </PostWrapper>
+            </ImagePostWrapper>
         )
     }
-    if (post.type === "video-file") {
-        return (
-            <PostWrapper post={post} visibility={visibility}>
-                <VideoFilePost
-                    post={post} mode={mode} setPopUp={setPopUp}
-                    loading={loading} liked={liked} setToFront={setToFront}
-                    p={p} setVisibility={setVisibility} visibility={visibility}
+
+    if (post.type === "video") {
+
+        const idVideo = post.videoPost.includes("https://www.youtube.com/watch?v=")
+        ? post.videoPost.replace('https://www.youtube.com/watch?v=', "")
+        : post.videoPost.includes("https://youtu.be/")
+        ? post.videoPost.replace('https://youtu.be/', "")
+        : null;
+
+        if (!idVideo) return
+
+        const urlVideo = `https://www.youtube.com/embed/${idVideo}?playlist=${idVideo}&loop=1`
+
+        const aspectRatioString = post.videoAr.split(':')
+        const width = Number(aspectRatioString[1])
+        const height = Number(aspectRatioString[0])
+        const aspectRatio = (width/height) * 100
+
+        return(
+            <VideoPostWrapper post={post} visibility={visibility}>
+                <PostHeader post={post} mode={mode} />
+                <PostContent post={post} aspectRatio={aspectRatio} urlVideo={urlVideo} />
+                <PostTitle post={post} />
+                <PostFooter 
+                    isMutating={isMutating} 
+                    isPostLiked={liked} 
+                    isPostMine={isPostMine}
+                    onToggleFullscrenMode={handleToggleFullscreenMode}
+                    onToggleLike={()=>handleToggleLike({post, user})}
+                    onOpenComments={handleOpenComments}
+                    onSharingPost={()=>copyToClipboard(postURL)}
+                    onDeletePost={handleDeletePost}
                 />
-            </PostWrapper>
+            </VideoPostWrapper>
+        )
+    }
+
+    if (post.type === "video-file") {
+        return(
+            <VideoFilePostWrapper visibility={visibility}>
+                <PostHeader post={post} mode={mode} />
+                <PostContent post={post}/>
+                <PostTitle post={post} />
+                <PostFooter 
+                    isMutating={isMutating} 
+                    isPostLiked={liked} 
+                    isPostMine={isPostMine}
+                    onToggleFullscrenMode={handleToggleFullscreenMode}
+                    onToggleLike={()=>handleToggleLike({post, user})}
+                    onOpenComments={handleOpenComments}
+                    onSharingPost={()=>copyToClipboard(postURL)}
+                    onDeletePost={handleDeletePost}
+                />
+            </VideoFilePostWrapper>
         )
     }
 }

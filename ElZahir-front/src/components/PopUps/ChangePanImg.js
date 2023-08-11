@@ -5,6 +5,8 @@ import { useQueryClient, useMutation } from "@tanstack/react-query"
 import { changeBackgroundImgFromUrl, changeBackgroundImgFromFile } from "../../services/userServices"
 import { doNothing, isImageInputValid }                            from "../../services/helpers"
 
+import { Uploader, Error, PostUiFooter } from "./PostUiModule"
+
 import style from '../../styles/popups.module.css'
 
 const ChangePanImg = ({user, setPopUp})=> {
@@ -32,21 +34,19 @@ const ChangePanImg = ({user, setPopUp})=> {
                 return copy
             })
             
-            close()
+            handleClose()
         } ,
         onError: ()=>{
             setLoading(false)
         }
     })
 
-    const close = ()=> {
-        if (fileForm.current.value) {
+    const handleClose = ()=> {
+        if (fileForm.current) {
             fileForm.current.value = null
         }
-        setUrl('')
-        setFile('')
+
         setPopUp({type: 'none', post: null})
-        setLoading(false)
     }
 
     const handleSubmitPost = (e)=> {
@@ -70,29 +70,14 @@ const ChangePanImg = ({user, setPopUp})=> {
 
     return (
         <form className={style.popup} onSubmit={error || mode === "idle"? doNothing: loading? doNothing : handleSubmitPost} encType="multipart/form-data">
+            <div className={ style['post-ui-header'] }>
+                <span>Change background image</span>
+            </div>
             <div className={style.main}>
-                <div className={ style['post-ui-header'] }>
-                    <span>Change background image</span>
-                </div>
-                <div className={style.uploader}>
-                    <textarea className={`${style.input} ${style['file-textarea']}`} style={error? {color: "red"} : {color: "green"}} placeholder={"URL"} onChange={(e)=> setUrl(e.target.value)} value={url} autoComplete='off' disabled required  />
-                    <div className={style.options}>
-                        <div className={`${style.clipboard} p`} onClick={pasteUrlFromClipboard}></div>
-                        <label className={`${style.upload} p`} >
-                            <input style={{display: "none"}} ref={fileForm} type="file" onClick={()=>setUrl('')} onChange={uploadFile} />
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    {((error) && url.length > 0) && <div className={style.error}>{error}</div>}
-
-                </div>
+                <Uploader onPasteUrl={pasteUrlFromClipboard} onUploadFile={uploadFile} isInputValid={error} url={url}/>
+                <Error error={error} />
             </div>
-            <div className={style.footer}>
-                <div className={style.loading} style={loading? {display: "block"} : {display: "none"}}></div>
-                <button className={`${style.button} p`} type="button" onClick={close} >CLOSE</button>
-                <button className={`${style.button} p`} >POST</button>
-            </div>
+            <PostUiFooter onCancel={handleClose} isPostLoading={loading} isPostButtonDisabled={error}/>
         </form>
     )
 }

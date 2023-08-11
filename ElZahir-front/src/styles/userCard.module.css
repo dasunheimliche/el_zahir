@@ -158,6 +158,16 @@
     gap: 10px;
 }
 
+.postbox button:hover{
+    background-color: transparent;
+}
+
+.postbox button {
+    outline: transparent;
+    border: transparent;
+    background-color: transparent;
+}
+
 .open {
     /* outline: 1px solid black; */
     background-image: url('../images/post-button.png');
@@ -191,7 +201,7 @@
     padding-bottom: 15px;
 }
 
-.buttons div {
+.buttons button {
     border: none;
     background-size: cover;
     transition-property: opacity;
@@ -269,123 +279,8 @@
     width: 90px;
     height: 37px;
     border-radius: 14px;
-
-    /* padding-left: 7px;
-    padding-right: 7px; */
 }
 
-
-/* .userCard {
-        width: 395px;
-        border-radius: 15px;
-        top: 95px;
-    }
-    
-    .top {
-        min-height: 340px;
-        min-height: 330px;
-    }
-    
-    .left-options {
-        width: 10%;
-    }
-    
-    .middle-options {
-        width: 80%;
-    }
-    
-    .right-options {
-        width: 10%;
-    }
-        
-    .profile {
-        border-radius: 50px;
-        top: -50px;
-        left: 35px;
-        width: 100px;
-        height: 100px;
-        border: 3px solid rgb(240, 240, 240);
-    }
-    
-    .username {
-        font-size: 17px;
-        top: 105px;
-    }
-    
-    .separator {
-        left: 67%;
-        height: 86px;
-    }
-    
-    .stats {
-        font-size: 20px;
-        gap: 15px;
-        padding-top: 15px;
-        padding-bottom: 20px;
-    }
-    
-    .stat {
-        width: 100px;
-        gap: 12px;
-    }
-    
-    .stat-title {
-        font-size: 20px;
-    }
-        
-    .postbox {
-        gap: 10px;
-    }
-    
-    .open {
-        width: 45px;
-        height: 45px;
-    }
-    
-    .hide { 
-        width: 45px;
-        height: 45px;
-    }
-    
-    .buttons {
-        gap: 15px;
-        border-radius: 100%/0px 0px 70px 70px;
-        padding-top: 15px;
-        padding-bottom: 15px;
-    }
-    
-    .visible {
-        height: 25px;
-    }
-    
-    .post-image {
-        width: 25px;
-    }
-    
-    .post-quote {
-        width: 37px;
-    }
-    
-    .post-text {
-        width: 37px;
-    }
-    
-    .post-video {
-        width: 25px;
-    }
-        
-    .follow {
-        border-radius: 14px;
-        margin-bottom: 20px;
-        width: 90px;
-        height: 37px;
-    }
-    
-    .unfollow:hover::after {
-        width: 90px;
-        height: 37px;
-        border-radius: 14px;
-    } */
 
 @media (max-width: 1600px) {
 

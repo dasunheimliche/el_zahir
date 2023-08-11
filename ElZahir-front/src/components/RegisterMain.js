@@ -1,14 +1,22 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useMutation, useQuery } from '@tanstack/react-query'
+
+import { fetchInvalidUsernames, signUp } from '../services/authServices'
 
 import style from '../styles/auth.module.css'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { fetchInvalidUsernames, signUp } from '../services/authServices'
-
 const Register = ()=> {
 
-    const [ inputs, setInputs   ] = useState({ name: null, lastname: null, username: null, email: null, password: '', password2: '' })
+    const [ inputs, setInputs ] = useState({ 
+        name: null, 
+        lastname: null, 
+        username: null, 
+        email: null, 
+        password: '', 
+        password2: '' 
+    })
+
     const [ loading, setLoading ] = useState(false)
 
     const navegar = useNavigate()
@@ -18,8 +26,12 @@ const Register = ()=> {
         queryFn: ()=>fetchInvalidUsernames()
     })
 
-    const isUsernameOk = !(invalidUsernames?.includes(inputs.username))
-    const isPasswordOk = (inputs.password === inputs.password2 || inputs.password.length > 0)
+    const isUsernameInputValid = !(invalidUsernames?.includes(inputs.username))
+    const isPasswordShort = inputs.password.length < 5
+    const isPasswordTheSame = inputs.password === inputs.password2
+    const isPasswordInputValid = isPasswordTheSame && isPasswordShort
+    const isInputEmpty = Object.values(inputs).some(value => !value);
+    const isSignUpButtonDisabled = !isPasswordInputValid || !isUsernameInputValid || loading || isInputEmpty
 
     const {mutate: signUpMutation} = useMutation({
         mutationFn: ()=>signUp(inputs),
@@ -31,43 +43,39 @@ const Register = ()=> {
         onError: ()=>setLoading(false)
     }) 
 
-    function signUpHandler (e) {
+    const handleInputChange = (fieldName, fieldValue) => {
+        setInputs(prevInputs => ({ ...prevInputs, [fieldName]: fieldValue }));
+      };
+
+    function handleSignUp (e) {
         e.preventDefault()
         signUpMutation()
     }
 
     return (
         <div className={style.main}>
-
-            <div className={style['left-side']}>
-
-                <div className={style.card}>
-
+            <div className={style.leftSide}>
+                <div className={style.authCard}>
                     <div>Bienvenido a Zahir</div>
-                    <div>Por favor ingrese sus datos</div>
-                    <form onSubmit={isPasswordOk && isUsernameOk && !loading? signUpHandler : undefined}>
+                    <div>Por favor ingrese sus datos:</div>
+                    <form onSubmit={handleSignUp}>
+                        <input type='text' onChange={e=>handleInputChange("name", e.target.value)}     placeholder={'name'} required/>
+                        <input type='text' onChange={e=>handleInputChange("lastname", e.target.value)} placeholder={'lastname'} required/>
+                        <input type='text' onChange={e=>handleInputChange("username", e.target.value)} placeholder={'username'} required/>
 
-                        <input required  type='text' onChange={(e)=> setInputs({...inputs, name: e.target.value})}     placeholder={'name'} />
-                        <input required  type='text' onChange={(e)=> setInputs({...inputs, lastname: e.target.value})} placeholder={'lastname'} />
-                        <input required  type='text' onChange={(e)=> setInputs({...inputs, username: e.target.value})} placeholder={'username'} />
-                        <div className={!isUsernameOk && style.invalidUser}></div>
+                        <div className={!isUsernameInputValid?  style.invalidUser : undefined}></div>
 
-                        <input required  type='email'    onChange={(e)=> setInputs({...inputs, email: e.target.value})}     placeholder={'e-mail'} />
-                        <input required  type='password' onChange={(e)=> setInputs({...inputs, password: e.target.value})}  placeholder={'password'} />
-                        <input required  type='password' onChange={(e)=> setInputs({...inputs, password2: e.target.value})} placeholder={'repeat password'} />
+                        <input type='email'    onChange={e=>handleInputChange("email", e.target.value)}     placeholder={'e-mail'} required/>
+                        <input type='password' onChange={e=>handleInputChange("password", e.target.value)}  placeholder={'password'} required/>
+                        <input type='password' onChange={e=>handleInputChange("password2", e.target.value)} placeholder={'repeat password'} required/>
 
-                        <div className={inputs.password? (inputs.password !== inputs.password2? style.notPass: (inputs.password.length < 5? style.tooShort : '')) : ''}></div>
+                        <div className={inputs.password? (!isPasswordTheSame? style.notSamePass: (isPasswordShort? style.notSamePass : undefined)) : undefined}></div>
 
-                        <button type='submit' className="p">Sign in</button>
-
+                        <button type='submit' className="p" disabled={isSignUpButtonDisabled}>Sign in</button>
                     </form>
-
                 </div>
-
             </div>
-
-            <div className="right-login">
-                
+            <div className={style.rightSide}>
             </div>
         </div>
     )

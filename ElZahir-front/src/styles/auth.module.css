@@ -1,335 +1,216 @@
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;900&display=swap');
 
+/** PLANTILLA */
 
-/* LOGIN */
+/* .selector {
+    Posición y visualización
+  
+    Dimensiones
+  
+    Margen y relleno
+  
+    Borde y sombra
+  
+    Fondo
+  
+    Tipografía
+  
+    Flexbox o Grid
+  
+    Animaciones y transiciones
+} */
+
+
+/** LOGIN */
   
 .main {
-    
-    background-color: rgba(255, 255, 255, 0);
-    
+    display: flex;
+
     width: 100%;
     height: 100vh;
-    
-    display: flex;
+
+    background-color: rgba(255, 255, 255, 0);
 }
     
-.left-side {
-    background-color: rgb(255, 255, 255);
+.leftSide {
+    display: flex;
 
     width: 50%;
 
-    display: flex;
+    background-color: rgb(255, 255, 255);
+
     justify-content: center;
     align-items: center;
 }
     
-.card {
-    font-family: 'Heebo', sans-serif;
-    width: 370px;
-
+.authCard {
     display: flex;
+    position: relative;
+
+    width: 23.125rem;
+
+    font-family: 'Heebo', sans-serif;
+
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-
-    position: relative;
 }
 
-.card div:first-child {
-    font-size: 20px;
-    font-weight:500;
-    margin-bottom: 25px;
+.authCard div:first-child {
+    margin-bottom: 1.56rem;
+
+    font-size: 1.45rem;
+    font-weight: 500;
 }
 
-.card div:nth-child(2) {
+.authCard div:nth-child(2) {
+    margin-bottom: 1.47rem; 
+
+    font-size: 1rem;
+
     align-self: flex-start;
-    font-size: 13px;
-    margin-bottom: 30px; 
 }
 
-.card form {
-    border-bottom: 1px solid rgb(92, 91, 91);
-    margin-bottom: 15px;
+.authCard form {
     width: 100%;
-    font-size: 15px;
-    padding-bottom: 7px;
+
+    margin-bottom: 0.93rem;
+    padding-bottom: 0.43rem;
+
+    border-bottom: 1px solid rgb(92, 91, 91);
+
+    font-size: 0.93rem;
+}
+
+button:disabled {
+    background-color: grey;
+}
+button:disabled:hover {
+    background-color: gray;
 }
 
 form input {
+    height: 1.7rem;
+    width: 100%;
+
+    margin-bottom: 0.93rem;
+    padding-bottom: 0.43rem;
+
     outline: none;
     border: none;
     border-bottom: 1px solid rgb(92, 91, 91);
-    margin-bottom: 15px;
-    width: 100%;
-    font-size: 15px;
-    padding-bottom: 7px;
+    
+    font-size: 1rem;
+    color: rgb(27, 27, 27);
+}
+
+.buttons {
+    display: flex;
+    gap: 5px;
 }
 
 form button {
-    color: white;
-    background-color: rgb(17,23,39);
+    all: unset;
     width: 100%;
+
+    margin-top: 1.16rem;
+    padding: 0.62rem 0;
+    
+    border-radius: 0.25rem;
+
+    background-color: rgb(17,23,39);
+
+    color: white;
     
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-radius: 5px;
-    
-    margin-top: 25px;
+
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rgb(26, 34, 58);
+}
+
+.failedLogin {
+    position: relative;
 }
     
 .failedLogin::after {
     content: "username or password invalid";
-    font-size: 13px;
-    color: red;
 
     position: absolute;
+    top: -0.5rem;
+
+    color: red;
+    font-size: 0.81rem;
 }
 
 .toRegister {
-    font-size: 12px;
     width: 95%;
+
+    font-size: 0.85rem;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 0.62rem;
 }
     
-.right-side {
+.rightSide {
     width: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
     background-image: url('https://64.media.tumblr.com/0049b7745b9013ee51be02c1bd4230d6/tumblr_njzwzqEnZv1u7j6e0o1_1280.jpg');
     background-size: cover;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
   
-/* REGISTER */
+/** REGISTER */
 
-.notPass::after {
+.notSamePass::after {
     content: "password must be the same";
-    font-size: 13px;
+
+    font-size: 0.81rem;
     color: red;
 }
   
-.tooShort::after {
+.notSamePass::after {
     content: "password too short";
-    font-size: 13px;
+
+    font-size: 0.81rem;
     color: red;
 }
   
 .invalidUser::after {
-    content: "invalid user";
-    font-size: 13px;
-    color: red;
     position: relative;
     top: -5px;
+
+    content: "invalid user";
+
+    font-size: 0.81rem;
+    color: red;
 }
 
-
-    /* .left-side {
-        width: 50%;
-    }
-        
-    .card {
-        width: 370px;
-    }
-
-    .card div:first-child {
-        font-size: 20px;
-        font-weight:500;
-        margin-bottom: 25px;
-    }
-
-    .card div:nth-child(2) {
-        font-size: 13px;
-        margin-bottom: 30px; 
-    }
-
-    .card form {
-        margin-bottom: 15px;
-        font-size: 15px;
-        padding-bottom: 7px;
-    }
-
-    form input {
-        margin-bottom: 15px;
-        font-size: 15px;
-        padding-bottom: 7px;
-    }
-
-    form button {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        border-radius: 5px;
-        margin-top: 25px;
-    }
-        
-    .failedLogin::after {
-        font-size: 13px;
-    }
-
-    .toRegister {
-        font-size: 12px;
-        width: 95%;
-        gap: 10px;
-    }
-        
-    .right-side {
-        width: 50%;
-    }
-    
-    .notPass::after {
-        font-size: 13px;
-    }
-    
-    .tooShort::after {
-        font-size: 13px;
-    }
-    
-    .invalidUser::after {
-        font-size: 13px;
-        top: -5px;
-    } */
 
 
 @media (max-width: 1600px) {
-        
-    .left-side {
-        width: 50%;
-    }
-        
-    .card {
-        width: 308px;
-    }
-
-    .card div:first-child {
-        font-size: 17px;
-        font-weight:500;
-        margin-bottom: 21px;
-    }
-
-    .card div:nth-child(2) {
-        font-size: 11px;
-        margin-bottom: 25px; 
-    }
-
-    .card form {
-        margin-bottom: 12px;
-        font-size: 12px;
-        padding-bottom: 6px;
-    }
-
-    form input {
-        margin-bottom: 12px;
-        font-size: 12px;
-        padding-bottom: 6px;
-    }
-
-    form button {
-        padding-top: 8px;
-        padding-bottom: 8px;
-        border-radius: 4px;
-        margin-top: 21px;
-    }
-        
-    .failedLogin::after {
-        font-size: 11px;
-    }
-
-    .toRegister {
-        font-size: 10px;
-        width: 95%;
-        gap: 8px;
-    }
-        
-    .right-side {
-        width: 50%;
-    }
     
-    .notPass::after {
-        font-size: 11px;
+    html {
+        font-size: 13px;
     }
-    
-    .tooShort::after {
-        font-size: 11px;
-    }
-    
-    .invalidUser::after {
-        font-size: 11px;
-        top: -4px;
-    }
+
 }
   
 @media (max-width: 1366px) {
-    .left-side {
-        width: 50%;
-    }
-        
-    .card {
-        width: 263px;
-    }
 
-    .card div:first-child {
-        font-size: 14px;
-        font-weight:500;
-        margin-bottom: 18px;
-    }
-
-    .card div:nth-child(2) {
-        font-size: 9px;
-        margin-bottom: 21px; 
-    }
-
-    .card form {
-        margin-bottom: 11px;
+    html {
         font-size: 11px;
-        padding-bottom: 5px;
     }
 
-    form input {
-        margin-bottom: 11px;
-        font-size: 11px;
-        padding-bottom: 5px;
-    }
-
-    form button {
-        padding-top: 7px;
-        padding-bottom: 7px;
-        border-radius: 4px;
-        margin-top: 18px;
-    }
-        
-    .failedLogin::after {
-        font-size: 9px;
-    }
-
-    .toRegister {
-        font-size: 9px;
-        width: 95%;
-        gap: 7px;
-    }
-        
-    .right-side {
-        width: 50%;
-    }
-    
-    .notPass::after {
-        font-size: 9px;
-    }
-    
-    .tooShort::after {
-        font-size: 9px;
-    }
-    
-    .invalidUser::after {
-        font-size: 9px;
-        top: -4px;
-    }
 }
   
 @media (max-width: 912px) and (orientation: portrait) {
@@ -337,17 +218,15 @@ form button {
 }
   
 @media (max-width: 500px) and (orientation: portrait) {
-    .right-side {
+    .rightSide {
         display: none;
         margin: 0px;
         padding: 0px;
     }
     
-    .left-side {
+    .leftSide {
         width: 100%;
         height: 100vh;
     }
 
-    
 }
-  
