@@ -353,6 +353,9 @@
         position: relative;
         top: 0px;
         border-radius: 0px;
+
+        border: none;
+        box-shadow: none;
     }
 
     .mobile-separator {
