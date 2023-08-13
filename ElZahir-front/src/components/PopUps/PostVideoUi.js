@@ -12,13 +12,13 @@ import { PostUIHeader, MainInput, SubInput, Uploader, Error, PostUiFooter } from
 import style from '../../styles/popups.module.css'
 
 const PostVideoUI = ({setPopUp})=> {
-    let [mode,        setMode        ] = useState('idle')
-    let [file,        setFile        ] = useState(false)
-    let [url,         setUrl         ] = useState('')
-    let [title,       setTitle       ] = useState('')
-    let [subtitle,    setSubtitle    ] = useState('')
-    let [aspectRatio, setAspectRatio ] = useState('')
-    let [loading,     setLoading     ] = useState(false)
+    const [mode,        setMode        ] = useState('idle')
+    const [file,        setFile        ] = useState(false)
+    const [url,         setUrl         ] = useState('')
+    const [title,       setTitle       ] = useState('')
+    const [subtitle,    setSubtitle    ] = useState('')
+    const [aspectRatio, setAspectRatio ] = useState('')
+    const [isMutating,  setIsMutating     ] = useState(false)
 
     const error = isVideoInputValid(url, file, mode)
 
@@ -30,7 +30,7 @@ const PostVideoUI = ({setPopUp})=> {
             if (mode === "url") return await postVideoFromUrl(url, title, subtitle, aspectRatio)
             if (mode === "file") return await postVideoFromFile(file, title, subtitle)
         },
-        onMutate: ()=>setLoading(true),
+        onMutate: ()=>setIsMutating(true),
         onSuccess: (res)=>{
             client.setQueryData(["userPosts"], (old)=> {
                 const copy = {...old}
@@ -40,7 +40,7 @@ const PostVideoUI = ({setPopUp})=> {
             handleClose()
         },
         onError: ()=>{
-            setLoading(false)
+            setIsMutating(false)
         }
     })
 
@@ -79,13 +79,13 @@ const PostVideoUI = ({setPopUp})=> {
                 <MainInput value={title}       onChange={e=>setTitle(e.target.value)}       placeholder={"Title"}/>
                 <SubInput  value={subtitle}    onChange={e=>setSubtitle(e.target.value)}    placeholder={"Description"}/>
                 <SubInput  value={aspectRatio} onChange={e=>setAspectRatio(e.target.value)} placeholder={"Optional: Aspect ratio (Ej.: 16:9)"}/>
-
+                
                 <Uploader onPasteUrl={pasteUrlFromClipboard} onUploadFile={uploadFile} isInputValid={error} url={url}/>
 
                 <Error error={error} />
             </div>
 
-            <PostUiFooter onCancel={handleClose} isPostLoading={loading} isPostButtonDisabled={error}/>
+            <PostUiFooter onCancel={handleClose} isMutating={isMutating} isPostButtonDisabled={error}/>
         </form>
     )
 }

@@ -40,9 +40,16 @@ export function Uploader ({onPasteUrl, onUploadFile, isInputValid, url}) {
     
     return(
         <div className={ style.uploader }>
-            <textarea disabled  className={ `${style.input} ${style['file-textarea']}` } style={isInputValid? {color: "red"} : {color: "green"}} placeholder={"File"} value={url} autoComplete='off' required/>
+            <textarea   
+                className={isInputValid? `${style.input} ${style['file-textarea']} ${style.invalidTextAreaInput}` : `${style.input} ${style['file-textarea']} ${style.validTextAreaInput}`} 
+                placeholder={"File"} 
+                value={url} 
+                autoComplete='off' 
+                required 
+                readOnly
+            />
             <div className={ style.options }>
-                <button className={ `${style.uploadButton} ${style.clipboard} ` } onClick={onPasteUrl} />
+                <button className={ `${style.uploadButton} ${style.clipboard} `} onClick={onPasteUrl} />
                 <label className={ `${style.uploadButton} ${style.upload} ` } >
                     <input className={style.fileInput} type="file" onChange={onUploadFile} />
                 </label>
@@ -60,13 +67,15 @@ export function Error({error}) {
     )
 }
 
-export function PostUiFooter ({onCancel, isPostLoading, isPostButtonDisabled=false}) {
+export function PostUiFooter ({onCancel, isMutating, isPostButtonDisabled=false}) {
+
+    const isButtonDisabled = isMutating || isPostButtonDisabled
 
     return(
         <div className={style.footer}>
-          {isPostLoading && <div className={style.loading} />}
+          {isMutating && <div className={style.loading} />}
           <button className={`${style.button} p`} type="button" onClick={onCancel} >CANCEL</button>
-          <button className={`${style.button} p`} disabled={isPostLoading || isPostButtonDisabled}>POST</button>
+          <button className={`${style.button} p`} disabled={isButtonDisabled}>POST</button>
       </div>
     )
 } 

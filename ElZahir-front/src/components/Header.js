@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { getCurrentUser, getUserList } from '../services/userServices'
-import { LARGE_WIDTH, MEDIUM_WIDTH }   from '../services/constants'
 
 import { ProfileDropdown, SearchUsersInput, ZahirLogo } from './HeaderModule'
 
@@ -26,22 +25,35 @@ const Header = ({sticky, setSticky, toFront, mode})=> {
 
     const {data: {data: me} = {}} = useQuery({queryKey: ['ME'], queryFn: getCurrentUser,})
     const {data: {data: searchResults} = {}} = useQuery({queryKey: ["GET_USER_LIST"], queryFn: getUserList,})
-    
+
     const handleScroll = () => {
-        const stickyValue =
-            window.innerWidth > LARGE_WIDTH ? 62 :
-            window.innerWidth <= MEDIUM_WIDTH ? 42 :
-            50;
-      
-        setSticky(window.scrollY >= stickyValue && !sticky);
+        if (mode === "mobile") return
+
+        let threshold;
+        
+        if (window.innerWidth > 1600) {
+            threshold = 62;
+        } else if (window.innerWidth <= 1366) {
+            threshold = 42;
+        } else {
+            threshold = 50;
+        }
+
+        if (window.scrollY >= threshold && !sticky) {
+            setSticky(true);
+        } else if (window.scrollY < threshold) {
+            setSticky(false);
+        }
     };
+    
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll)
+        window.addEventListener('scroll', handleScroll);
+    
         return () => {
-            window.removeEventListener('scroll', handleScroll)
-        }
-    }, []) // eslint-disable-line
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [sticky]); //eslint-disable-line
 
     return (
         <HeaderWrapper mode={mode} sticky={sticky} toFront={toFront}>

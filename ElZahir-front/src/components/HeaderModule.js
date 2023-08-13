@@ -12,9 +12,10 @@ export function ZahirLogo () {
     
 }
 
+
 export function SearchUsersInput({searchResults, me}) {
 
-    let [searchQuery,   setSearchQuery  ] = useState('')
+    const [searchQuery,   setSearchQuery  ] = useState('')
 
     const searchRef   = useRef()
 
@@ -34,14 +35,16 @@ export function SearchUsersInput({searchResults, me}) {
         return validResults.map((res,i)=> {
             if (me.userId === res.id) {
                 return (
-                    <Link className='linknostyle' key={i} to={`/home/`}>
-                        <div className='p' onClick={clearSearch}>{res.username}</div>
+                    <Link className='linknostyle' key={res.id} to={`/home/`}>
+                        <img src={res.profileImg} alt='profile' />
+                        <span className='p' onClick={clearSearch}>{res.username}</span>
                     </Link>
                 )
             } else {
                 return (
-                    <Link className='linknostyle' key={i} to={`/user/${res.id}`}>
-                        <div className='p' onClick={clearSearch}>{res.username}</div>
+                    <Link className='linknostyle' key={res.id} to={`/user/${res.id}`}>
+                        <img src={res.profileImg} alt='profile' />
+                        <span className='p' onClick={clearSearch}>{res.username}</span>
                     </Link>
                 )
             }
@@ -78,8 +81,8 @@ export function ProfileDropdown({me, queryClient}) {
     return(
         <div className={!isMenuOpen? style['user-container'] : `${style['user-container']} ${style['expanded-user-menu']}`} onClick={toggleUserMenu}>
             <div className={style.user}>
-                <div style={{'backgroundImage':`url(${me.profileImg})`}} className={style['user-logo']}></div>
-                <div className={style.username}>{me.username}</div>
+                <img src={me.profileImg} className={style['user-logo']} alt='profile'/>
+                <span className={style.username}>{me.username}</span>
             </div>
             <div className={isMenuOpen? style['user-menu'] : `${style['user-menu']} invisible`}>
                 <span className={style.signOff} onClick={signOffHandler}>Log Off</span>

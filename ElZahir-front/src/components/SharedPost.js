@@ -56,21 +56,10 @@ const SharedPost = ()=> {
     }, [size.width, size.height]); //eslint-disable-line
 
  
-    if (post?.type === "image") {
-        return (
-            <div className={style.container}>
-                <div id={style['mobile-image-container']} style={(size.height > (window.innerHeight - 150))? {width: `${ancho}px`, maxWidth: '90vw'} : {}}>
-                    <div className="logo post-logo">Zahir.</div>
-                    <SharedImagePost post={post}  p={p}/>
-                </div>
-            </div>
-        )
-    }
-
     if (post?.type === "text") {
         return (
-            <div className={style.container}>
-                <div id={style['mobile-container']} style={{width: "30%"}}>
+            <div className={style.fullscreenBackground}>
+                <div className={`${style['mobile-container']} ${style.resizeHandler}`}>
                     <div className="logo post-logo">Zahir.</div>
                     <SharedTextPost post={post} p={p}/>
                 </div>
@@ -79,18 +68,30 @@ const SharedPost = ()=> {
     }
     if (post?.type === "cita") {
         return(
-            <div className={style.container}>
-                <div id={style['mobile-container']} style={{width: "30%"}}>
+            <div className={style.fullscreenBackground}>
+                <div className={`${style['mobile-container']} ${style.resizeHandler}`}>
                     <div className="logo post-logo">Zahir.</div>
                     <SharedQuotePost post={post} p={p}/>
                 </div>
             </div>
         )
     }
+
+    if (post?.type === "image") {
+        return (
+            <div className={style.fullscreenBackground}>
+                <div className={style['mobile-image-container']} style={(size.height > (window.innerHeight - 150))? {width: `${ancho}px`, maxWidth: '90vw'} : {}}>
+                    <div className="logo post-logo">Zahir.</div>
+                    <SharedImagePost post={post}  p={p}/>
+                </div>
+            </div>
+        )
+    }
+
     if (post?.type === "video") {
         return(
-            <div className={style.container}>
-                <div id={style['mobile-container']} style={aspectRatioNumber >= 100?  (aspectRatioNumber >= 170? {width:"23%"}: {width: "32%"}) : {width: "50%"} }>
+            <div className={style.fullscreenBackground}>
+                <div className={style['mobile-container']} style={aspectRatioNumber >= 100?  (aspectRatioNumber >= 170? {width:"23%"}: {width: "32%"}) : {width: "50%"} }>
                     <div className="logo post-logo">Zahir.</div>
                     <SharedVideoPost post={post} p={p}/>
                 </div>
@@ -99,8 +100,8 @@ const SharedPost = ()=> {
     }
     if (post?.type === "video-file") {
         return (
-            <div className={style.container}>
-                <div id={style['mobile-container']} style={{maxWidth: '50vw', maxHeight: '90vh'} }>
+            <div className={style.fullscreenBackground}>
+                <div className={style['mobile-container']} style={{maxWidth: '50vw', maxHeight: '90vh'} }>
                     <div className="logo post-logo">Zahir.</div>
                     <SharedVideoFilePost post={post} p={p}/>
                 </div>

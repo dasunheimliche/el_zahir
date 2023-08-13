@@ -1,17 +1,40 @@
 
+/** PLANTILLA */
+
+/* .selector {
+    Posición y visualización
+  
+    Dimensiones
+  
+    Margen y relleno
+  
+    Borde y sombra
+  
+    Fondo
+  
+    Tipografía
+  
+    Flexbox o Grid
+  
+    Animaciones y transiciones
+} */
+
 
 
 .bar {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: top 0.2s;
+    top: -3.43rem;
+
+    margin-top: 3.87rem;
+    margin-bottom: 2.5rem;
 
     width: 100%;
-    height: 55px;
-    top: -55px;
-    margin-top: 62px;
-    margin-bottom: 40px;
+    height: 3.43rem;
+
+    justify-content: space-between;
+    align-items: center;
+
+    transition: top 0.2s;
 }
 
 .mobile-bar {
@@ -19,157 +42,186 @@
 }
 
 .sticky-bar {
-    width: 90%;
     z-index: 1;
-    filter: blur(0px);
     position: fixed;
     top: 0;
 
-    margin-top: 20px;
-    margin-bottom: 15px;
+    width: 90%;
+    
+    margin-top: 1.25em;
+    margin-bottom: 0.93rem;
 }
 
 /* LEFT SIDE */
 
 .left-side {
-    outline-offset: -1px;
     z-index: 1;
+    position: relative;
     display: flex;
+
     justify-content: flex-start;
     align-items: center;
-    min-width: 50%;
-    position: relative;
-
-    gap: 20px;
+    gap: 1.25rem;
 }
 
 .search {
-    position: relative;
     z-index: 1;
+    box-sizing: border-box;
+    position: relative;
     display: flex;
+
+    width: 9.37rem;
+    height: 1.81rem;
+
+    padding-left: 0.44rem;
+
+    border-radius: 0.93rem;
+
+    background-color: rgb(245, 245, 245);
+
     align-items: center;
     justify-content: flex-start;
-    background-color: rgb(245, 245, 245);
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    gap: 0.3rem;
 
-    gap: 3px;
-    border-radius: 15px;
-    width: 150px;
-    height: 29px;
-    padding-left: 7px;
+    opacity: 0.8;
 }
 
 .search img {
     height: auto;
-
-    width: 20px;
+    width: 1.25rem;
 }
 
 .search input {
     all: unset;
-    height: 100%;
 
-    width: 75%;
-    font-size: 17px;
+    height: 100%;
+    width: 100%;
+
+    font-size: 1rem;
 
     touch-action: none;
 }
 
 .user-list {
+    box-sizing: border-box;
     position: absolute;
+    display: flex;
+    
     left: 0px;
-    top: 25px;
+    top: 1.56rem;
+
+    width: 9.37rem;
+
+    margin-top: 0.62rem;
+    padding: 0.44rem 0 0.44rem 2rem;
+    padding-left: 0.44rem;
+
+    border-radius: 0.62rem;
+
     background-color: rgba(255, 255, 255, 0.605);
+    
+    flex-direction: column;
+    gap: 0.31rem;
+
     transition-property: height;
     transition-duration: 0.2s;
-    display: flex;
-    flex-direction: column;
+}
 
-    border-radius: 10px;
-    width: 120px;
-    margin-top: 10px;
-    padding-left: 37px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    gap: 5px;
+.user-list * {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.user-list img {
+    border-radius: 100rem;
+    object-fit:cover;
+    height: 1.3rem;
+    width: 1.3rem;
 }
 
 /* RIGHT SIDE */
 
 .right-side {
-    outline-offset: -1px;
-    min-width: 50%;
     display: flex;
+    
     justify-content: flex-end;
 }
 
 .user-container {
     z-index: 2; /* test */
-    cursor: pointer;
-    color: rgb(245, 245, 245);
-    background-color: rgba(31, 31, 31, 0.285);
     position: relative;
-    border-radius: 25px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 5px;
-    padding-right: 15px;
+
+    padding: 0.31rem 0.93rem 0.31rem 0.31rem;
+
+    border-radius: 1.56rem;
+
+    background-color: rgba(31, 31, 31, 0.285);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    
+    color: rgb(245, 245, 245);
+    
     transition-property: background-color, color;
     transition-duration: 0.2s;
 
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    cursor: pointer;
 }
 
 .user-container:hover {
-    color: white;
     background-color: rgb(44, 44, 44);
+
+    color: white;
 }
 
 .expanded-user-menu {
-    color: white;
+    border-radius: 1.56rem 1.56rem 0 0;
+
     background-color: rgb(44, 44, 44);
-    
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+
+    color: white;
 }
 
 .user {
     display: flex;
+
     align-items: center;
     justify-content: flex-start;
-
-    gap: 7px;
+    gap: 0.44rem;
 }
 
 .user-logo {
+    width: 2.19rem;
+    height: 2.19rem;
+    
+    margin-left: 0.19rem;
+
+    border-radius: 1.25rem;
+
     background-size: cover;
-    width: 35px;
-    height: 35px;
-    border-radius: 20px;
-    margin-left: 3px;
 }
 
 .username {
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 .user-menu {
-    background-color: rgb(44, 44, 44);
-    left: 0px;
     position: absolute;
     display: flex;
+    left: 0px;
+
+    width: calc(100% - 1rem);
+
+    padding: 0.94rem 0 0.62rem 1rem;
+
+    border-bottom-left-radius: 1.56rem;
+    border-bottom-right-radius: 1.56rem;
+
+    background-color: rgb(44, 44, 44);
+    
+    
     flex-direction: column;
     justify-content: flex-start;
-
-    width: calc(100% - 17px);
-    padding-left: 17px;
-    gap: 7px;
-    padding-top: 15px;
-    padding-bottom: 10px;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
+    gap: 0.44rem;
 }
 
 .signOff {
@@ -179,203 +231,15 @@
 
 @media (max-width: 1600px) {
 
-    .bar {
-        height: 46px;
-        top: -46px;
-        margin-top: 52px;
-        margin-bottom: 33px;
-    }
-
-    .sticky-bar {
-        margin-top: 17px;
-        margin-bottom: 12px;
-        top: 0px;
-    }
-
-    .left-side {
-        gap: 17px;
-    }
-
-    .logo {
-        text-shadow: -2px -2px 0px rgb(255, 255, 255);
-        font-size: 24px;
-        padding-left: 2px;
-        top: 2px;
-    }
-
-    .search {
-        gap: 2px;
-        border-radius: 12px;
-        width: 125px;
-        height: 24px;
-        padding-left: 6px;
-    }
-
-    .search img {
-        width: 17px;
-    }
-
-    .search input {
-        width: 75%;
-        font-size: 14px;
-    }
-
-    .user-list {
-
-        top: 21px;
-        border-radius: 8px;
-        width: 100px;
-        margin-top: 8px;
-        padding-left: 31px;
-        padding-top: 6px;
-        padding-bottom: 6px;
-        gap: 4px;
-    }
-
-    .user-container {
-        border-radius: 21px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        padding-left: 4px;
-        padding-right: 12px;
-    }
-
-    .expanded-user-menu {
-        border-top-left-radius: 21px;
-        border-top-right-radius: 21px;
-        border-bottom-left-radius: 0px;
-        border-bottom-right-radius: 0px;
-    }
-
-    .user {
-        gap: 6px;
-    }
-
-    .user-logo {
-        width: 29px;
-        height: 29px;
-        border-radius: 17px;
-        margin-left: 2px;
-    }
-
-    .username {
+    html {
         font-size: 13px;
     }
-
-    .user-menu {
-        width: calc(100% - 14px);
-        padding-left: 14px;
-        gap: 6px;
-        padding-top: 12px;
-        padding-bottom: 8px;
-        border-bottom-left-radius: 21px;
-        border-bottom-right-radius: 21px;
-    }
-
-    .signOff {
-        font-size: 13px;
-    }
-    
-    
 
 }
 
 @media (max-width: 1366px) {
 
-    .bar {
-        height: 39px;
-        top: -44px;
-        margin-top: 44px;
-        margin-bottom: 28px;
-    }
-    
-    .sticky-bar {
-        margin-top: 14px;
-        margin-bottom: 10px;
-        top: 0px;
-    }
-        
-    .left-side {
-        gap: 14px;
-    }
-    
-    .logo {
-        text-shadow: -2px -2px 0px rgb(255, 255, 255);
-        font-size: 21px;
-        padding-left: 2px;
-        top: 1px;
-    }
-    
-    .search {
-        gap: 2px;
-        border-radius: 11px;
-        width: 107px;
-        height: 21px;
-        padding-left: 5px;
-    }
-    
-    .search img {
-        width: 14px;
-    }
-    
-    .search input {
-        width: 75%;
-        font-size: 12px;
-    }
-    
-    .user-list {
-    
-        top: 18px;
-        border-radius: 7px;
-        width: 85px;
-        margin-top: 7px;
-        padding-left: 26px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        gap: 3px;
-    }
-        
-    .user-container {
-        border-radius: 18px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        padding-left: 4px;
-        padding-right: 11px;
-    }
-    
-    .expanded-user-menu {
-        border-top-left-radius: 18px;
-        border-top-right-radius: 18px;
-        border-bottom-left-radius: 0px;
-        border-bottom-right-radius: 0px;
-    }
-    
-    .user {
-        gap: 5px;
-    }
-    
-    .user-logo {
-        width: 25px;
-        height: 25px;
-        border-radius: 14px;
-        margin-left: 2px;
-    }
-    
-    .username {
-        font-size: 11px;
-    }
-    
-    .user-menu {
-        width: calc(100% - 12px);
-        padding-left: 12px;
-        gap: 5px;
-        padding-top: 11px;
-        padding-bottom: 7px;
-        border-bottom-left-radius: 18px;
-        border-bottom-right-radius: 18px;
-    }
-
-    .signOff {
+    html {
         font-size: 11px;
     }
 

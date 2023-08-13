@@ -3,7 +3,7 @@ import { useRef, useState }            from "react"
 import { useQueryClient, useMutation } from "@tanstack/react-query"
 
 import { changeBackgroundImgFromUrl, changeBackgroundImgFromFile } from "../../services/userServices"
-import { doNothing, isImageInputValid }                            from "../../services/helpers"
+import { isImageInputValid }                                       from "../../services/helpers"
 
 import { Uploader, Error, PostUiFooter } from "./PostUiModule"
 
@@ -11,22 +11,22 @@ import style from '../../styles/popups.module.css'
 
 const ChangePanImg = ({user, setPopUp})=> {
 
-    let [mode,    setMode   ] = useState('idle')
-    let [url,     setUrl    ] = useState('')
-    let [file,    setFile   ] = useState(false)
-    let [loading, setLoading] = useState(false)
+    const [mode,    setMode   ] = useState('idle')
+    const [url,     setUrl    ] = useState('')
+    const [file,    setFile   ] = useState(false)
+    const [isMutating, setIsMutating] = useState(false)
 
     const client   = useQueryClient()
     const fileForm = useRef()
 
-    let error = isImageInputValid(url, file, mode)
+    const error = isImageInputValid(url, file, mode)
 
     const {mutate: postMutation} = useMutation({
         mutationFn: async()=> {
             if (mode === "url") return await changeBackgroundImgFromUrl(user, url)
             if (mode === "file") return await changeBackgroundImgFromFile(user, file)
         },
-        onMutate: ()=>setLoading(true),
+        onMutate: ()=>setIsMutating(true),
         onSuccess: (res)=>{
             client.setQueryData(["ME"], (old)=> {
                 const copy = {...old}
@@ -37,7 +37,7 @@ const ChangePanImg = ({user, setPopUp})=> {
             handleClose()
         } ,
         onError: ()=>{
-            setLoading(false)
+            setIsMutating(false)
         }
     })
 
@@ -69,15 +69,15 @@ const ChangePanImg = ({user, setPopUp})=> {
     }
 
     return (
-        <form className={style.popup} onSubmit={error || mode === "idle"? doNothing: loading? doNothing : handleSubmitPost} encType="multipart/form-data">
+        <form className={style.popup} onSubmit={handleSubmitPost} encType="multipart/form-data">
             <div className={ style['post-ui-header'] }>
-                <span>Change background image</span>
+                <span>Change cover image</span>
             </div>
             <div className={style.main}>
                 <Uploader onPasteUrl={pasteUrlFromClipboard} onUploadFile={uploadFile} isInputValid={error} url={url}/>
                 <Error error={error} />
             </div>
-            <PostUiFooter onCancel={handleClose} isPostLoading={loading} isPostButtonDisabled={error}/>
+            <PostUiFooter onCancel={handleClose} isMutating={isMutating} isPostButtonDisabled={error}/>
         </form>
     )
 }

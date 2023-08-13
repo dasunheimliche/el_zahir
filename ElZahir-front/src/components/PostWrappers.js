@@ -3,42 +3,51 @@ import { useEffect, useState } from 'react'
 import style from '../styles/post.module.css'
 
 
-function PostWrapper ({children, visibility}) {
+function PostWrapper ({children, isFullscreen}) {
 
     return(
-        <div className={!visibility? `${style.post} ${style.figure} ${style.shadows} ${style['mobile-post']}` : `${style.post} ${style.figure}`}>
+        <div className={isFullscreen? `${style.post} ${style.figure} ${style.shadows} ${style['mobile-post']}` : `${style.post} ${style.figure}`}>
             {children}
         </div>
     )
 }
 
-export function TextPostWrapper ({children, visibility}) {
+function FullscreenPostBackground ({children, isFullscreen}) {
+
     return(
-        <div className={visibility? {} : style.container}>
-            <div id={!visibility && style['mobile-container']} style={!visibility? {width: "30%"} : {}}>
-                {!visibility && <div className="logo post-logo">Zahir.</div>}
-                <PostWrapper visibility={visibility}>
-                    {children}
-                </PostWrapper>
-            </div>
+        <div className={isFullscreen? style.fullscreenBackground : undefined}>
+            {children}
         </div>
     )
 }
 
-export function QuotePostWrapper ({children, visibility}) {
+export function TextPostWrapper ({children, isFullscreen}) {
     return(
-        <div className={visibility? {} : style.container}>
-            <div id={!visibility && style['mobile-container']} style={!visibility? {width: "30%"} : {}}>
-                {!visibility && <div className="logo post-logo">Zahir.</div>}
-                <PostWrapper visibility={visibility}>
-                    {children}
-                </PostWrapper>
-            </div>
-        </div>
+        <FullscreenPostBackground isFullscreen={isFullscreen}>
+                <div className={isFullscreen && `${style['mobile-container']} ${style.resizeHandler}`}>
+                    {isFullscreen && <div className="logo post-logo">Zahir.</div>}
+                    <PostWrapper isFullscreen={isFullscreen}>
+                        {children}
+                    </PostWrapper>
+                </div>
+        </FullscreenPostBackground>
     )
 }
 
-export function ImagePostWrapper ({children, post, visibility}) {
+export function QuotePostWrapper ({children, isFullscreen}) {
+    return(
+        <FullscreenPostBackground isFullscreen={isFullscreen}>
+                <div className={isFullscreen && `${style['mobile-container']} ${style.resizeHandler}`}>
+                    {isFullscreen && <div className="logo post-logo">Zahir.</div>}
+                    <PostWrapper isFullscreen={isFullscreen}>
+                        {children}
+                    </PostWrapper>
+                </div>
+        </FullscreenPostBackground>
+    )
+}
+
+export function ImagePostWrapper ({children, post, isFullscreen}) {
 
     const size = {width: post.mediaWidth, height: post.mediaHeight}
 
@@ -59,43 +68,43 @@ export function ImagePostWrapper ({children, post, visibility}) {
     }, []); //eslint-disable-line
 
     return(
-        <div className={visibility? {} : style.container}>
-            <div id={!visibility && style['mobile-image-container']} style={(size.height > (window.innerHeight - 150) && !visibility)? {width: `${ancho}px`, maxWidth: '90vw'} : {}}>
-                {!visibility && <div className="logo post-logo">Zahir.</div>}
-                <PostWrapper visibility={visibility}>
-                    {children}
-                </PostWrapper>
-            </div>
-        </div>
+        <FullscreenPostBackground isFullscreen={isFullscreen}>
+                <div className={isFullscreen && style['mobile-image-container']} style={(size.height > (window.innerHeight - 150) && isFullscreen)? {width: `${ancho}px`, maxWidth: '90vw'} : undefined}>
+                    {isFullscreen && <div className="logo post-logo">Zahir.</div>}
+                    <PostWrapper isFullscreen={isFullscreen}>
+                        {children}
+                    </PostWrapper>
+                </div>
+        </FullscreenPostBackground>
     )
 }
 
-export function VideoPostWrapper ({children, post, visibility}) {
+export function VideoPostWrapper ({children, post, isFullscreen}) {
 
     const aspectRatioString = post.type === "video" && post.videoAr?.split(':')
     const aspectRatioNumber = post.type === "video" && (Number(aspectRatioString[1])/Number(aspectRatioString[0])) * 100
 
     return(
-        <div className={visibility? {} : style.container}>
-            <div id={!visibility && style['mobile-container']} style={!visibility?  aspectRatioNumber >= 100?  (aspectRatioNumber >= 170? {width:"23%"}: {width: "32%"}) : {width: "50%"} : {}}>
-                {!visibility && <div className="logo post-logo">Zahir.</div>}
-                <PostWrapper visibility={visibility}>
-                    {children}
-                </PostWrapper>
-            </div>
-        </div>
+        <FullscreenPostBackground isFullscreen={isFullscreen}>
+                <div className={isFullscreen && style['mobile-container']} style={isFullscreen?  aspectRatioNumber >= 100?  (aspectRatioNumber >= 170? {width:"23%"}: {width: "32%"}) : {width: "50%"} : {}}>
+                    {isFullscreen && <div className="logo post-logo">Zahir.</div>}
+                    <PostWrapper isFullscreen={isFullscreen}>
+                        {children}
+                    </PostWrapper>
+                </div>
+        </FullscreenPostBackground>
     )
 }
 
-export function VideoFilePostWrapper ({children, visibility}) {
+export function VideoFilePostWrapper ({children, isFullscreen}) {
     return (
-        <div className={visibility? {} : style.container}>
-            <div id={!visibility && style['mobile-container']} style={!visibility? {maxWidth: '50vw', maxHeight: '90vh'} : {}}>
-                {!visibility && <div className="logo post-logo">Zahir.</div>}
-                <PostWrapper visibility={visibility}>
-                    {children}
-                </PostWrapper>
-            </div>
-        </div>
+        <FullscreenPostBackground isFullscreen={isFullscreen}>
+                <div className={isFullscreen? `${style['mobile-container']} ${style.videoFileResizeHandler}` : undefined} >
+                    {isFullscreen && <div className="logo post-logo">Zahir.</div>}
+                    <PostWrapper isFullscreen={isFullscreen}>
+                        {children}
+                    </PostWrapper>
+                </div>
+        </FullscreenPostBackground>
     )
 }

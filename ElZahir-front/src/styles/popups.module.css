@@ -152,6 +152,14 @@
     resize: none;
 }
 
+.validTextAreaInput {
+    color: green;
+}
+
+.invalidTextAreaInput {
+    color: red;
+}
+
 .uploadButton {
     all: unset;
     width: 100%;

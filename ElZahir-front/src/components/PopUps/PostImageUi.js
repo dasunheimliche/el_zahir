@@ -12,12 +12,12 @@ import style from '../../styles/popups.module.css'
 
 
 const PostImageUI = ({setPopUp})=> {
-    const [mode,     setMode     ] = useState('idle')
-    const [url,      setUrl      ] = useState('')
-    const [file,     setFile     ] = useState(false)
-    const [title,    setTitle    ] = useState('')
-    const [subtitle, setSubtitle ] = useState('')
-    const [loading,  setLoading  ] = useState(false)
+    const [mode,       setMode       ] = useState('idle')
+    const [url,        setUrl        ] = useState('')
+    const [file,       setFile       ] = useState(false)
+    const [title,      setTitle      ] = useState('')
+    const [subtitle,   setSubtitle   ] = useState('')
+    const [isMutating, setIsMutating ] = useState(false)
 
     const client   = useQueryClient()
     const fileForm = useRef()
@@ -29,7 +29,7 @@ const PostImageUI = ({setPopUp})=> {
             if (mode === "url") return await postImageFromUrl(url, title, subtitle)
             if (mode === "file") return await postImageFromFile(file, title, subtitle)
         },
-        onMutate: ()=>setLoading(true),
+        onMutate: ()=>setIsMutating(true),
         onSuccess: (res)=>{
             client.setQueryData(["userPosts"], (old)=> {
                 const copy = {...old}
@@ -39,7 +39,7 @@ const PostImageUI = ({setPopUp})=> {
             handleClose()
         },
         onError: ()=>{
-            setLoading(false)
+            setIsMutating(false)
         }
     })
 
@@ -80,13 +80,13 @@ const PostImageUI = ({setPopUp})=> {
             <div className={ style.main }>
                 <MainInput value={title}    onChange={e=>setTitle(e.target.value)}     placeholder={"Title"}/>
                 <SubInput  value={subtitle} onChange={e=> setSubtitle(e.target.value)} placeholder={"Description"}/>
-
+                
                 <Uploader onPasteUrl={pasteUrlFromClipboard} onUploadFile={uploadFile} isInputValid={error} url={url}/>
 
                 <Error error={error} />
             </div>
 
-            <PostUiFooter onCancel={handleClose} isPostLoading={loading} isPostButtonDisabled={error}/>
+            <PostUiFooter onCancel={handleClose} isMutating={isMutating} isPostButtonDisabled={error}/>
         </form>
     )
 }

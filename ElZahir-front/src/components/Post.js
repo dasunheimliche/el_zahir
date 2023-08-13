@@ -7,33 +7,38 @@ import PostContent from './Post/PostContent'
 import PostFooter  from './Post/PostFooter'
 import PostTitle   from './Post/PostTitle'
 
+import { LOCAL_URL_POST, VERCEL_URL_POST } from '../services/constants'
+
 import { copyToClipboard } from '../services/helpers'
 import { getCurrentUser }  from '../services/userServices'
 import { toggleLike }      from '../services/postServices'
 import { ImagePostWrapper, QuotePostWrapper, TextPostWrapper, VideoFilePostWrapper, VideoPostWrapper } from './PostWrappers'
 
+const postURL = LOCAL_URL_POST || VERCEL_URL_POST
+
 const Post = ({post, mode, setPopUp, setToFront})=> {
 
     const {data: {data: user} = {}} = useQuery({queryKey: ['ME'], queryFn: getCurrentUser})
 
-    const [isMutating, setIsMutating ] = useState(false)
-    const [visibility, setVisibility ] = useState(true)
-    const [liked,      setLiked      ] = useState(post.likes.some(id => id === user.id))
+    const [isMutating,   setIsMutating   ] = useState(false)
+    const [isFullscreen, setIsFullscreen ] = useState(false)
+    const [liked,        setLiked        ] = useState(post.likes.some(id => id === user.id))
     
 
     const client = useQueryClient()
     const {"*": param} = useParams()
 
     const isPostMine = (mode !== 'user' && user? user.id === post.user: "" === post.user)
-    const postURL = `${"http://localhost:3000"}/#/post/${post.id}`
+
+    const URL = `http://${postURL}/${post?.id}`
 
     const handleToggleFullscreenMode = ()=> {
-        if (visibility) {
-            setVisibility(false)
+        if (!isFullscreen) {
+            setIsFullscreen(true)
             setToFront(true)
             return
         }
-        setVisibility(true)
+        setIsFullscreen(false)
         setToFront(false)
     }
 
@@ -75,7 +80,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
 
     if (post.type === "text") {
         return(
-            <TextPostWrapper visibility={visibility}>
+            <TextPostWrapper isFullscreen={isFullscreen}>
                 <PostHeader post={post} mode={mode} />
                 <PostContent post={post} />
                 <PostFooter 
@@ -85,7 +90,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
                     onToggleFullscrenMode={handleToggleFullscreenMode}
                     onToggleLike={()=>handleToggleLike({post, user})}
                     onOpenComments={handleOpenComments}
-                    onSharingPost={()=>copyToClipboard(postURL)}
+                    onSharingPost={()=>copyToClipboard(URL)}
                     onDeletePost={handleDeletePost}
                 />
             </TextPostWrapper>
@@ -94,7 +99,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
 
     if (post.type === "cita") {
         return(
-            <QuotePostWrapper visibility={visibility}>
+            <QuotePostWrapper isFullscreen={isFullscreen}>
                 <PostHeader post={post} mode={mode} />
                 <PostContent post={post}/>
                 <PostFooter 
@@ -104,7 +109,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
                     onToggleFullscrenMode={handleToggleFullscreenMode}
                     onToggleLike={()=>handleToggleLike({post, user})}
                     onOpenComments={handleOpenComments}
-                    onSharingPost={()=>copyToClipboard(postURL)}
+                    onSharingPost={()=>copyToClipboard(URL)}
                     onDeletePost={handleDeletePost}
                 />
             </QuotePostWrapper>
@@ -113,7 +118,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
 
     if (post.type === "image") {
         return(
-            <ImagePostWrapper visibility={visibility} post={post}>
+            <ImagePostWrapper isFullscreen={isFullscreen} post={post}>
                 <PostHeader post={post} mode={mode} />
                 <PostContent post={post} />
                 <PostTitle post={post} />
@@ -124,7 +129,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
                     onToggleFullscrenMode={handleToggleFullscreenMode}
                     onToggleLike={()=>handleToggleLike({post, user})}
                     onOpenComments={handleOpenComments}
-                    onSharingPost={()=>copyToClipboard(postURL)}
+                    onSharingPost={()=>copyToClipboard(URL)}
                     onDeletePost={handleDeletePost}
                 />
             </ImagePostWrapper>
@@ -149,7 +154,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
         const aspectRatio = (width/height) * 100
 
         return(
-            <VideoPostWrapper post={post} visibility={visibility}>
+            <VideoPostWrapper post={post} isFullscreen={isFullscreen}>
                 <PostHeader post={post} mode={mode} />
                 <PostContent post={post} aspectRatio={aspectRatio} urlVideo={urlVideo} />
                 <PostTitle post={post} />
@@ -160,7 +165,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
                     onToggleFullscrenMode={handleToggleFullscreenMode}
                     onToggleLike={()=>handleToggleLike({post, user})}
                     onOpenComments={handleOpenComments}
-                    onSharingPost={()=>copyToClipboard(postURL)}
+                    onSharingPost={()=>copyToClipboard(URL)}
                     onDeletePost={handleDeletePost}
                 />
             </VideoPostWrapper>
@@ -169,7 +174,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
 
     if (post.type === "video-file") {
         return(
-            <VideoFilePostWrapper visibility={visibility}>
+            <VideoFilePostWrapper isFullscreen={isFullscreen}>
                 <PostHeader post={post} mode={mode} />
                 <PostContent post={post}/>
                 <PostTitle post={post} />
@@ -180,7 +185,7 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
                     onToggleFullscrenMode={handleToggleFullscreenMode}
                     onToggleLike={()=>handleToggleLike({post, user})}
                     onOpenComments={handleOpenComments}
-                    onSharingPost={()=>copyToClipboard(postURL)}
+                    onSharingPost={()=>copyToClipboard(URL)}
                     onDeletePost={handleDeletePost}
                 />
             </VideoFilePostWrapper>
