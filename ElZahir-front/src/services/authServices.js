@@ -21,12 +21,12 @@ export async function fetchInvalidUsernames() {
 
 export async function signUp(inputs) {
 
-    const { name, lastname, username, email, password1, password2 } = inputs;
+    const { name, lastname, username, email, password, password2 } = inputs;
 
-    if (password1 !== password2 || password1.length > 5) return
+    if (password !== password2 || password.length < 5) return
 
     try {
-        return await axios.post(`${vercelAPI}/api/register`, { name, lastname, username, email, password1 });
+        return await axios.post(`${vercelAPI}/api/register`, { name, lastname, username, email, password });
     } catch(error) {
         console.log(error)
     }

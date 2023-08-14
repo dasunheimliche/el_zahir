@@ -27,11 +27,18 @@ const Register = ()=> {
     })
 
     const isUsernameInputValid = !(invalidUsernames?.includes(inputs.username))
-    const isPasswordShort = inputs.password.length < 5
-    const isPasswordTheSame = inputs.password === inputs.password2
-    const isPasswordInputValid = isPasswordTheSame && isPasswordShort
+    const isPasswordShort = inputs.password.length < 5? true : false
+    const isPasswordTheSame = inputs.password === inputs.password2? true : false
+    const isPasswordInputValid = isPasswordTheSame && !isPasswordShort
     const isInputEmpty = Object.values(inputs).some(value => !value);
     const isSignUpButtonDisabled = !isPasswordInputValid || !isUsernameInputValid || loading || isInputEmpty
+
+    console.log("==========================================")
+    console.log("IS USERNAME INVALID ", isUsernameInputValid)
+    console.log("IS PASSWORD SHORT ", isPasswordShort)
+    console.log("IS PASSWORD SAME ", isPasswordTheSame)
+    console.log("IS SOME INPUT EMPTY", isInputEmpty)
+    console.log("==========================================")
 
     const {mutate: signUpMutation} = useMutation({
         mutationFn: ()=>signUp(inputs),
@@ -69,7 +76,7 @@ const Register = ()=> {
                         <input type='password' onChange={e=>handleInputChange("password", e.target.value)}  placeholder={'password'} required/>
                         <input type='password' onChange={e=>handleInputChange("password2", e.target.value)} placeholder={'repeat password'} required/>
 
-                        <div className={inputs.password? (!isPasswordTheSame? style.notSamePass: (isPasswordShort? style.notSamePass : undefined)) : undefined}></div>
+                        <div className={inputs.password? (isPasswordShort? style.tooShort : (!isPasswordTheSame?  style.notSamePass: undefined)) : undefined}></div>
 
                         <button type='submit' className="p" disabled={isSignUpButtonDisabled}>Sign in</button>
                     </form>

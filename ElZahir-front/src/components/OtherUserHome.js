@@ -4,12 +4,12 @@ import { useQuery }               from '@tanstack/react-query'
 import { useParams } from 'react-router-dom';
 
 import Header       from './Header'
-import ProfilePanel from './ProfilePanel'
-import Post         from './Post'
+import ProfileCard from './ProfileCard'
 import Comments     from './PopUps/Comments'
 import Followers    from './PopUps/Followers'
 import Following    from './PopUps/Following'
 import BottomLogo   from './BottomLogo'
+import PostList     from "./PostList";
 
 import useElementAtTopOfPage from '../hooks/useElementAtTopOfPage'
 import useInnerHeight        from '../hooks/userInnerHeight';
@@ -42,9 +42,6 @@ const OtherUserHome = ({setUser, me})=> {
         queryFn: ()=>fetchUserPosts(userID)
     })
 
-    const cargarPosts = (posts)=> {
-        return posts.map(post => <Post key={post.id} toFront={toFront} setToFront={setToFront} setPopUp={setPopUp} mainUser={me} user={me} setUser={setUser} post={post} type={post.type} />)
-    }
 
     return (
         <div className={style.main}>
@@ -60,7 +57,7 @@ const OtherUserHome = ({setUser, me})=> {
   
                 <div className={!toFront? style.content : `${style.content} ${style.toFront}`}>
                     {otherUser && <div className={style['left-side']}>
-                        <ProfilePanel 
+                        <ProfileCard 
                             key={userID}
                             user={me} 
                             otherUser={otherUser} 
@@ -70,7 +67,7 @@ const OtherUserHome = ({setUser, me})=> {
                     </div>}
                     <div className={style['right-side']}>
                         <div className={sticky === false? `${style.grid} ${style.noTab}` : `${style.grid} ${style['sticky-grid']} ${style['other-user-sticky-grid']}`}>
-                            {cargarPosts(allposts? allposts : [])}
+                            <PostList posts={allposts} setToFront={setToFront} setPopUp={setPopUp} mode={"user"}/>
                         </div>
                     </div>
                 </div>

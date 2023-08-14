@@ -9,7 +9,7 @@ import { FollowStats, FollowStatus, PostingOptions, ProfileImg, TopCardOptions }
 
 import style from '../styles/userCard.module.css'
 
-const ProfilePanel = ({otherUser, posts, sticky, setPopUp, mode})=> {
+const ProfileCard = ({otherUser, posts, sticky, setPopUp, mode})=> {
 
     const {data: {data: user} = {}} = useQuery({queryKey: ['ME'], queryFn: getCurrentUser,})
 
@@ -94,4 +94,4 @@ const ProfilePanel = ({otherUser, posts, sticky, setPopUp, mode})=> {
     )
 }
 
-export default ProfilePanel
+export default ProfileCard

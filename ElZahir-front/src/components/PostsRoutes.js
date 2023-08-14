@@ -1,7 +1,7 @@
 import style from  '../styles/home.module.css'
 import { Routes } from 'react-router-dom'
 
-const Posts = ({children, sticky})=> {
+const PostsRoutes = ({children, sticky})=> {
 
     return(
         <div className={sticky === false? style.grid : `${style.grid} ${style['sticky-grid']}`}>
@@ -12,4 +12,4 @@ const Posts = ({children, sticky})=> {
     )
 }
 
-export default Posts
+export default PostsRoutes

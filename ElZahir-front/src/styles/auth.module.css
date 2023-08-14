@@ -178,7 +178,7 @@ button:hover {
     color: red;
 }
   
-.notSamePass::after {
+.tooShort::after {
     content: "password too short";
 
     font-size: 0.81rem;
