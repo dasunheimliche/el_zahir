@@ -14,13 +14,13 @@ const PostCitaUI = ({setPopUp})=> {
     const [author, setAuthor] = useState('')
     const [work,   setWork  ] = useState('')
     const [quote,  setQuote ] = useState('')
-    const [loading, setLoading] = useState(false)
+    const [isMutating, setIsMutating] = useState(false)
 
     const client   = useQueryClient()
 
     const {mutate: postMutation} = useMutation({
         mutationFn: async()=> await postQuote(author, work, quote),
-        onMutate: ()=>setLoading(true),
+        onMutate: ()=>setIsMutating(true),
         onSuccess: (res)=>{
             client.setQueryData(["userPosts"], (old)=> {
                 const copy = {...old}
@@ -30,7 +30,7 @@ const PostCitaUI = ({setPopUp})=> {
             handleClose()
         },
         onError: ()=>{
-          setLoading(false)
+            setIsMutating(false)
         }
     })
 
@@ -53,7 +53,7 @@ const PostCitaUI = ({setPopUp})=> {
                 <TextArea  value={quote}  onChange={(e)=> setQuote(e.target.value)}  placeholder={"Quote"}/> 
             </div>
 
-            <PostUiFooter onCancel={handleClose} isPostLoading={loading}/>
+            <PostUiFooter onCancel={handleClose} isMutating={isMutating}/>
         </form>
     )
 }

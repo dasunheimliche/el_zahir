@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { Suspense } from 'react'
+import Loading from './Loading'
 
 import style from '../styles/post.module.css'
 
@@ -15,16 +17,18 @@ function PostWrapper ({children, isFullscreen}) {
 function FullscreenPostBackground ({children, isFullscreen}) {
 
     return(
-        <div className={isFullscreen? style.fullscreenBackground : undefined}>
-            {children}
-        </div>
+        <Suspense fallback={<Loading />}>
+            <div className={isFullscreen? style.fullscreenBackground : undefined}>
+                {children}
+            </div>
+        </Suspense>
     )
 }
 
 export function TextPostWrapper ({children, isFullscreen}) {
     return(
         <FullscreenPostBackground isFullscreen={isFullscreen}>
-                <div className={isFullscreen && `${style['mobile-container']} ${style.resizeHandler}`}>
+                <div className={isFullscreen? `${style['mobile-container']} ${style.resizeHandler}` : undefined}>
                     {isFullscreen && <div className="logo post-logo">Zahir.</div>}
                     <PostWrapper isFullscreen={isFullscreen}>
                         {children}
@@ -37,7 +41,7 @@ export function TextPostWrapper ({children, isFullscreen}) {
 export function QuotePostWrapper ({children, isFullscreen}) {
     return(
         <FullscreenPostBackground isFullscreen={isFullscreen}>
-                <div className={isFullscreen && `${style['mobile-container']} ${style.resizeHandler}`}>
+                <div className={isFullscreen? `${style['mobile-container']} ${style.resizeHandler}` : undefined}>
                     {isFullscreen && <div className="logo post-logo">Zahir.</div>}
                     <PostWrapper isFullscreen={isFullscreen}>
                         {children}
@@ -69,7 +73,7 @@ export function ImagePostWrapper ({children, post, isFullscreen}) {
 
     return(
         <FullscreenPostBackground isFullscreen={isFullscreen}>
-                <div className={isFullscreen && style['mobile-image-container']} style={(size.height > (window.innerHeight - 150) && isFullscreen)? {width: `${ancho}px`, maxWidth: '90vw'} : undefined}>
+                <div className={isFullscreen? style['mobile-image-container'] : undefined} style={(size.height > (window.innerHeight - 150) && isFullscreen)? {width: `${ancho}px`, maxWidth: '90vw'} : undefined}>
                     {isFullscreen && <div className="logo post-logo">Zahir.</div>}
                     <PostWrapper isFullscreen={isFullscreen}>
                         {children}
@@ -86,7 +90,7 @@ export function VideoPostWrapper ({children, post, isFullscreen}) {
 
     return(
         <FullscreenPostBackground isFullscreen={isFullscreen}>
-                <div className={isFullscreen && style['mobile-container']} style={isFullscreen?  aspectRatioNumber >= 100?  (aspectRatioNumber >= 170? {width:"23%"}: {width: "32%"}) : {width: "50%"} : {}}>
+                <div className={isFullscreen? style['mobile-container'] : undefined} style={isFullscreen?  aspectRatioNumber >= 100?  (aspectRatioNumber >= 170? {width:"23%"}: {width: "32%"}) : {width: "50%"} : {}}>
                     {isFullscreen && <div className="logo post-logo">Zahir.</div>}
                     <PostWrapper isFullscreen={isFullscreen}>
                         {children}

@@ -1,5 +1,4 @@
 import style from '../../styles/post.module.css'
-// import { doNothing } from '../../services/helpers';
 
 const PostFooter = ({isMutating, isPostLiked, isPostMine, onDeletePost, onSharingPost, onOpenComments, onToggleLike,onToggleFullscrenMode})=> {
 

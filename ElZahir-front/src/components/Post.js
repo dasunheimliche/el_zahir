@@ -12,6 +12,7 @@ import { LOCAL_URL_POST, VERCEL_URL_POST } from '../services/constants'
 import { copyToClipboard } from '../services/helpers'
 import { getCurrentUser }  from '../services/userServices'
 import { toggleLike }      from '../services/postServices'
+
 import { ImagePostWrapper, QuotePostWrapper, TextPostWrapper, VideoFilePostWrapper, VideoPostWrapper } from './PostWrappers'
 
 const postURL = LOCAL_URL_POST || VERCEL_URL_POST
@@ -122,9 +123,9 @@ const Post = ({post, mode, setPopUp, setToFront})=> {
                 <PostHeader post={post} mode={mode} />
                 <PostContent post={post} />
                 <PostTitle post={post} />
-                <PostFooter 
-                    isMutating={isMutating} 
-                    isPostLiked={liked} 
+                <PostFooter
+                    isMutating={isMutating}
+                    isPostLiked={liked}
                     isPostMine={isPostMine}
                     onToggleFullscrenMode={handleToggleFullscreenMode}
                     onToggleLike={()=>handleToggleLike({post, user})}

@@ -33,10 +33,20 @@
     left: 0;
 
     width: 100%; 
-    height: 100%;
+    height: 250%;
 
     background-image: url('../images//trippy-back3.gif');
-    background-size:cover;
+    /* background-image: url('https://i.pinimg.com/originals/e7/c7/d9/e7c7d9b828d2828d7a709dcca2e89c55.gif'); */
+    /* background-image: url('https://i.pinimg.com/originals/49/ac/ab/49acabdb9efbcf9fd7f3ba9a6a7a4cdd.gif'); */
+    /* background-image: url('https://i.pinimg.com/originals/83/52/39/8352391aecd2f7e11cf371a42c68dc48.gif'); */
+    /* background-image: url('https://i.pinimg.com/originals/1c/02/bd/1c02bd1eeb5e22be52ceb4f718bf8949.gif'); */
+    /* background-image: url('https://i.pinimg.com/originals/e1/34/9f/e1349ff7c2b112436f73a2e78a7f1338.gif'); */
+    /* background-image: url('https://i.pinimg.com/originals/31/f1/5a/31f15ab2e1a8a3e4e2cff7bbf80f5997.gif'); */
+    /* background-image: url('https://i.pinimg.com/originals/91/0b/ea/910beabad73f3fd871ec0fd93384812d.gif'); */
+    /* background-image: url('https://i.pinimg.com/originals/28/47/ea/2847ea1511ec9a6cae2ded4e1417d359.gif'); */
+    /* background-image: url('https://i.pinimg.com/originals/de/c7/7a/dec77af3e0bad3f8937f8144a60abcbc.gif'); */
+    /* background-image: url('https://i.pinimg.com/originals/03/86/75/03867548d25035d175d00b6a2084e27b.gif'); */
+    background-size: 100% 100%;
 
     filter: blur(0.19rem);
     transform: scale(1.2);
@@ -178,9 +188,16 @@
 .quote-container {
     display: flex;
     flex-direction: column;
+    width: 100%;
+
+    align-items: center;
 }
 
 .quote {
+    display: flex;
+    width: max-content;
+    max-width: 25rem;
+
     padding: 1.25rem 0;
 
     font-size: 1.44rem;
@@ -302,13 +319,14 @@ video {
 /** BUTTONS */
 
 .open {
+    outline: none;
+    background-color: transparent;
     width: 1.56rem;
     height: 1.56rem;
 
     margin-left: 0.62rem;
 
     border-radius: 0.94rem;
-    border: 0.19rem solid rgba(221, 221, 221, 0);
 
     background-image: url('../icons/abrir2.png');
     background-size: cover;
@@ -317,8 +335,7 @@ video {
 }
 
 .open:hover {
-    background-color: rgb(221, 221, 221);
-    border: 0.19rem solid rgb(221, 221, 221);
+    background-color: rgb(164, 164, 164);
 }
 
 /** SOCIAL ICONS */
@@ -501,7 +518,7 @@ video {
 
     .fullscreenBackground::before {
         background-image: none;
-        background: linear-gradient(109.6deg, rgb(36, 45, 57) 11.2%, rgb(16, 37, 60) 51.2%, rgb(0, 0, 0) 98.6%);
+        background: linear-gradient(109.6deg, rgb(10, 13, 16) 11.2%, rgb(9, 21, 34) 51.2%, rgb(0, 0, 0) 98.6%);
     }
 
 }

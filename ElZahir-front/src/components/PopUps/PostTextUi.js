@@ -12,13 +12,13 @@ import textButton from '../../icons/textButton.png'
 const PostTextUI = ({setPopUp})=> {
   const [title,   setTitle   ] = useState('')
   const [text,    setText    ] = useState('')
-  const [loading, setLoading ] = useState(false)
+  const [isMutating, setIsMutating ] = useState(false)
 
   const client   = useQueryClient()
 
   const {mutate: postMutation} = useMutation({
     mutationFn: async()=> await postText(title, text),
-    onMutate: ()=>setLoading(true),
+    onMutate: ()=>setIsMutating(true),
     onSuccess: (res)=>{
       client.setQueryData(["userPosts"], (old)=> {
           const copy = {...old}
@@ -28,7 +28,7 @@ const PostTextUI = ({setPopUp})=> {
       handleClose()
     },
     onError: ()=>{
-      setLoading(false)
+      setIsMutating(false)
     }
   })
 
@@ -51,7 +51,7 @@ const PostTextUI = ({setPopUp})=> {
         <TextArea value={text} onChange={e=> setText(e.target.value)} placeholder={"Text"}/>
       </div>
 
-      <PostUiFooter onCancel={handleClose} isPostLoading={loading}/>
+      <PostUiFooter onCancel={handleClose} isMutating={isMutating}/>
     </form>
   )
 }

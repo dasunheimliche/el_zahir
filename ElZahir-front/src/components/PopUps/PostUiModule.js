@@ -67,7 +67,7 @@ export function Error({error}) {
     )
 }
 
-export function PostUiFooter ({onCancel, isMutating, isPostButtonDisabled=false}) {
+export function PostUiFooter ({onCancel, isMutating, isPostButtonDisabled}) {
 
     const isButtonDisabled = isMutating || isPostButtonDisabled
 

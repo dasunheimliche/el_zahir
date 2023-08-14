@@ -39,12 +39,12 @@ const Home = ()=> {
     const renderPosts = (posts) => {
         if (!posts) return
         return posts.map((post) => (
-          <Post
-            setToFront={setToFront}
-            setPopUp={setPopUp}
-            key={post.id}
-            post={post}
-          />
+            <Post
+                setToFront={setToFront}
+                setPopUp={setPopUp}
+                key={post.id}
+                post={post}
+            />
         ));
     };
 
