@@ -22,6 +22,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    background: linear-gradient(109.6deg, rgb(10, 13, 16) 11.2%, rgb(9, 21, 34) 51.2%, rgb(0, 0, 0) 98.6%);
 }
 
 .fullscreenBackground::before {

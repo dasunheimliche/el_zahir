@@ -24,6 +24,7 @@
 .bar {
     display: flex;
     top: -3.43rem;
+    top: -1rem;
 
     margin-top: 3.87rem;
     margin-bottom: 2.5rem;
