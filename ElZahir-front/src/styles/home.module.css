@@ -81,8 +81,9 @@
 
 .sticky-tabs {
   height: 0px;
-
+  max-height: 0px;
   visibility: hidden;
+  display: none;
 }
 
 .tab {
@@ -149,7 +150,6 @@
   top: 8.75rem;
 
   border-radius: 0.62rem;
-
   top: 11rem;
 }
 

@@ -327,7 +327,6 @@ postRouter.get("/discover-posts", async (request, response) => {
 });
 
 postRouter.get("/user-posts", async (request, response) => {
-  console.log("LOCAL FETCH");
   const token = getToken(request);
   const decodedToken = jwt.verify(token, process.env.SECRET);
   if (!token || !decodedToken.id) {

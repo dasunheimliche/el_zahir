@@ -69,7 +69,12 @@ const Header = ({ sticky, setSticky, toFront, mode }) => {
         <ZahirLogo />
         <SearchUsersInput me={me} searchResults={searchResults} />
       </div>
-      <div className={`${style['right-side']}`}>
+      <div
+        className={
+          sticky
+            ? `${style['right-side']} ${style['right-side-sticky']}`
+            : `${style['right-side']}`
+        }>
         <ProfileDropdown me={me} queryClient={queryClient} />
       </div>
     </HeaderWrapper>

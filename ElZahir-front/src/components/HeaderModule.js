@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import style from '../styles/header.module.css';
 import logo from '../icons/search.png';
+import profileDefault from '../images/profileDefault.png';
 
 export function ZahirLogo() {
   return (
@@ -91,6 +92,8 @@ export function ProfileDropdown({ me, queryClient }) {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  console.log('ME PROFILE IMG', me.profileImg);
+
   return (
     <div
       className={
@@ -100,7 +103,11 @@ export function ProfileDropdown({ me, queryClient }) {
       }
       onClick={toggleUserMenu}>
       <div className={style.user}>
-        <img src={me.profileImg} className={style['user-logo']} alt="profile" />
+        <img
+          src={me.profileImg ? me.profileImg : profileDefault}
+          className={style['user-logo']}
+          alt="profile"
+        />
         <span className={style.username}>{me.username}</span>
       </div>
       <div

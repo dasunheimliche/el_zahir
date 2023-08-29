@@ -1,3 +1,5 @@
+import profileDefault from '../../images/profileDefault.png';
+
 import style from '../../styles/post.module.css';
 
 import { Link } from 'react-router-dom';
@@ -9,7 +11,7 @@ const PostHeader = ({ post, mode }) => {
         <div className={style['user-profile']}>
           <img
             className={style['profile-image']}
-            src={post.profileImg}
+            src={post.profileImg ? post.profileImg : profileDefault}
             alt="profile img"></img>
         </div>
         <Link className="linknostyle" to={`/user/${post.user}`}>

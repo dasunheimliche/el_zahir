@@ -95,6 +95,12 @@
   font-size: 1.06rem;
   font-weight: bold;
   color: rgb(0, 0, 0);
+
+  /* outline: 1px solid red; */
+  max-width: 9.37rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .separator {
