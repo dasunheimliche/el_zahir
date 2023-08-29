@@ -1,285 +1,276 @@
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const Imagekit = require("imagekit");
+const fs = require("fs/promises");
 
-const bcrypt   = require('bcrypt')
-const jwt      = require('jsonwebtoken')
-const Imagekit = require('imagekit')
-const fs       = require('fs/promises')
+const Post = require("../models/Post");
+const User = require("../models/User");
 
-const Post = require('../models/Post')
-const User = require('../models/User')
+const userRouter = require("express").Router();
 
-const userRouter = require('express').Router() 
-
-const config = require('../utils/config')
+const config = require("../utils/config");
 
 const imagekit = new Imagekit({
-    publicKey: config.IMGKIT_PUBLIC_KEY,
-    privateKey: config.IMGKIT_PRIVATE_KEY,
-    urlEndpoint: config.IMGKIT_URL_ENDPOINT
-})
+  publicKey: config.IMGKIT_PUBLIC_KEY,
+  privateKey: config.IMGKIT_PRIVATE_KEY,
+  urlEndpoint: config.IMGKIT_URL_ENDPOINT,
+});
 
 const uniqueParam = Math.floor(Math.random() * 1000000);
 
-const getToken = (request)=> {
-    
-    const auth = request.headers.authorization
+const getToken = (request) => {
+  const auth = request.headers.authorization;
 
-    if (auth && auth.toLowerCase().startsWith('bearer')) {
-        return auth.substring(7)
-    }
-    return null
-}
-
-userRouter.post('/me', async(req, res) => {
-    const token = getToken(req)
+  if (auth && auth.toLowerCase().startsWith("bearer")) {
+    return auth.substring(7);
+  }
+  return null;
+};
 
-    if (!token) return
-  
-    const decodedToken = await jwt.verify(token, config.SECRET)
-    if (!token || !decodedToken.id) {
-        res.status(401).json({error: 'token missing or invalid'})
-    }
-    const user = await User.findById(decodedToken.id)
-    if (user) {
-        res.json(user)
-    } else {
-        res.status(404).json({ error: 'User not found' })
-    }
-})
+userRouter.post("/me", async (req, res) => {
+  const token = getToken(req);
 
-userRouter.post('/', async (req, res) => {
+  if (!token) return;
 
-    const { username, name, lastname, email, password } = req.body
-    
-    const saltRounds = 10
-    const passwordHash = await bcrypt.hash(password, saltRounds)
-    
-    const user = new User({
-        username,
-        name,
-        lastname,
-        email,
-        passwordHash
-    })
-  
-    const savedUser = await user.save()
-    
-    res.json(savedUser)
-
-})
+  const decodedToken = await jwt.verify(token, config.SECRET);
+  if (!token || !decodedToken.id) {
+    res.status(401).json({ error: "token missing or invalid" });
+  }
+  const user = await User.findById(decodedToken.id);
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).json({ error: "User not found" });
+  }
+});
 
-userRouter.get('/', async (req, res) => {
+userRouter.post("/", async (req, res) => {
+  const { username, name, lastname, email, password } = req.body;
 
-    const token = getToken(req)
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    const decodedToken = jwt.verify(token, config.SECRET)
+  const user = new User({
+    username,
+    name,
+    lastname,
+    email,
+    passwordHash,
+  });
 
-    if (!token || !decodedToken.id) {
-        response.status(401).json({error: 'token missing or invalid'})
-    }
+  const savedUser = await user.save();
 
-    const users = await User.find({})
-    res.json(users)
+  res.json(savedUser);
+});
 
-})
+userRouter.get("/", async (req, res) => {
+  const token = getToken(req);
 
+  const decodedToken = jwt.verify(token, config.SECRET);
 
-userRouter.get('/:id', async (request, response) => {
+  if (!token || !decodedToken.id) {
+    response.status(401).json({ error: "token missing or invalid" });
+  }
 
-    const token = getToken(request)
+  const users = await User.find({});
+  res.json(users);
+});
 
-    const decodedToken = jwt.verify(token, config.SECRET)
+userRouter.get("/:id", async (request, response) => {
+  const token = getToken(request);
 
-    if (!token || !decodedToken.id) {
-        response.status(401).json({error: 'token missing or invalid'})
-    }
+  const decodedToken = jwt.verify(token, config.SECRET);
 
-    const userId = String(request.params.id)
-        
-    const user = await User.findById(userId)
-    if (user) {
-        response.json(user)
-    } else {
-        response.status(404).json({ error: 'User not found' })
-    }
+  if (!token || !decodedToken.id) {
+    response.status(401).json({ error: "token missing or invalid" });
+  }
 
-})
+  const userId = String(request.params.id);
 
-userRouter.put('/follow/:id', async (request, response)=> {
+  const user = await User.findById(userId);
+  if (user) {
+    response.json(user);
+  } else {
+    response.status(404).json({ error: "User not found" });
+  }
+});
 
-    const token = getToken(request)
+userRouter.put("/follow/:id", async (request, response) => {
+  const token = getToken(request);
 
-    const decodedToken = jwt.verify(token, config.SECRET)
+  const decodedToken = jwt.verify(token, config.SECRET);
 
-    if (!token || !decodedToken.id) {
-        response.status(401).json({error: 'token missing or invalid'})
-    }
+  if (!token || !decodedToken.id) {
+    response.status(401).json({ error: "token missing or invalid" });
+  }
 
-    const body = request.body
-    const id = request.params.id
-    const meId = body.id
+  const body = request.body;
+  const id = request.params.id;
+  const meId = body.id;
 
-    const user = await User.findById(id)
-    const me = await User.findById(meId)
+  const user = await User.findById(id);
+  const me = await User.findById(meId);
 
-    const test = me.following.includes(user._id)
-    
-    if (test) {
-        response.json({error: "user already followed"})
-    }
+  const test = me.following.includes(user._id);
 
-    user.followers = user.followers.concat(me._id)
-    me.following = me.following.concat(user._id)
+  if (test) {
+    response.json({ error: "user already followed" });
+  }
 
-    await user.save()
-    await me.save()
+  user.followers = user.followers.concat(me._id);
+  me.following = me.following.concat(user._id);
 
-    response.json({me:{following: me.following}, user:{followers: user.followers}})
-})
+  await user.save();
+  await me.save();
 
-userRouter.put('/unfollow/:id', async (request, response)=> {
+  response.json({
+    me: { following: me.following },
+    user: { followers: user.followers },
+  });
+});
 
-    const token = getToken(request)
+userRouter.put("/unfollow/:id", async (request, response) => {
+  const token = getToken(request);
 
-    const decodedToken = jwt.verify(token, config.SECRET)
+  const decodedToken = jwt.verify(token, config.SECRET);
 
-    if (!token || !decodedToken.id) {
-        response.status(401).json({error: 'token missing or invalid'})
-    }
+  if (!token || !decodedToken.id) {
+    response.status(401).json({ error: "token missing or invalid" });
+  }
 
-    const body = request.body
-    const id = request.params.id
-    const meId = body.id
-    
-    const user = await User.findById(id)
-    const me = await User.findById(meId)
+  const body = request.body;
+  const id = request.params.id;
+  const meId = body.id;
 
-    const test = me.following.includes(user._id)
-    
-    if (!test) {
-        response.json({error: "user already unfollowed"})
-    }
+  const user = await User.findById(id);
+  const me = await User.findById(meId);
 
-    me.following = me.following.filter(ide => ide.toString() !== id)
-    user.followers = user.followers.filter(ide => ide.toString() !== me._id.toString())
-        
-    await user.save()
-    await me.save()
+  const test = me.following.includes(user._id);
 
-    response.json({me:{following: me.following}, user:{followers: user.followers}})
-})
+  if (!test) {
+    response.json({ error: "user already unfollowed" });
+  }
 
-userRouter.put('/profile-image/:id', async (request, response)=> {
+  me.following = me.following.filter((ide) => ide.toString() !== id);
+  user.followers = user.followers.filter(
+    (ide) => ide.toString() !== me._id.toString()
+  );
 
-    const token = getToken(request)
+  await user.save();
+  await me.save();
 
-    const decodedToken = jwt.verify(token, config.SECRET)
+  response.json({
+    me: { following: me.following },
+    user: { followers: user.followers },
+  });
+});
 
-    if (!token || !decodedToken.id) {
-        response.status(401).json({error: 'token missing or invalid'})
-    }
+userRouter.put("/profile-image/:id", async (request, response) => {
+  const token = getToken(request);
 
-    const body = request.body
-    const id = request.params.id
+  const decodedToken = jwt.verify(token, config.SECRET);
 
-    const user = await User.findById(id)
+  if (!token || !decodedToken.id) {
+    response.status(401).json({ error: "token missing or invalid" });
+  }
 
-    if (request.files) {
-        let imageFile = request.files.image
-        let uploadPath = __dirname + '\\uploads\\' + imageFile.name
+  const body = request.body;
+  const id = request.params.id;
 
-        imageFile.mv(uploadPath, async function (err) {
-            if (err) {
-                response.status(500).send(err)
-            }
+  const user = await User.findById(id);
 
-            let fileup = await fs.readFile(uploadPath)
-    
-            let promesa = await imagekit.upload({
-                file: fileup,
-                fileName: `profile_img_${id}`,
-                folder: `/zahir/users/${user._id.toString()}/profile_image`
-            })
+  if (request.files) {
+    let imageFile = request.files.image;
+    let uploadPath = __dirname + "\\uploads\\" + imageFile.name;
 
-            fs.unlink(uploadPath)
+    imageFile.mv(uploadPath, async function (err) {
+      if (err) {
+        response.status(500).send(err);
+      }
 
-            user.profileImg = promesa.url
-            await user.save()
+      let fileup = await fs.readFile(uploadPath);
 
-            await Post.updateMany({user : user._id}, {profileImg: promesa.url})
+      let promesa = await imagekit.upload({
+        file: fileup,
+        fileName: `profile_img_${id}`,
+        folder: `/zahir/users/${user._id.toString()}/profile_image`,
+      });
 
-            response.json({profileImg: user.profileImg})
-        })
-    } else {
-        let promesa = await imagekit.upload({
-            file: body.profileImg,
-            fileName: `profile_img_${id}`,
-            folder: `/zahir/users/${user._id.toString()}/profile_image`
-        })
+      fs.unlink(uploadPath);
 
-        user.profileImg = `${promesa.url}?${uniqueParam}`
-        await user.save()
+      user.profileImg = promesa.url;
+      await user.save();
 
-        await Post.updateMany({user : user._id}, {profileImg: promesa.url})
+      await Post.updateMany({ user: user._id }, { profileImg: promesa.url });
 
-        response.json({profileImg: user.profileImg})
-    }
-})
+      response.json({ profileImg: user.profileImg });
+    });
+  } else {
+    let promesa = await imagekit.upload({
+      file: body.profileImg,
+      fileName: `profile_img_${id}`,
+      folder: `/zahir/users/${user._id.toString()}/profile_image`,
+    });
 
-userRouter.put('/profile-panel-image/:id', async (request, response)=> {
+    user.profileImg = `${promesa.url}?${uniqueParam}`;
+    await user.save();
 
-    const token = getToken(request)
+    await Post.updateMany({ user: user._id }, { profileImg: promesa.url });
 
-    const decodedToken = jwt.verify(token, config.SECRET)
+    response.json({ profileImg: user.profileImg });
+  }
+});
 
-    if (!token || !decodedToken.id) {
-        response.status(401).json({error: 'token missing or invalid'})
-    }
+userRouter.put("/profile-panel-image/:id", async (request, response) => {
+  const token = getToken(request);
 
-    const body = request.body
-    const id = request.params.id
+  const decodedToken = jwt.verify(token, config.SECRET);
 
-    const user = await User.findById(id)
+  if (!token || !decodedToken.id) {
+    response.status(401).json({ error: "token missing or invalid" });
+  }
 
-    if (request.files) {
-        let imageFile = request.files.image
-        let uploadPath = __dirname + '\\uploads\\' + imageFile.name
+  const body = request.body;
+  const id = request.params.id;
 
-        imageFile.mv(uploadPath, async function (err) {
-            if (err) {
-                response.status(500).send(err)
-            }
+  const user = await User.findById(id);
 
-            let fileup = await fs.readFile(uploadPath)
-    
-            let promesa = await imagekit.upload({
-                file: fileup,
-                fileName: `profile_panel_img_${id}`,
-                folder: `/zahir/users/${user._id.toString()}/profile_panel_image`
-            })
+  if (request.files) {
+    let imageFile = request.files.image;
+    let uploadPath = __dirname + "\\uploads\\" + imageFile.name;
 
-            fs.unlink(uploadPath)
+    imageFile.mv(uploadPath, async function (err) {
+      if (err) {
+        response.status(500).send(err);
+      }
 
-            user.mainPanelImg = promesa.url
-    
-            await user.save()
-            response.json({mainPanelImg: user.mainPanelImg})
+      let fileup = await fs.readFile(uploadPath);
 
-        })
-    } else {
+      let promesa = await imagekit.upload({
+        file: fileup,
+        fileName: `profile_panel_img_${id}`,
+        folder: `/zahir/users/${user._id.toString()}/profile_panel_image`,
+      });
 
-        let promesa = await imagekit.upload({
-            file: body.mainPanelImg,
-            fileName: `profile_panel_img_${id}`,
-            folder: `/zahir/users/${user._id.toString()}/profile_panel_image`
-        })
+      fs.unlink(uploadPath);
 
-        user.mainPanelImg = promesa.url
-        await user.save()
+      user.mainPanelImg = promesa.url;
 
-        response.json({mainPanelImg: user.mainPanelImg})
+      await user.save();
+      response.json({ mainPanelImg: user.mainPanelImg });
+    });
+  } else {
+    let promesa = await imagekit.upload({
+      file: body.mainPanelImg,
+      fileName: `profile_panel_img_${id}`,
+      folder: `/zahir/users/${user._id.toString()}/profile_panel_image`,
+    });
 
-    }
-})
+    user.mainPanelImg = promesa.url;
+    await user.save();
 
+    response.json({ mainPanelImg: user.mainPanelImg });
+  }
+});
 
-module.exports = userRouter
+module.exports = userRouter;

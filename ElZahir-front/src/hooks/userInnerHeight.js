@@ -15,4 +15,4 @@ function useInnerHeight() {
   return innerHeight;
 }
 
-export default useInnerHeight
+export default useInnerHeight;

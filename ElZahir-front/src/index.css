@@ -1,10 +1,9 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Patua+One&display=swap');
 
 @font-face {
   font-family: Circular;
-  src: url(./fonts/CircularStd-Book.otf) format("opentype");
+  src: url(./fonts/CircularStd-Book.otf) format('opentype');
 }
 
 @font-face {
@@ -20,7 +19,7 @@
 html {
   width: 100%;
   height: 100%;
-  background-size:contain;
+  background-size: contain;
 }
 
 body {
@@ -43,7 +42,7 @@ body {
 }
 
 .loading::after {
-  content: "";
+  content: '';
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,14 +50,14 @@ body {
   width: 100%;
   height: 100%;
 
-  background-image: url("./icons/svg-loaders/rings.svg");
+  background-image: url('./icons/svg-loaders/rings.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 71px;
 }
 
-input{ 
-  touch-action: none; 
+input {
+  touch-action: none;
 }
 
 .p {
@@ -73,7 +72,6 @@ input{
   min-height: -webkit-fill-available;
   background-image: linear-gradient(to top, #6aede6 0%, #fb90b2 100%);
   filter: saturate(1.5);
-
 }
 
 .invisible {
@@ -114,7 +112,7 @@ code {
   -webkit-text-fill-color: transparent;
 
   filter: saturate(130%);
-  -webkit-user-select:none;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -137,7 +135,7 @@ code {
 .bottom-logo-off {
   color: transparent;
   font-size: 0px;
-  opacity: 0%;  
+  opacity: 0%;
   max-height: 0px;
   max-width: 0px;
   z-index: -10;
@@ -147,7 +145,7 @@ code {
   top: 95%;
   right: 4.5%;
   left: auto;
-  -webkit-user-select:none;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -155,17 +153,15 @@ code {
   display: none;
 }
 
-
 @media (max-width: 1600px) {
   .logo {
-
     text-shadow: -2px -2px 0px rgb(255, 255, 255);
     font-size: 24px;
     letter-spacing: 1px;
     padding-left: 2px;
     top: 2px;
   }
-  
+
   .post-logo {
     margin-bottom: 8px;
   }
@@ -173,14 +169,13 @@ code {
 
 @media (max-width: 1366px) {
   .logo {
-
     text-shadow: -2px -2px 0px rgb(255, 255, 255);
     font-size: 21px;
     letter-spacing: 1px;
     padding-left: 2px;
     top: 1px;
   }
-  
+
   .post-logo {
     margin-bottom: 7px;
   }
@@ -190,11 +185,9 @@ code {
   .post-logo {
     margin-left: 0%;
   }
-
 }
 
 @media (max-width: 490px) and (orientation: portrait) {
-
   .logo {
     text-shadow: -2px -2px 0px rgb(255, 255, 255);
   }
@@ -205,24 +198,21 @@ code {
 
   .bottom-logo-on {
     display: block;
-    opacity: 100%;  
+    opacity: 100%;
     height: 30px;
     z-index: 0;
-    position:fixed;
+    position: fixed;
     transition: opacity 0.2s;
     transition-delay: 0.3s;
     right: 4.5%;
     left: auto;
-    -webkit-user-select:none;
+    -webkit-user-select: none;
     user-select: none;
 
-    filter: drop-shadow(1px 1px 2px #000000b4 );
+    filter: drop-shadow(1px 1px 2px #000000b4);
   }
 
   .hide-logo {
     display: none;
   }
-
 }
-
-

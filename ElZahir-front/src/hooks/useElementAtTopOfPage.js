@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 
 function useIsElementInViewport(ref, parentRef) {
@@ -37,4 +36,4 @@ function useIsElementInViewport(ref, parentRef) {
   return isInside;
 }
 
-export default useIsElementInViewport
+export default useIsElementInViewport;

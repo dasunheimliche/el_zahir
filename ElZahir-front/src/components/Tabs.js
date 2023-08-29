@@ -1,32 +1,55 @@
-import style from '../styles/home.module.css'
+import style from '../styles/home.module.css';
 
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom';
 
+const Tabs = ({ sticky }) => {
+  const navigate = useNavigate();
+  const { '*': segment } = useParams();
 
-const Tabs = ({ sticky })=> {
+  const toFollowing = () => {
+    navigate('/home/following');
+  };
 
-    const navigate        = useNavigate()
-    const {"*": segment}  = useParams()
+  const toHome = () => {
+    navigate('/home');
+  };
 
-    const toFollowing = ()=> {
-        navigate('/home/following')
-    }
+  const toDiscover = () => {
+    navigate('/home/discover');
+  };
 
-    const toHome = ()=> {
-        navigate('/home')
-    }
+  return (
+    <div
+      className={sticky ? `${style.tabs} ${style['sticky-tabs']}` : style.tabs}>
+      <span
+        onClick={toHome}
+        className={
+          segment === ''
+            ? `${style.tab} ${style['neonText']} p`
+            : `${style.tab} p`
+        }>
+        ME
+      </span>
+      <span
+        onClick={toFollowing}
+        className={
+          segment === 'following'
+            ? `${style.tab} ${style['neonText']} p`
+            : `${style.tab} p`
+        }>
+        FOLLOWING
+      </span>
+      <span
+        onClick={toDiscover}
+        className={
+          segment === 'discover'
+            ? `${style.tab} ${style['neonText']} p`
+            : `${style.tab} p`
+        }>
+        EXPLORE
+      </span>
+    </div>
+  );
+};
 
-    const toDiscover = ()=> {
-        navigate('/home/discover')
-    }
-
-    return(
-        <div className={sticky? `${style.tabs} ${style['sticky-tabs']}` : style.tabs}>
-            <span onClick={toHome}       className={segment === ''?          `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>ME</span>
-            <span onClick={toFollowing}  className={segment === 'following'? `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>FOLLOWING</span>
-            <span onClick={toDiscover}   className={segment === 'discover'?  `${style.tab} ${style['neonText']} p` : `${style.tab} p`}>EXPLORE</span>
-        </div>
-    )
-}
-
-export default Tabs
+export default Tabs;

@@ -1,4 +1,3 @@
-
 /** PLANTILLA */
 
 /* .selector {
@@ -19,270 +18,261 @@
     Animaciones y transiciones
 } */
 
-
-
 .bar {
-    display: flex;
-    top: -3.43rem;
-    top: -1rem;
+  display: flex;
+  top: -3.43rem;
+  top: -1rem;
 
-    margin-top: 3.87rem;
-    margin-bottom: 2.5rem;
+  margin-top: 3.87rem;
+  margin-bottom: 2.5rem;
 
-    width: 100%;
-    height: 3.43rem;
+  width: 100%;
+  height: 3.43rem;
 
-    justify-content: space-between;
-    align-items: center;
+  justify-content: space-between;
+  align-items: center;
 
-    transition: top 0.2s;
+  transition: top 0.2s;
 }
 
 .mobile-bar {
-    display: none;
+  display: none;
 }
 
 .sticky-bar {
-    z-index: 1;
-    position: fixed;
-    top: 0;
+  z-index: 1;
+  position: fixed;
+  top: 0;
 
-    width: 90%;
-    
-    margin-top: 1.25em;
-    margin-bottom: 0.93rem;
+  width: 90%;
+
+  margin-top: 1.25em;
+  margin-bottom: 0.93rem;
 }
 
 /* LEFT SIDE */
 
 .left-side {
-    z-index: 1;
-    position: relative;
-    display: flex;
+  z-index: 1;
+  position: relative;
+  display: flex;
 
-    justify-content: flex-start;
-    align-items: center;
-    gap: 1.25rem;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 .search {
-    z-index: 1;
-    box-sizing: border-box;
-    position: relative;
-    display: flex;
+  z-index: 1;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
 
-    width: 9.37rem;
-    height: 1.81rem;
+  width: 9.37rem;
+  height: 1.81rem;
 
-    padding-left: 0.44rem;
+  padding-left: 0.44rem;
 
-    border-radius: 0.93rem;
+  border-radius: 0.93rem;
 
-    background-color: rgb(245, 245, 245);
+  background-color: rgb(245, 245, 245);
 
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.3rem;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
 
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 .search img {
-    height: auto;
-    width: 1.25rem;
+  height: auto;
+  width: 1.25rem;
 }
 
 .search input {
-    all: unset;
+  all: unset;
 
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 
-    font-size: 1rem;
+  font-size: 1rem;
 
-    touch-action: none;
+  touch-action: none;
 }
 
 .user-list {
-    box-sizing: border-box;
-    position: absolute;
-    display: flex;
-    
-    left: 0px;
-    top: 1.56rem;
+  box-sizing: border-box;
+  position: absolute;
+  display: flex;
 
-    width: 9.37rem;
+  left: 0px;
+  top: 1.56rem;
 
-    margin-top: 0.62rem;
-    padding: 0.44rem 0 0.44rem 2rem;
-    padding-left: 0.44rem;
+  width: 9.37rem;
 
-    border-radius: 0.62rem;
+  margin-top: 0.62rem;
+  padding: 0.44rem 0 0.44rem 2rem;
+  padding-left: 0.44rem;
 
-    background-color: rgba(255, 255, 255, 0.605);
-    
-    flex-direction: column;
-    gap: 0.31rem;
+  border-radius: 0.62rem;
 
-    transition-property: height;
-    transition-duration: 0.2s;
+  background-color: rgba(255, 255, 255, 0.605);
+
+  flex-direction: column;
+  gap: 0.31rem;
+
+  transition-property: height;
+  transition-duration: 0.2s;
 }
 
 .user-list * {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .user-list img {
-    border-radius: 100rem;
-    object-fit:cover;
-    height: 1.3rem;
-    width: 1.3rem;
+  border-radius: 100rem;
+  object-fit: cover;
+  height: 1.3rem;
+  width: 1.3rem;
 }
 
 /* RIGHT SIDE */
 
 .right-side {
-    display: flex;
-    
-    justify-content: flex-end;
+  display: flex;
+
+  justify-content: flex-end;
 }
 
 .user-container {
-    z-index: 2; /* test */
-    position: relative;
+  z-index: 2; /* test */
+  position: relative;
 
-    padding: 0.31rem 0.93rem 0.31rem 0.31rem;
+  padding: 0.31rem 0.93rem 0.31rem 0.31rem;
 
-    border-radius: 1.56rem;
+  border-radius: 1.56rem;
 
-    background-color: rgba(31, 31, 31, 0.285);
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-    
-    color: rgb(245, 245, 245);
-    
-    transition-property: background-color, color;
-    transition-duration: 0.2s;
+  background-color: rgba(31, 31, 31, 0.285);
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 
-    cursor: pointer;
+  color: rgb(245, 245, 245);
+
+  transition-property: background-color, color;
+  transition-duration: 0.2s;
+
+  cursor: pointer;
 }
 
 .user-container:hover {
-    background-color: rgb(44, 44, 44);
+  background-color: rgb(44, 44, 44);
 
-    color: white;
+  color: white;
 }
 
 .expanded-user-menu {
-    border-radius: 1.56rem 1.56rem 0 0;
+  border-radius: 1.56rem 1.56rem 0 0;
 
-    background-color: rgb(44, 44, 44);
+  background-color: rgb(44, 44, 44);
 
-    color: white;
+  color: white;
 }
 
 .user {
-    display: flex;
+  display: flex;
 
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.44rem;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.44rem;
 }
 
 .user-logo {
-    width: 2.19rem;
-    height: 2.19rem;
-    
-    margin-left: 0.19rem;
+  width: 2.19rem;
+  height: 2.19rem;
 
-    border-radius: 1.25rem;
+  margin-left: 0.19rem;
 
-    background-size: cover;
+  border-radius: 1.25rem;
+
+  background-size: cover;
 }
 
 .username {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 .user-menu {
-    position: absolute;
-    display: flex;
-    left: 0px;
+  position: absolute;
+  display: flex;
+  left: 0px;
 
-    width: calc(100% - 1rem);
+  width: calc(100% - 1rem);
 
-    padding: 0.94rem 0 0.62rem 1rem;
+  padding: 0.94rem 0 0.62rem 1rem;
 
-    border-bottom-left-radius: 1.56rem;
-    border-bottom-right-radius: 1.56rem;
+  border-bottom-left-radius: 1.56rem;
+  border-bottom-right-radius: 1.56rem;
 
-    background-color: rgb(44, 44, 44);
-    
-    
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 0.44rem;
+  background-color: rgb(44, 44, 44);
+
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.44rem;
 }
 
 .signOff {
-    z-index: 1;
+  z-index: 1;
 }
 
-
 @media (max-width: 1600px) {
-
-    html {
-        font-size: 13px;
-    }
-
+  html {
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 1366px) {
-
-    html {
-        font-size: 11px;
-    }
-
+  html {
+    font-size: 11px;
+  }
 }
-  
+
 @media (max-width: 913px) and (orientation: portrait) {
-    
 }
 
 @media (max-width: 500px) and (orientation: portrait) {
+  .desktop-bar {
+    display: none;
+  }
 
-    .desktop-bar {
-        display: none;
-    }
+  .mobile-bar {
+    display: block;
+    margin: 0 2%;
+  }
 
-    .mobile-bar {
-        display: block;
-        margin: 0 2%;
-    }
+  .bar {
+    margin: 0px;
+    position: static;
+    width: 100%;
+  }
 
-    .bar {
-        margin: 0px;
-        position: static;
-        width: 100%;
-    }
+  .left-side {
+    width: auto;
+  }
 
-    .left-side {
-        width: auto;
-    }
+  .right-side {
+    width: auto;
+  }
 
-    .right-side {
-        width: auto;
-    }
+  .user-container {
+    z-index: 2;
+  }
 
-    .user-container {
-        z-index: 2;
-    }
-
-    .sticky-bar {
-        width: 95%;
-        position: static;
-        margin: 0px;
-    }
-
+  .sticky-bar {
+    width: 95%;
+    position: static;
+    margin: 0px;
+  }
 }

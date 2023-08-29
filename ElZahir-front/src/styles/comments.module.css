@@ -1,214 +1,207 @@
 .background {
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.898);
+  position: fixed;
+  min-width: 100%;
+  min-height: 100%;
+  top: 0;
+  left: 0px;
+  padding: 0px;
+  padding-bottom: 20%;
 
-    z-index: 2;
-    background-color: rgba(0, 0, 0, 0.898);
-    position: fixed;
-    min-width: 100%;
-    min-height: 100%;
-    top: 0;
-    left: 0px;
-    padding: 0px;
-    padding-bottom: 20%;
-  
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  
-    overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
 }
 
 .comments-container {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    max-height: 90%;
-    background-color: white;
-    padding: 20px;
-    border-radius: 15px;
-    justify-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  max-height: 90%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 15px;
+  justify-self: flex-end;
 
-    overflow: hidden; /* test */
-    position: relative;
-
+  overflow: hidden; /* test */
+  position: relative;
 }
 
 .header {
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .close {
-    cursor: pointer;
-    background-image: url('../icons/salir2.png');
-    background-size: cover;
-    width: 17px;
-    height: 17px;
-    filter: opacity(70%);
+  cursor: pointer;
+  background-image: url('../icons/salir2.png');
+  background-size: cover;
+  width: 17px;
+  height: 17px;
+  filter: opacity(70%);
 }
 
 .close:hover {
-    filter: opacity(100%);
+  filter: opacity(100%);
 }
 
 .counter {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .title {
-    font-size: 17px;
-    font-weight: 500;
+  font-size: 17px;
+  font-weight: 500;
 }
 
 .count {
-    font-size: 17px;
+  font-size: 17px;
 }
 
 .input-container {
-    display: flex;
-    align-items: center;
-    background-color: rgb(255, 233, 233);
-    border-radius: 15px;
-    height: 37px;
+  display: flex;
+  align-items: center;
+  background-color: rgb(255, 233, 233);
+  border-radius: 15px;
+  height: 37px;
 
-    margin-bottom: 10px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+  margin-bottom: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 
-    position: relative;
-    justify-content: space-between;
-    padding-left: 10px;
+  position: relative;
+  justify-content: space-between;
+  padding-left: 10px;
 
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .input-container button:disabled {
-    background-color: rgb(255, 233, 233);
+  background-color: rgb(255, 233, 233);
 }
 
 .cancel {
-    outline-offset: -1px;
-    cursor: pointer;
-    background-image: url('../icons/salir2.png');
-    background-size: cover;
-    min-width: 20px;
-    height: 20px;
-    filter: opacity(70%);
-    margin-right: 10px;
+  outline-offset: -1px;
+  cursor: pointer;
+  background-image: url('../icons/salir2.png');
+  background-size: cover;
+  min-width: 20px;
+  height: 20px;
+  filter: opacity(70%);
+  margin-right: 10px;
 }
 
 .cancel:hover {
-    filter: opacity(100%);
+  filter: opacity(100%);
 }
 
 .cancel-off {
-    display: none;
-   
+  display: none;
 }
 
 .input {
-    all: unset;
-    outline: none;
-    outline-offset: -1px;
-    border: none;
-    font-size: 17px;
-    background-color: rgba(255, 255, 255, 0);
-    width: 100%;
-    touch-action: none;
-
+  all: unset;
+  outline: none;
+  outline-offset: -1px;
+  border: none;
+  font-size: 17px;
+  background-color: rgba(255, 255, 255, 0);
+  width: 100%;
+  touch-action: none;
 }
 
 .input-off {
-    height: 37px;
+  height: 37px;
 }
 
 .send {
-    all: unset;
-    cursor: pointer;
-    min-width: 58px;
-    height: 37px;
-    border: none;
-    top: 0px;
-    right: 0px;
-    background-color: inherit;
+  all: unset;
+  cursor: pointer;
+  min-width: 58px;
+  height: 37px;
+  border: none;
+  top: 0px;
+  right: 0px;
+  background-color: inherit;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .send:hover {
-    background-color: rgb(255, 221, 221);
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
+  background-color: rgb(255, 221, 221);
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 .testear {
-    display: flex;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .comments {
-    background-color: rgb(255, 233, 233);
-    border-radius: 15px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    min-height: 100px;
-    overflow-y: auto;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+  background-color: rgb(255, 233, 233);
+  border-radius: 15px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100px;
+  overflow-y: auto;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 }
 
 /* SINGLE COMMENT */
 
 .comment-container {
-    background-color: rgba(255, 251, 251, 0.603);
-    padding: 10px;
-    border-radius: 15px;
+  background-color: rgba(255, 251, 251, 0.603);
+  padding: 10px;
+  border-radius: 15px;
 }
 
 .comment-username {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .comment-content {
-    font-size: 15px;
-    margin-left: 3px;
-    overflow-wrap: break-word;
+  font-size: 15px;
+  margin-left: 3px;
+  overflow-wrap: break-word;
 }
 
 .comment-socials {
-    display: flex;
-    justify-content: flex-end;
-    gap: 5px;
-    font-size: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  font-size: 12px;
 }
 
 /* SUB COMMENT*/
 .subComments {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 .sub-comment {
-    /* margin-left: 20px; */
+  /* margin-left: 20px; */
 }
 
 .sub-username {
-    font-weight: bold;
-    font-size: 15px;
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .sub-content {
-    font-size: 15px;
-    margin-left: 3px;
-    overflow-wrap: break-word;
+  font-size: 15px;
+  margin-left: 3px;
+  overflow-wrap: break-word;
 }
 
 @media (max-width: 500px) and (orientation: portrait) {
-
-    .comments-container {
-        width: 80%;
-    }
-
+  .comments-container {
+    width: 80%;
+  }
 }
