@@ -1,4 +1,3 @@
-// import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query';
 
 import { getUserList } from '../../services/userServices';
@@ -7,7 +6,7 @@ import { UserTile } from './ConnectionsUiModule';
 
 import style from '../../styles/popups.module.css';
 
-const Following = ({ setPopUp, user }) => {
+const Followers = ({ setPopUp, user }) => {
   const { data: { data: users } = {}, isLoading } = useQuery({
     queryKey: ['GET_USER_LIST'],
     queryFn: async () => await getUserList(),
@@ -51,4 +50,4 @@ const Following = ({ setPopUp, user }) => {
   );
 };
 
-export default Following;
+export default Followers;

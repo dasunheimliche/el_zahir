@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
-import SharedTextPost from './Posts/SharedTextPost';
-import SharedQuotePost from './Posts/SharedQuotePost';
-import SharedImagePost from './Posts/SharedImagePost';
-import SharedVideoPost from './Posts/SharedVideoPost';
-import SharedVideoFilePost from './Posts/SharedVideoFilePost';
+import SharedTextPost from './SharedPost/SharedTextPost';
+import SharedQuotePost from './SharedPost/SharedQuotePost';
+import SharedImagePost from './SharedPost/SharedImagePost';
+import SharedVideoPost from './SharedPost/SharedVideoPost';
+import SharedVideoFilePost from './SharedPost/SharedVideoFilePost';
 
 import { doNothing } from '../services/helpers';
 import { fetchPost } from '../services/postServices';

@@ -192,6 +192,14 @@
   width: 1.3rem;
 }
 
+.user-list span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  max-width: 6.5rem;
+}
+
 /* RIGHT SIDE */
 
 .right-side {

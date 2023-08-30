@@ -1,4 +1,3 @@
-// import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query';
 
 import { getUserList } from '../../services/userServices';
@@ -7,7 +6,7 @@ import { UserTile } from './ConnectionsUiModule';
 
 import style from '../../styles/popups.module.css';
 
-const Followers = ({ setPopUp, user }) => {
+const Following = ({ setPopUp, user }) => {
   const { data: { data: users } = {}, isLoading } = useQuery({
     queryKey: ['GET_USER_LIST'],
     queryFn: async () => await getUserList(),
@@ -40,7 +39,7 @@ const Followers = ({ setPopUp, user }) => {
           onClick={() => setPopUp({ type: 'none', post: null })}></div>
       </div>
       <div className={style.counter}>
-        <span className="followers-header-title">Followers: </span>
+        <span className="followers-header-title">Following: </span>
         {isLoading && (
           <div className={`${style.loading} ${style['little-loading']}`}> </div>
         )}
@@ -51,4 +50,4 @@ const Followers = ({ setPopUp, user }) => {
   );
 };
 
-export default Followers;
+export default Following;

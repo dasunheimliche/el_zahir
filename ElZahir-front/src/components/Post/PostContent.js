@@ -1,6 +1,19 @@
 import style from '../../styles/post.module.css';
 import quotes from '../../images/quotes.png';
 
+export default function PostContent({ post, aspectRatio, urlVideo }) {
+  if (post.type === 'text') return <TextPostContent post={post} />;
+
+  if (post.type === 'cita') return <QuotePostContent post={post} />;
+
+  if (post.type === 'image') return <ImagePostContent post={post} />;
+
+  if (post.type === 'video')
+    return <VideoPostContent aspectRatio={aspectRatio} videoUrl={urlVideo} />;
+
+  if (post.type === 'video-file') return <VideFilePostContent post={post} />;
+}
+
 function TextPostContent({ post }) {
   return (
     <div className={style['text-post']}>
@@ -71,18 +84,3 @@ function VideFilePostContent({ post }) {
     </video>
   );
 }
-
-const PostContent = ({ post, aspectRatio, urlVideo }) => {
-  if (post.type === 'text') return <TextPostContent post={post} />;
-
-  if (post.type === 'cita') return <QuotePostContent post={post} />;
-
-  if (post.type === 'image') return <ImagePostContent post={post} />;
-
-  if (post.type === 'video')
-    return <VideoPostContent aspectRatio={aspectRatio} videoUrl={urlVideo} />;
-
-  if (post.type === 'video-file') return <VideFilePostContent post={post} />;
-};
-
-export default PostContent;

@@ -11,7 +11,7 @@ import { Uploader, Error, PostUiFooter } from './PostUiModule';
 
 import style from '../../styles/popups.module.css';
 
-const ChangePanImg = ({ user, setPopUp }) => {
+export default function ChangePanImg({ user, setPopUp }) {
   const [mode, setMode] = useState('idle');
   const [url, setUrl] = useState('');
   const [file, setFile] = useState(false);
@@ -35,6 +35,10 @@ const ChangePanImg = ({ user, setPopUp }) => {
         return copy;
       });
 
+      if (fileForm.current) {
+        fileForm.current.value = null;
+      }
+
       handleClose();
     },
     onError: () => {
@@ -43,10 +47,6 @@ const ChangePanImg = ({ user, setPopUp }) => {
   });
 
   const handleClose = () => {
-    if (fileForm.current) {
-      fileForm.current.value = null;
-    }
-
     setPopUp({ type: 'none', post: null });
   };
 
@@ -93,6 +93,4 @@ const ChangePanImg = ({ user, setPopUp }) => {
       />
     </form>
   );
-};
-
-export default ChangePanImg;
+}

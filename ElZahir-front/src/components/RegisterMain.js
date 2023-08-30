@@ -33,13 +33,6 @@ const Register = () => {
   const isSignUpButtonDisabled =
     !isPasswordInputValid || !isUsernameInputValid || loading || isInputEmpty;
 
-  console.log('==========================================');
-  console.log('IS USERNAME INVALID ', isUsernameInputValid);
-  console.log('IS PASSWORD SHORT ', isPasswordShort);
-  console.log('IS PASSWORD SAME ', isPasswordTheSame);
-  console.log('IS SOME INPUT EMPTY', isInputEmpty);
-  console.log('==========================================');
-
   const { mutate: signUpMutation } = useMutation({
     mutationFn: () => signUp(inputs),
     onMutate: () => setLoading(true),

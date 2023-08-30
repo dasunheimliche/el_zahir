@@ -1,36 +1,35 @@
 import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import {
-  followUser,
-  unfollowUser,
-  getCurrentUser,
-} from '../services/userServices';
+import { followUser, unfollowUser } from '../services/userServices';
 
 import Header from './Header';
-import {
-  FollowStats,
-  FollowStatus,
-  PostingOptions,
-  ProfileImg,
-  TopCardOptions,
-} from './ProfileCardModule';
+
+import TopCardOptions from './ProfileCard/TopCardOptions';
+import ProfileImg from './ProfileCard/ProfileImg';
+import FollowStatus from './ProfileCard/FollowStatus';
+import FollowStats from './ProfileCard/FollowStats';
+import PostingOptions from './ProfileCard/PostingOptions';
+
+import useMyUserData from '../hooks/useMyUserData';
 
 import style from '../styles/userCard.module.css';
 
-const ProfileCard = ({ otherUser, posts, sticky, setPopUp, mode }) => {
-  const { data: { data: user } = {} } = useQuery({
-    queryKey: ['ME'],
-    queryFn: getCurrentUser,
-  });
-
+export default function ProfileCard({
+  otherUser,
+  posts,
+  sticky,
+  setPopUp,
+  mode,
+}) {
   const [showPostOptions, setShowPostOptions] = useState(false);
   const [isMutating, setIsMutating] = useState(false);
 
-  const isMine = !(mode === 'user');
-
   const client = useQueryClient();
 
+  const user = useMyUserData();
+
+  const isMine = !(mode === 'user');
   const isUserFollowed = otherUser && user.following.includes(otherUser.id);
 
   const { mutate: followUserHandler } = useMutation({
@@ -78,30 +77,15 @@ const ProfileCard = ({ otherUser, posts, sticky, setPopUp, mode }) => {
   }
 
   return (
-    <div
-      className={
-        sticky === false
-          ? style.userCard
-          : `${style.userCard} ${style['sticky-userCard']}`
-      }>
-      <div
-        className={style.top}
-        style={{
-          backgroundImage: `url(${
-            mode === 'user' ? otherUser.mainPanelImg : user.mainPanelImg
-          })`,
-        }}>
+    <ProfileCardWrapper sticky={sticky}>
+      <TopCard mode={mode} user={user} otherUser={otherUser}>
         <Header sticky={sticky} mode={'mobile'} />
         <TopCardOptions
           mode={mode}
           onChangeCoverImg={handleShowChangeProfileCoverMenu}
         />
-      </div>
-
-      <div
-        className={
-          isMine ? style.bottom : ` ${style.bottom} ${style.userBottom}`
-        }>
+      </TopCard>
+      <BottomCard isMine={isMine}>
         <ProfileImg
           mode={mode}
           user={user}
@@ -124,7 +108,6 @@ const ProfileCard = ({ otherUser, posts, sticky, setPopUp, mode }) => {
             setPopUp({ type: 'seeFollowings', post: null })
           }
         />
-
         {mode !== 'user' && (
           <PostingOptions
             showPostOptions={showPostOptions}
@@ -135,9 +118,47 @@ const ProfileCard = ({ otherUser, posts, sticky, setPopUp, mode }) => {
             onOpenVideoPostMenu={() => setPopUp({ type: 'video', post: null })}
           />
         )}
-      </div>
+      </BottomCard>
+    </ProfileCardWrapper>
+  );
+}
+
+//** CONTAINER
+
+function ProfileCardWrapper({ children, sticky }) {
+  return (
+    <div
+      className={
+        sticky === false
+          ? style.userCard
+          : `${style.userCard} ${style['sticky-userCard']}`
+      }>
+      {children}
     </div>
   );
-};
+}
 
-export default ProfileCard;
+function TopCard({ children, mode, user, otherUser }) {
+  return (
+    <div
+      className={style.top}
+      style={{
+        backgroundImage: `url(${
+          mode === 'user' ? otherUser.mainPanelImg : user.mainPanelImg
+        })`,
+      }}>
+      {children}
+    </div>
+  );
+}
+
+function BottomCard({ children, isMine }) {
+  return (
+    <div
+      className={
+        isMine ? style.bottom : ` ${style.bottom} ${style.userBottom}`
+      }>
+      {children}
+    </div>
+  );
+}
