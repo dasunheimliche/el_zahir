@@ -1,23 +1,6 @@
 import style from '../../styles/comments.module.css';
 
-export function CommentsHeader({ onCloseComments }) {
-  return (
-    <div className={style.header}>
-      <div className={style.close} onClick={onCloseComments} />
-    </div>
-  );
-}
-
-export function CommentsCounter({ comments }) {
-  return (
-    <div className={style.counter}>
-      <span className={style.title}>Comments </span>
-      <span className={style.count}>{comments?.length}</span>
-    </div>
-  );
-}
-
-export function CommentInput({
+export default function CommentInput({
   userInput,
   isMutating,
   placeholder,

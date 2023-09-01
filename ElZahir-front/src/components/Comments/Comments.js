@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import CommentTile from './CommentTile';
+
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { getCurrentUser } from '../../services/userServices';
@@ -7,15 +7,14 @@ import { fetchComments, sendComment } from '../../services/commentServices';
 
 import { useQueryClient } from '@tanstack/react-query';
 
-import {
-  CommentInput,
-  CommentsCounter,
-  CommentsHeader,
-} from './CommentsModule';
+import CommentTile from './ComentTile';
+import CommentsHeader from './CommentsHeader';
+import CommentsCounter from './CommentsCounter';
+import CommentsInput from './CommentsInput';
 
 import style from '../../styles/comments.module.css';
 
-const Comments = ({ post, setPopUp }) => {
+export default function Comments({ post, setPopUp }) {
   const [userInput, setUserInput] = useState('');
   const [placeholder, setPlaceholder] = useState('');
   const [commentID, setCommentID] = useState('');
@@ -97,7 +96,7 @@ const Comments = ({ post, setPopUp }) => {
       <div className={style['comments-container']}>
         <CommentsHeader onCloseComments={handleCloseComments} />
         <CommentsCounter comments={comments} />
-        <CommentInput
+        <CommentsInput
           userInput={userInput}
           isMutating={isMutating}
           placeholder={placeholder}
@@ -109,6 +108,4 @@ const Comments = ({ post, setPopUp }) => {
       </div>
     </div>
   );
-};
-
-export default Comments;
+}

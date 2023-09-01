@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { getCurrentUser } from '../../services/userServices';
 import {
@@ -7,40 +7,11 @@ import {
   deleteComment,
 } from '../../services/commentServices';
 
-import { useQueryClient } from '@tanstack/react-query';
+import Comment from './Comment';
 
 import style from '../../styles/comments.module.css';
 
-function Comment({
-  comment,
-  user,
-  post,
-  isMutating,
-  onAnswerComment,
-  onDeleteComment,
-}) {
-  return (
-    <>
-      <div className={style['comment-username']}>@{comment.username}</div>
-      <div className={style['comment-content']}>{comment.comment}</div>
-      <div className={style['comment-socials']}>
-        <div className="p" onClick={onAnswerComment}>
-          Answer
-        </div>
-        {comment.username === user.username ||
-        post.username === user.username ? (
-          <div className="p" onClick={isMutating ? undefined : onDeleteComment}>
-            Delete
-          </div>
-        ) : (
-          console.log
-        )}
-      </div>
-    </>
-  );
-}
-
-const CommentTile = ({ post, comment, onTargetUserComment }) => {
+export default function CommentTile({ post, comment, onTargetUserComment }) {
   const [isMutating, setIsMutating] = useState(false);
 
   const { data: { data: user } = {} } = useQuery({
@@ -115,6 +86,4 @@ const CommentTile = ({ post, comment, onTargetUserComment }) => {
       </div>
     </div>
   );
-};
-
-export default CommentTile;
+}

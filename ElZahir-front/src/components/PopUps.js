@@ -8,19 +8,12 @@ import PostVideoUi from './PopUps/PostVideoUi';
 import ChangePI from './PopUps/ChangePI';
 import ChangePanImg from './PopUps/ChangePanImg';
 
-import Comments from './PopUps/Comments';
+import Comments from './Comments/Comments';
 import Delete from './PopUps/Delete';
 import Following from './PopUps/Following';
 import Followers from './PopUps/Followers';
 
 export default function PopUps({ popUp, setPopUp, user }) {
-  // const postImageUI = popUp.type === 'image'
-  // const postTextUI = popUp.type === 'text'
-  // const postQuoteUI = popUp.type === 'cita'
-  // const postVideoUI = popUp.type === 'video'
-  // const changePI = popUp.type === 'changePI'
-  // const changCI = popUp.type === 'changePanImg'
-
   return (
     <PopUpsWrapper popUp={popUp}>
       {popUp.type === 'image' && <PostImageUi setPopUp={setPopUp} />}

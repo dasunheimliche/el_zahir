@@ -1,11 +1,10 @@
-// IMPORTS
 import { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 
 import Header from './Header';
 import ProfileCard from './ProfileCard';
-import Comments from './PopUps/Comments';
+import Comments from './Comments/Comments';
 import Followers from './PopUps/Followers';
 import Following from './PopUps/Following';
 import BottomLogo from './BottomLogo';
