@@ -148,7 +148,7 @@
   display: block;
 
   width: 100%;
-  max-width: 100%;
+  /* max-width: 100%; */
   height: auto;
 }
 
@@ -182,6 +182,8 @@
   padding: 1.87rem 3.12rem 0.62rem;
 
   background-color: white;
+
+  position: relative;
 }
 
 .left-comilla {
@@ -197,18 +199,29 @@
   width: 100%;
 
   align-items: center;
+
+  position: relative; /*test*/
 }
 
 .quote {
   display: flex;
-  width: max-content;
-  max-width: 25rem;
+
+  width: 100%;
 
   padding: 1.25rem 0;
+
+  text-overflow: unset;
 
   font-size: 1.44rem;
   font-style: italic;
   white-space: pre-line;
+
+  overflow: hidden;
+  word-break: break-all;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .right-side {
@@ -494,7 +507,7 @@ video {
   }
 }
 
-@media (max-width: 500px) and (orientation: portrait) {
+@media (max-width: 510px) and (orientation: portrait) {
   .post {
     border-radius: 12px;
   }

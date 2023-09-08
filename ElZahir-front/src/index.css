@@ -200,7 +200,7 @@ code {
   }
 }
 
-@media (max-width: 490px) and (orientation: portrait) {
+@media (max-width: 510px) and (orientation: portrait) {
   .logo {
     text-shadow: -2px -2px 0px rgb(255, 255, 255);
   }

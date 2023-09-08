@@ -56,7 +56,6 @@
 
 .right-side {
   z-index: 0;
-
   width: 100%;
 }
 
@@ -125,7 +124,6 @@
 /* GRID */
 
 .grid {
-  min-width: 64.37rem;
   min-height: calc(100vh - 18.75rem);
 
   padding: 2.06rem 1.37rem 1.87rem;
@@ -136,7 +134,7 @@
   background-color: rgba(255, 245, 245, 0.291);
 
   column-count: 2;
-  column-gap: 0.75rem;
+  /* column-width: max(40px); */
 }
 
 .noTab {
@@ -147,7 +145,6 @@
 .sticky-grid {
   z-index: -1;
   position: relative;
-  top: 8.75rem;
 
   border-radius: 0.62rem;
   top: 11rem;
@@ -172,11 +169,11 @@
 @media (max-width: 912px) and (orientation: portrait) {
   .grid {
     columns: 1;
-    min-width: 332px;
+    /* min-width: 332px; */
   }
 }
 
-@media (max-width: 500px) and (orientation: portrait) {
+@media (max-width: 510px) and (orientation: portrait) {
   .content {
     flex-direction: column;
   }
