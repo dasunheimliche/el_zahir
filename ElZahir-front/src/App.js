@@ -12,6 +12,8 @@ import Loading from './components/Loading';
 import { getConfig } from './services/helpers';
 import { getCurrentUser } from './services/userServices';
 
+/** TESTING :D */
+
 function App() {
   const navigate = useNavigate();
 
