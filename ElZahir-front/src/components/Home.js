@@ -19,6 +19,8 @@ import useElementAtTopOfPage from '../hooks/useElementAtTopOfPage';
 
 import style from '../styles/home.module.css';
 
+/* TEST */
+
 export default function Home() {
   const [sticky, setSticky] = useState(false);
   const [popUp, setPopUp] = useState({ type: 'none', post: null });
