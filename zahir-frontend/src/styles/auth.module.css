@@ -1,0 +1,203 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;900&display=swap');
+
+/** LOGIN */
+
+.main {
+  display: flex;
+
+  width: 100%;
+  height: 100vh;
+
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.leftSide {
+  display: flex;
+
+  width: 50%;
+
+  background-color: rgb(255, 255, 255);
+
+  justify-content: center;
+  align-items: center;
+}
+
+.authCard {
+  display: flex;
+  position: relative;
+
+  width: 23.125rem;
+
+  font-family: 'Heebo', sans-serif;
+
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.authCard div:first-child {
+  margin-bottom: 1.56rem;
+
+  font-size: 1.45rem;
+  font-weight: 500;
+}
+
+.authCard div:nth-child(2) {
+  margin-bottom: 1.47rem;
+
+  font-size: 1rem;
+
+  align-self: flex-start;
+}
+
+.authCard form {
+  width: 100%;
+
+  margin-bottom: 0.93rem;
+  padding-bottom: 0.43rem;
+
+  border-bottom: 1px solid rgb(92, 91, 91);
+
+  font-size: 0.93rem;
+}
+
+button:disabled {
+  background-color: grey;
+}
+button:disabled:hover {
+  background-color: gray;
+}
+
+form input {
+  height: 1.7rem;
+  width: 100%;
+
+  margin-bottom: 0.93rem;
+  padding-bottom: 0.43rem;
+
+  outline: none;
+  border: none;
+  border-bottom: 1px solid rgb(92, 91, 91);
+
+  font-size: 1rem;
+  color: rgb(27, 27, 27);
+}
+
+.buttons {
+  display: flex;
+  gap: 5px;
+}
+
+form button {
+  all: unset;
+  width: 100%;
+
+  margin-top: 1.16rem;
+  padding: 0.62rem 0;
+
+  border-radius: 0.25rem;
+
+  background-color: rgb(17, 23, 39);
+
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: rgb(26, 34, 58);
+}
+
+.failedLogin {
+  position: relative;
+}
+
+.failedLogin::after {
+  content: 'username or password invalid';
+
+  position: absolute;
+  top: -0.5rem;
+
+  color: red;
+  font-size: 0.81rem;
+}
+
+.toRegister {
+  width: 95%;
+
+  font-size: 0.85rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.62rem;
+}
+
+.rightSide {
+  width: 50%;
+
+  background-image: url('https://64.media.tumblr.com/0049b7745b9013ee51be02c1bd4230d6/tumblr_njzwzqEnZv1u7j6e0o1_1280.jpg');
+  background-size: cover;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/** REGISTER */
+
+.notSamePass::after {
+  content: 'password must be the same';
+
+  font-size: 0.81rem;
+  color: red;
+}
+
+.tooShort::after {
+  content: 'password too short';
+
+  font-size: 0.81rem;
+  color: red;
+}
+
+.invalidUser::after {
+  position: relative;
+  top: -5px;
+
+  content: 'invalid user';
+
+  font-size: 0.81rem;
+  color: red;
+}
+
+@media (max-width: 1600px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 1366px) {
+  html {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 912px) and (orientation: portrait) {
+}
+
+@media (max-width: 510px) and (orientation: portrait) {
+  .rightSide {
+    display: none;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .leftSide {
+    width: 100%;
+    height: 100vh;
+  }
+}
