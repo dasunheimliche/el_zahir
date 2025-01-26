@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  username      String    @unique
+  name          String
+  lastname      String
+  email         String    @unique
+  passwordHash  String
+  mainPanelImg  String?
+  profileImg    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relaciones
+  posts         Post[]
+  comments      Comment[]
+  likedPosts    PostLike[]
+  likedComments CommentLike[]
+  followers     Follow[]    @relation("UserFollowers")
+  following     Follow[]    @relation("UserFollowing")
+
+  version       Int         @default(0) @map("__v")
+}
+
+model Post {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  type            String    
+  title           String
+  subtitle        String?
+  content         String?
+  mediaUrl        String?
+  mediaData       Json?     
+  authorId        String    @db.ObjectId
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Referencias embebidas para MongoDB
+  authorUsername  String
+  authorProfileImg String?
+
+  // Relaciones
+  author          User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments        Comment[]
+  likes           PostLike[]
+
+  version         Int         @default(0) @map("__v")
+}
+
+model Comment {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  content        String
+  authorId       String    @db.ObjectId
+  postId         String?   @db.ObjectId
+  parentId       String?   @db.ObjectId
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Referencias embebidas para MongoDB
+  authorUsername String
+
+  // Relaciones
+  author         User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post           Post?       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent         Comment?    @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies        Comment[]   @relation("CommentReplies")
+  likes          CommentLike[]
+
+  version        Int         @default(0) @map("__v")
+}
+
+model Follow {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  followerId  String   @db.ObjectId
+  followingId String   @db.ObjectId
+  createdAt   DateTime @default(now())
+
+  // Relaciones
+  follower    User     @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+}
+
+model PostLike {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  postId    String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  // Relaciones
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+}
+
+model CommentLike {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  commentId String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  // Relaciones
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId])
+}
