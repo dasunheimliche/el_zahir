@@ -7,110 +7,118 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+type UserProfile {
+  name          String
+  lastname      String
+  bio           String?
+  mainPanelImg  String?
+  profileImg    String?
+  updatedAt     DateTime
+}
+
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   username      String    @unique
-  name          String
-  lastname      String
   email         String    @unique
   passwordHash  String
-  mainPanelImg  String?
-  profileImg    String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?  // Añadido para seguridad y analytics
+  isActive      Boolean   @default(true)  // Añadido para soft delete
+  version       Int       @default(0) @map("__v")
 
-  // Relaciones
+  profile       UserProfile
+
   posts         Post[]
   comments      Comment[]
-  likedPosts    PostLike[]
-  likedComments CommentLike[]
-  followers     Follow[]    @relation("UserFollowers")
-  following     Follow[]    @relation("UserFollowing")
+  interactions  Interaction[]
+}
 
-  version       Int         @default(0) @map("__v")
+enum ConnectionType {
+  FOLLOW
+}
+
+model Connection {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  fromUserId  String   @db.ObjectId
+  toUserId    String   @db.ObjectId
+  type        ConnectionType
+  createdAt   DateTime @default(now())
+
+  @@unique([fromUserId, toUserId, type])
+}
+
+
+enum ContentType {
+  TEXT
+  IMAGE
+  VIDEO
+  YOUTUBE
+  QUOTE
+}
+
+enum ContentStatus {
+  PUBLISHED
+  DELETED
 }
 
 model Post {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  type            String    
-  title           String
-  subtitle        String?
-  content         String?
-  mediaUrl        String?
-  mediaData       Json?     
-  authorId        String    @db.ObjectId
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  type        ContentType
+  status      ContentStatus @default(PUBLISHED)
+  title       String
+  subtitle    String?
+  content     String?
+  mediaUrl    String?
+  authorId    String        @db.ObjectId
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  publishedAt DateTime?     // Separado de createdAt
+  version     Int          @default(0) @map("__v")
 
-  // Referencias embebidas para MongoDB
-  authorUsername  String
-  authorProfileImg String?
+  author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+  interactions Interaction[]
+}
+
+enum InteractionType {
+  LIKE
+  SHARE
+  COMMENT
+}
+
+model Interaction {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  type          InteractionType
+  userId        String          @db.ObjectId
+  postId        String?         @db.ObjectId
+  commentId     String?         @db.ObjectId
+  metadata      Json?           // Para datos específicos de la interacción
+  createdAt     DateTime        @default(now())
 
   // Relaciones
-  author          User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  comments        Comment[]
-  likes           PostLike[]
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post          Post?           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment       Comment?        @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
-  version         Int         @default(0) @map("__v")
+  @@unique([userId, postId, commentId, type])
 }
 
 model Comment {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  content        String
-  authorId       String    @db.ObjectId
-  postId         String?   @db.ObjectId
-  parentId       String?   @db.ObjectId
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-
-  // Referencias embebidas para MongoDB
-  authorUsername String
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  content     String
+  authorId    String    @db.ObjectId
+  postId      String?   @db.ObjectId
+  parentId    String?   @db.ObjectId
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  editedAt    DateTime?  // Para trackear ediciones
 
   // Relaciones
-  author         User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  post           Post?       @relation(fields: [postId], references: [id], onDelete: Cascade)
-  parent         Comment?    @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  replies        Comment[]   @relation("CommentReplies")
-  likes          CommentLike[]
-
-  version        Int         @default(0) @map("__v")
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post        Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies     Comment[] @relation("CommentReplies")
+  interactions Interaction[]
 }
 
-model Follow {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  followerId  String   @db.ObjectId
-  followingId String   @db.ObjectId
-  createdAt   DateTime @default(now())
-
-  // Relaciones
-  follower    User     @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
-  following   User     @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
-
-  @@unique([followerId, followingId])
-}
-
-model PostLike {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  postId    String   @db.ObjectId
-  createdAt DateTime @default(now())
-
-  // Relaciones
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, postId])
-}
-
-model CommentLike {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  commentId String   @db.ObjectId
-  createdAt DateTime @default(now())
-
-  // Relaciones
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, commentId])
-}
