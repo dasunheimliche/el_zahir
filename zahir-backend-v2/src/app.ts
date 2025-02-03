@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import { specs } from "./shared/config/swagger";
 import "reflect-metadata";
-import { authRouter } from "./components/auth/data-access/auth.routes";
+import { authRouter } from "./components/auth/entry-points/api/auth.routes";
 
 dotenv.config();
 
