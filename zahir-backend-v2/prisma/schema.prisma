@@ -13,7 +13,6 @@ type UserProfile {
   bio           String?
   mainPanelImg  String?
   profileImg    String?
-  updatedAt     DateTime
 }
 
 model User {

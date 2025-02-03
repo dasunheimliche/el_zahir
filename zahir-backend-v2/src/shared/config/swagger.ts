@@ -1,8 +1,8 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import {
-  HelloSchemas,
-  HelloPaths,
-} from "../../components/hello/entry-points/api/hello.schemas";
+  AuthPaths,
+  AuthSchemas,
+} from "../../components/auth/domain/auth.swagger";
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -20,11 +20,11 @@ const options: swaggerJsdoc.Options = {
     ],
     components: {
       schemas: {
-        ...HelloSchemas,
+        ...AuthSchemas,
       },
     },
     paths: {
-      ...HelloPaths,
+      ...AuthPaths,
     },
   },
   apis: [], // Ya no necesitamos esto porque definimos los paths manualmente
