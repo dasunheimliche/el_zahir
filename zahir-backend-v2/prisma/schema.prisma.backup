@@ -7,12 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  USER
-  ADMIN
-  MODERATOR
-}
-
 type UserProfile {
   name          String
   lastname      String
@@ -26,31 +20,17 @@ model User {
   username      String    @unique
   email         String    @unique
   passwordHash  String
-  role          UserRole  @default(USER)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  lastLoginAt   DateTime?
-  isActive      Boolean   @default(true)
+  lastLoginAt   DateTime?  // Añadido para seguridad y analytics
+  isActive      Boolean   @default(true)  // Añadido para soft delete
   version       Int       @default(0) @map("__v")
 
   profile       UserProfile
-  refreshTokens RefreshToken[]
+
   posts         Post[]
   comments      Comment[]
   interactions  Interaction[]
-}
-
-model RefreshToken {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  token     String   @unique
-  userId    String   @db.ObjectId
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-  isRevoked Boolean  @default(false)
-  
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
 }
 
 enum ConnectionType {
@@ -66,6 +46,7 @@ model Connection {
 
   @@unique([fromUserId, toUserId, type])
 }
+
 
 enum ContentType {
   TEXT
@@ -91,7 +72,7 @@ model Post {
   authorId    String        @db.ObjectId
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  publishedAt DateTime?
+  publishedAt DateTime?     // Separado de createdAt
   version     Int          @default(0) @map("__v")
 
   author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
@@ -111,9 +92,10 @@ model Interaction {
   userId        String          @db.ObjectId
   postId        String?         @db.ObjectId
   commentId     String?         @db.ObjectId
-  metadata      Json?
+  metadata      Json?           // Para datos específicos de la interacción
   createdAt     DateTime        @default(now())
 
+  // Relaciones
   user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   post          Post?           @relation(fields: [postId], references: [id], onDelete: Cascade)
   comment       Comment?        @relation(fields: [commentId], references: [id], onDelete: Cascade)
@@ -129,11 +111,13 @@ model Comment {
   parentId    String?   @db.ObjectId
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  editedAt    DateTime?
+  editedAt    DateTime?  // Para trackear ediciones
 
+  // Relaciones
   author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   post        Post?     @relation(fields: [postId], references: [id], onDelete: Cascade)
   parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   replies     Comment[] @relation("CommentReplies")
   interactions Interaction[]
 }
+

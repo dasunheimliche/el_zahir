@@ -2,7 +2,7 @@ import swaggerJsdoc from "swagger-jsdoc";
 import {
   AuthPaths,
   AuthSchemas,
-} from "../../components/auth/domain/auth.swagger";
+} from "../../../components/auth/domain/auth.swagger";
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -27,7 +27,7 @@ const options: swaggerJsdoc.Options = {
       ...AuthPaths,
     },
   },
-  apis: [], // Ya no necesitamos esto porque definimos los paths manualmente
+  apis: [],
 };
 
 export const specs = swaggerJsdoc(options);
